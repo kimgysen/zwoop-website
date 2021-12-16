@@ -9,6 +9,7 @@ import Navbar from "@components/layout/navbar/Navbar";
 import Hero from "@components/pages/login/Hero";
 import {useRouter} from "next/router";
 import {useSession} from "next-auth/react";
+import Footer from "@components/layout/footer/Footer";
 
 
 const Login: NextPage = () => {
@@ -32,9 +33,7 @@ const Login: NextPage = () => {
             <Box h='100vh'>
                 <Hero />
             </Box>
-            <Box h='100vh' pt='50px'>
-                Test second page
-            </Box>
+            <Footer />
         </>
     )
 }

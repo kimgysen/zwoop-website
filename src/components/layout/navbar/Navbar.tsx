@@ -58,7 +58,7 @@ const Navbar: React.FC = () => {
                         textAlign={useBreakpointValue({ base: 'center', md: 'left' })}
                         fontFamily={'heading'}
                         color={useColorModeValue('gray.800', 'white')}>
-                        <NextLink href={'/home'} passHref>
+                        <NextLink href={'/'} passHref>
                             <Link>Zwoop</Link>
                         </NextLink>
                     </Text>

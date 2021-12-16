@@ -1,7 +1,7 @@
-import {Container} from "@chakra-ui/react";
+import {Container, Box} from "@chakra-ui/react";
 import React from "react";
 import Navbar from "@components/layout/navbar/Navbar";
-import {Box} from "@chakra-ui/layout/src/box";
+import Footer from "@components/layout/footer/Footer";
 
 
 const AppLayout: React.FC = ({ children }) => {
@@ -13,11 +13,12 @@ const AppLayout: React.FC = ({ children }) => {
                 pt={ '60px' }
                 width={{ base: "100%", md: "95%" }}
                 maxW={"5xl"}
-                minH="100vh"
+                minH="80vh"
                 h="100%"
             >
                 { children }
             `</Container>
+            <Footer />
         </Box>
     )
 }
