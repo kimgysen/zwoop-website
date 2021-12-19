@@ -1,5 +1,5 @@
 import React, {useMemo, useState} from "react";
-import ApiResult from "../../../../../../api-client/type/ApiResult";
+import ApiResult from "@apiclients/type/ApiResult";
 import {
     Box,
     Button,
@@ -8,15 +8,14 @@ import {
     InputGroup,
     InputLeftElement,
     InputRightElement,
-    Spinner, Stack,
+    Spinner,
     Text
 } from "@chakra-ui/react";
 import {FaUserAlt} from "react-icons/fa";
 import {CheckCircleIcon} from "@chakra-ui/icons";
-import {validateNickName, validateRegistration} from "@components/layout/navbar/modal/content/LoginPopupHelper";
-import {verifyNickName} from "../../../../../../api-client/authentication/VerifyNickNameService";
+import {validateNickName} from "@components/layout/navbar/modal/content/LoginPopupHelper";
+import {verifyNickName} from "@apiclients/feature/authentication/VerifyNickNameService";
 import debounce from "lodash.debounce";
-import {registerUser} from "../../../../../../api-client/authentication/UserService";
 
 interface RegisterFragmentProps {
     initialState: ApiResult,
@@ -50,19 +49,6 @@ const RegisterFragment: React.FC<RegisterFragmentProps> = ({ initialState, state
         () => debounce(handleOnNickChange, 300)
         , []);
 
-    const handleRegister = async () => {
-        setState({ ...initialState, loading: true, result: { location: null } });
-        const nickName = nickApiResult.result?.nickName;
-
-        try {
-            validateRegistration(publicAddressTrx, nickName);
-            const { result, error } = await registerUser(publicAddressTrx, nickName);
-            setState({ ...initialState, result, error });
-
-        } catch (e: any) {
-            setState({ ...initialState, error: e.message });
-        }
-    }
 
     return (
         <Box align="right">
@@ -108,7 +94,6 @@ const RegisterFragment: React.FC<RegisterFragmentProps> = ({ initialState, state
             </Box>
 
             <Button
-                onClick={ handleRegister }
                 disabled={ !nickApiResult.result!.success }
                 display={{ base: 'none', md: 'inline-flex' }}
                 mt={ '10px' }

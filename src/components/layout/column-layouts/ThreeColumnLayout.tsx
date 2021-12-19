@@ -2,16 +2,16 @@ import React from "react";
 import CenterContainer from "../center/CenterContainer";
 import {Box, Flex} from "@chakra-ui/react";
 
-interface IThreeColumnLayout {
+interface ThreeColumnLayoutProps {
     leftComponent: React.ReactNode,
     centerComponent: React.ReactNode,
     rightComponent: React.ReactNode
 }
 
-const ThreeColumnLayout: React.FC<IThreeColumnLayout> = ({ leftComponent, centerComponent, rightComponent  }) => {
+const ThreeColumnLayout: React.FC<ThreeColumnLayoutProps> = ({ leftComponent, centerComponent, rightComponent  }) => {
     return (
         <CenterContainer>
-            <Flex pt={{ md: '20px' }}>
+            <Flex pt={{ md: '10px' }}>
                 <Box
                     display={{ base: 'none', lg: 'block' }}
                     width={{ md: 200 }}

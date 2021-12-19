@@ -1,13 +1,13 @@
 import {Box, Flex} from "@chakra-ui/react";
 import {FC} from "react";
-import Tag from "../../../model/Tag";
+import Tag from "@models/Tag";
 
 
-interface ITagsList {
+interface TagsListProps {
     tags: Tag[]
 }
 
-const TagsList: FC<ITagsList> = ({ tags }) => (
+const TagsList: FC<TagsListProps> = ({ tags }) => (
     <Flex
         direction="row"
         flexWrap="wrap"
@@ -23,7 +23,7 @@ const TagsList: FC<ITagsList> = ({ tags }) => (
                  mb={ '5px' }
                  p="3px 8px 3px"
             >
-                { tag }
+                { tag.tagName }
             </Box>
         ))}
     </Flex>

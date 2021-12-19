@@ -7,9 +7,8 @@ const CenterContainer = ({ children }: CenterContainerProps) => {
   return (
       <Box
           margin={ 'auto' }
-          pt={ '50px' }
-          width={{ base: "100%", md: "95%" }}
-          maxW={"1000"}
+          width={{ base: "100%" }}
+          maxW={"6xl"}
           minH="100vh"
           h="100%"
       >

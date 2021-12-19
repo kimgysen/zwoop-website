@@ -1,5 +1,6 @@
 import React, {FC, useEffect, useState} from "react";
 import Select, {OnChangeValue} from 'react-select';
+import Tag from "@models/Tag";
 
 
 // Types for react-select.
@@ -7,15 +8,15 @@ import Select, {OnChangeValue} from 'react-select';
 type TagOptionType = { label: string, value: string }
 
 
-interface ITagsBox {
+interface TagsBoxProps {
   defaultTags: TagOptionType[]
   fetchTags: (tagQuery: string) => void,
   tags: TagOptionType[],
-  setTags: (tags: string[]) => void
+  setTags: (tags: Tag[]) => void
 }
 
 
-const TagsBox: FC<ITagsBox> = ({ defaultTags, fetchTags, tags = [], setTags }) => {
+const TagsBox: FC<TagsBoxProps> = ({ defaultTags, fetchTags, tags = [], setTags }) => {
   const TAGS_REQUEST_MIN_CHARS_TRESHOLD = 2;
 
   const [ options, setOptions ]     = useState(tags);
@@ -27,7 +28,7 @@ const TagsBox: FC<ITagsBox> = ({ defaultTags, fetchTags, tags = [], setTags }) =
   }, [tags]);
 
   const changeInputHandler = (val: string) => {
-    if (val.length > TAGS_REQUEST_MIN_CHARS_TRESHOLD) {
+    if (val.length >= TAGS_REQUEST_MIN_CHARS_TRESHOLD) {
       fetchTags(val);
       setMenuOpen(true);
     } else {
@@ -38,7 +39,7 @@ const TagsBox: FC<ITagsBox> = ({ defaultTags, fetchTags, tags = [], setTags }) =
 
   const addTagHandler = (tags: OnChangeValue<TagOptionType, true>) => {
     if (tags) {
-      setTags((tags as TagOptionType[]).map((tag: TagOptionType) => tag.value));
+      setTags((tags as TagOptionType[]).map((tag) => ({ tagName: tag.label, tagId: tag.value})));
     }
   };
 
@@ -50,15 +51,16 @@ const TagsBox: FC<ITagsBox> = ({ defaultTags, fetchTags, tags = [], setTags }) =
   });
   return (
     <Select
-      defaultValue={defaultTags}
-      onInputChange={changeInputHandler}
-      onChange={addTagHandler}
-      menuIsOpen={menuIsOpen}
-      closeMenuOnSelect={false}
-      styles={{ clearIndicator: ClearIndicatorStyles }}
-      isClearable={ true }
-      isMulti
-      options={options}
+        instanceId='unique-val'
+        defaultValue={defaultTags}
+        onInputChange={changeInputHandler}
+        onChange={addTagHandler}
+        menuIsOpen={menuIsOpen}
+        closeMenuOnSelect={false}
+        styles={{ clearIndicator: ClearIndicatorStyles }}
+        isClearable={ true }
+        isMulti
+        options={options}
     />
 
   );

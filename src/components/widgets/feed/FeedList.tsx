@@ -1,15 +1,15 @@
 import FeedItem from "./feed-item/FeedItem";
 import {FC} from "react";
 import {Box, Skeleton, Stack} from "@chakra-ui/react";
-import Post from "../../../model/Post";
-import Card from "../../layout/components/card/Card";
+import Post from "@models/Post";
+import Card from "@components/layout/components/card/Card";
 
-interface IFeedList {
+interface FeedListProps {
     isLoading: boolean,
     posts: Post[] | undefined
 }
 
-const FeedList: FC<IFeedList> = ({ isLoading, posts = [] }) => {
+const FeedList: FC<FeedListProps> = ({ isLoading, posts = [] }) => {
     return (
         <Box width={'100%'}>
             {

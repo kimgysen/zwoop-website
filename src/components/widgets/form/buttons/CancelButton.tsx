@@ -11,7 +11,6 @@ const CancelButton: FC<ICancelButton> = ({ onCancel }) => {
         <Button
             bg={'red.400'}
             mr={3}
-            rounded={'full'}
             color={'white'}
             _hover={{ bg: 'red.500' }}
             onClick={ e => onCancel(e) }>

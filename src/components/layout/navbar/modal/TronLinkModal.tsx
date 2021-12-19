@@ -1,8 +1,6 @@
 import React from "react";
-import TronLinkAuth from "../../../../model/TronlinkAuth";
+import TronLinkAuth from "@models/TronlinkAuth";
 import ModalWidget from "@components/widgets/modal/Modal";
-import TronMessagePopup from "@components/layout/navbar/modal/content/TronMessagePopup";
-import LoginModal from "@components/layout/navbar/modal/LoginModal";
 
 
 interface AuthModalProps {

@@ -1,6 +1,5 @@
 
 const TronWeb = require('tronweb');
-import TronLinkAuth from "../../model/TronlinkAuth";
 
 
 const TRONGRID_API = 'https://api.trongrid.io';

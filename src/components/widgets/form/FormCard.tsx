@@ -1,20 +1,19 @@
 import {Box} from "@chakra-ui/react";
 import React, {FC, ReactNode} from "react";
-import Card from "../../layout/components/card/Card";
 
 
-interface IFormCard {
+interface FormCardProps {
     title: string,
     description?: ReactNode
 }
 
-const FormCard: FC<IFormCard> = ({ title, description, children }) =>
-    <Card>
+const FormCard: FC<FormCardProps> = ({ title, description, children }) =>
+    <Box>
         <h2>{ title }</h2>
         <Box mt={ 2 }>
             <Box fontSize="xs"  mb={ 2 }>{ description }</Box>
             { children }
         </Box>
-    </Card>
+    </Box>
 
 export default FormCard;

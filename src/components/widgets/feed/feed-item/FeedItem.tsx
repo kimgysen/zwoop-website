@@ -3,15 +3,18 @@ import marked from 'marked';
 import {Box, Flex, Heading, Link} from "@chakra-ui/react";
 import {FC} from "react";
 import Card from "../../../layout/components/card/Card";
-import Post from "../../../../model/Post";
+import Post from "@models/Post";
 import {TrxBox} from "./TrxBox";
 import TagsList from "../../tags/TagsList";
 
-export interface IFeedItem {
+export interface FeedItemProps {
     post: Post
 }
 
-const FeedItem: FC<IFeedItem> = ({ post }) => {
+//TODO: Use sanitizer library
+//https://marked.js.org/using_advanced#options
+
+const FeedItem: FC<FeedItemProps> = ({ post }) => {
     return (
         <Card>
             <Flex
@@ -31,14 +34,13 @@ const FeedItem: FC<IFeedItem> = ({ post }) => {
                         lineHeight={ "1.4em" }
                         sx={{ overflow: 'hidden' }}
                     >
-                        <NextLink href={ 'google.be' }>
+                        <NextLink href={ '/posts/1' } passHref>
                             <Link
                                 _hover={{ textDecoration: "underline" }}
                                 isExternal
                                 d="block"
                             >
-                                { post.postTitle } is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&apos;s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-                                is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+                                { post.postTitle }
                             </Link>
                         </NextLink>
                     </Heading>
@@ -48,7 +50,7 @@ const FeedItem: FC<IFeedItem> = ({ post }) => {
                         color="gray.600"
                     >
                         <div
-                            dangerouslySetInnerHTML={{ __html: marked(post.postText, { sanitize: true }) }}
+                            dangerouslySetInnerHTML={{ __html: marked(post.postText) }}
                             style={{
                                 maxHeight: '75px',
                                 WebkitMaskImage: "linear-gradient(180deg, #000 60%, transparent)",

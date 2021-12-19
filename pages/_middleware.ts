@@ -1,9 +1,8 @@
-
-import { NextResponse, NextRequest } from 'next/server';
+import {NextRequest, NextResponse} from 'next/server';
 import {getToken, JWT} from "next-auth/jwt";
 
 
-const authenticatedPaths = ['/', '/setup-post'];
+const authenticatedPaths = ['/', '/ask'];
 
 const secret = process.env.SECRET;
 

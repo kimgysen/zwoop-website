@@ -1,5 +1,5 @@
 import React from "react";
-import TronLinkAuth from "../../../../../model/TronlinkAuth";
+import TronLinkAuth from "@models/TronlinkAuth";
 import {Box} from "@chakra-ui/layout/src/box";
 
 interface TronLoginPopupProps {

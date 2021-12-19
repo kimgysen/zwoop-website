@@ -1,5 +1,5 @@
 import axios, {AxiosError} from "axios";
-import ApiResult from "../type/ApiResult";
+import ApiResult from "../../type/ApiResult";
 
 const endpoint = process.env.NEXT_PUBLIC_API_USER_BASE_URI;
 const prefix = process.env.NEXT_PUBLIC_API_V1_PUBLIC_USER_PREFIX;

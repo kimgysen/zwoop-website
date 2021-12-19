@@ -1,14 +1,13 @@
 import {FC} from "react";
-import {Center, Image, VStack, usePrefersReducedMotion, keyframes} from "@chakra-ui/react";
-import trxLogo from '../../../../resources/svg/trx-logo.svg';
+import {Center, Image, keyframes, usePrefersReducedMotion, VStack} from "@chakra-ui/react";
 import millify from "millify";
 
 
-export interface ITrxBox {
+export interface TrxBoxProps {
     price: number
 }
 
-export const TrxBox: FC<ITrxBox> = ({ price }) => {
+export const TrxBox: FC<TrxBoxProps> = ({ price }) => {
     const prefersReducedMotion = usePrefersReducedMotion();
     const spin = keyframes`
       from { transform: rotate(0deg); }
@@ -45,7 +44,7 @@ export const TrxBox: FC<ITrxBox> = ({ price }) => {
             >
                 <Image
                     animation={ animation }
-                    src={ trxLogo }
+                    src='/static/images/trx-logo.svg'
                     w={ 30 }
                     h={ 30 }
                     alt="trx-logo"

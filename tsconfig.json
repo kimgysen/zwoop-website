@@ -23,8 +23,11 @@
       "@components/*": [
         "src/components/*"
       ],
-      "@components": [
-        "src/components"
+      "@models/*": [
+        "src/models/*"
+      ],
+      "@apiclients/*": [
+        "src/apiclients/*"
       ],
       "@styles/*": [
         "src/styles/*"

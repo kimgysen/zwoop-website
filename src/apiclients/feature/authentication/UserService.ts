@@ -1,5 +1,5 @@
-import axios, {AxiosError, AxiosResponse} from "axios";
-import ApiResult from "../type/ApiResult";
+import axios, {AxiosError} from "axios";
+import ApiResult from "../../type/ApiResult";
 
 const userApiEndpoint = process.env.NEXT_PUBLIC_API_USER_BASE_URI;
 const userApiPrefix = process.env.NEXT_PUBLIC_API_V1_PUBLIC_USER_PREFIX;
@@ -18,7 +18,6 @@ export const findUserByProviderAndOauthId: (authProviderId: number, oauthId: str
             error: null
         }))
         .catch((reason: AxiosError) => {
-            console.log(reason);
             if (reason.response!.status === 404) {
                 return {
                     loading: false,
@@ -77,7 +76,6 @@ export const loginUser: (body: { authProviderId: number, authId: string }) =>
             error: null
         }))
         .catch((reason: AxiosError) => {
-            console.log(reason);
             return {
                 loading: false,
                 result: null,

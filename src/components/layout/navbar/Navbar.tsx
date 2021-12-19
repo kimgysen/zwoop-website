@@ -4,6 +4,7 @@ import {
     Collapse,
     Flex,
     IconButton,
+    Image,
     Stack,
     Text,
     useBreakpointValue,
@@ -20,15 +21,12 @@ import {signOut, useSession} from "next-auth/react";
 import {FaPen} from "react-icons/fa";
 
 const Navbar: React.FC = () => {
-
     const { data: session, status } = useSession();
     const loading = status === "loading";
 
     const { isOpen: rightMenuIsOpen, onToggle: rightMenuOnToggle } = useDisclosure();
     const { isOpen: modalIsOpen, onToggle: modalOnOpen, onClose: modalOnClose } = useDisclosure();
 
-
-    console.log(session);
 
     return (
         <Box
@@ -45,7 +43,7 @@ const Navbar: React.FC = () => {
             <Flex
                 margin={ 'auto' }
                 width={{ base: "100%", md: "95%" }}
-                maxW={"1000"}
+                maxW={"6xl"}
                 minH={'50px'}
                 py={{ base: 2 }}
                 px={{ base: 4 }}
@@ -79,25 +77,7 @@ const Navbar: React.FC = () => {
                     }
                     {
                         session && (
-                            <>
-                                <Button
-                                    as={'a'}
-                                    fontSize={'sm'}
-                                    fontWeight={400}
-                                    variant={'link'}
-                                    href={ `/user/${ session.userId }` }>
-                                    { session.user?.name }
-                                </Button>
-                                <Button
-                                    bg={'blue.400'}
-                                    leftIcon={ <FaPen /> }
-                                    rounded={'full'}
-                                    color={'white'}
-                                    _hover={{ bg: 'blue.500' }}>
-                                    <NextLink href={'/setup-post'} passHref>
-                                        <Link>Ask</Link>
-                                    </NextLink>
-                                </Button>
+                            <Flex flex={{ base: 1, md: 2 }} justify={{ base: 'center', md: 'end' }}>
                                 <a
                                     href={`/api/auth/signout`}
                                     onClick={(e) => {
@@ -105,9 +85,35 @@ const Navbar: React.FC = () => {
                                         signOut()
                                     }}
                                 >
-                                    Sign out
+                                    logout
                                 </a>
-                            </>
+                                <Button
+                                    as={'a'}
+                                    pr='5px'
+                                    mr='5px'
+                                    fontSize={'sm'}
+                                    fontWeight={400}
+                                    variant={'link'}
+                                    href={ `/user/${ session.userId }` }>
+                                    <Image
+                                        w='35px'
+                                        h='35px'
+                                        mr='10px'
+                                        src={ session.user?.image as string }
+                                        alt='profile pic'
+                                    />
+                                </Button>
+                                <Button
+                                    bg={'blue.400'}
+                                    leftIcon={ <FaPen /> }
+                                    rounded={'full'}
+                                    color={'white'}
+                                    _hover={{ bg: 'blue.500' }}>
+                                    <NextLink href={'/ask'} passHref>
+                                        <Link>Ask</Link>
+                                    </NextLink>
+                                </Button>
+                            </Flex>
                         )
                     }
                     {

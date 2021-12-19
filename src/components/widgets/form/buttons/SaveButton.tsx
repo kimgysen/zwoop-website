@@ -10,7 +10,6 @@ const SaveButton: FC<ISaveButton> = ({ onSave }) => {
     return (
         <Button
             bg={'blue.400'}
-            rounded={'full'}
             color={'white'}
             _hover={{ bg: 'blue.500' }}
             onClick={ e => onSave(e) }
