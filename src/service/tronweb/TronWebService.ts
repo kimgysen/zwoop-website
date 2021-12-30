@@ -38,7 +38,6 @@ export const retryLogin = () => new Promise((resolve, reject) => {
                     isTrxWalletInstalled: isInstalled(),
                     isTrxWalletLoggedIn: isLoggedIn()
                 });
-                (window as any).tronWeb.request({ method: 'tron_requestAccounts' });
 
             } else {
                 createGlobalTronWebInstance();

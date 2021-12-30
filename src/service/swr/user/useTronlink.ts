@@ -1,5 +1,5 @@
 import useSWR from "swr";
-import {retryLogin as fetcher} from "../../service/tronweb/TronWebService";
+import {retryLogin as fetcher} from "../../tronweb/TronWebService";
 import TronLinkAuth from "@models/TronlinkAuth";
 
 export default function useTronLink() {

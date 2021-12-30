@@ -1,8 +1,8 @@
 import {Button, Stack} from '@chakra-ui/react';
-import React, {useState} from "react";
+import React from "react";
 import {FaFacebook, FaGithub, FaGoogle, FaLinkedin, FaTwitter} from "react-icons/fa";
 import ModalWidget from "@components/widgets/modal/Modal";
-import NewWindow from 'react-new-window';
+import {signIn} from 'next-auth/react';
 
 interface LoginModalProps {
     modalIsOpen: boolean,
@@ -10,12 +10,6 @@ interface LoginModalProps {
 }
 
 const LoginModal: React.FC<LoginModalProps> = ({ modalIsOpen, modalOnClose }) => {
-    const [popup, setPopUp] = useState({ open: false, provider: '' });
-
-    const handleClick = (provider: string) => {
-        setPopUp({ open: true, provider });
-    }
-
     return (
         <ModalWidget
             title={ 'Login' }
@@ -31,47 +25,39 @@ const LoginModal: React.FC<LoginModalProps> = ({ modalIsOpen, modalOnClose }) =>
                 <Button
                     colorScheme='red'
                     leftIcon={<FaGoogle />}
-                    onClick={ () => handleClick('google') }
+                    onClick={ () => signIn('google') }
                 >
                     Gmail
                 </Button>
                 <Button
                     colorScheme='gray'
                     leftIcon={<FaGithub />}
-                    onClick={ () => handleClick('github') }
+                    onClick={ () => signIn('github') }
                 >
                     Github
                 </Button>
                 <Button
                     colorScheme='linkedin'
                     leftIcon={<FaLinkedin />}
-                    onClick={ () => handleClick('linkedin') }
+                    onClick={ () => signIn('linkedin') }
                 >
                     LinkedIn
                 </Button>
                 <Button
                     colorScheme='facebook'
                     leftIcon={<FaFacebook />}
-                    onClick={ () => handleClick('facebook') }
+                    onClick={ () => signIn('facebook') }
                 >
                     Facebook
                 </Button>
                 <Button
                     colorScheme='twitter'
                     leftIcon={<FaTwitter />}
-                    onClick={ () => handleClick('twitter') }
+                    onClick={ () => signIn('twitter') }
                 >
                     Twitter
                 </Button>
             </Stack>
-            {popup.open ? (
-                <NewWindow
-                    url={ `/login/sign-in?oauthProvider=${ popup.provider }` }
-                    onUnload={() => {
-                        setPopUp({ open: false, provider: '' })
-                    }}
-                />
-            ) : null}
         </ModalWidget>
     )
 

@@ -5,12 +5,19 @@ import ThreeColumnLayout from "@components/layout/column-layouts/ThreeColumnLayo
 import WatchList from "@components/widgets/watchlist/WatchList";
 import FeedList from "@components/widgets/feed/FeedList";
 import TronlinkBanner from "@components/pages/home/tronlink-banner/TronlinkBanner";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {useRouter} from "next/router";
-import useTronLink from "../../src/swr/user/useTronlink";
+import useTronLink from "../../src/service/swr/user/useTronlink";
 import Tag from "@models/Tag";
 import Post from "@models/Post";
 import {Heading} from "@chakra-ui/layout/src/heading";
+import {
+    connectStomp,
+    disconnectStomp,
+    subscribeToPrivateChat,
+    subscribeToPublicChat
+} from "../../src/service/stomp/StompService";
+import {getRawJwt} from "../../src/service/jwt/JwtService";
 
 
 const FeedByTag: NextPage = () => {
@@ -20,6 +27,48 @@ const FeedByTag: NextPage = () => {
     const router = useRouter();
     const { tagName } = router.query;
 
+    const [messages, setMessages] = useState([]);
+
+    useEffect(() => {
+        (async () => {
+            if (tagName) {
+                const jwt = await getRawJwt();
+                const chatRoomId = 'room-' + tagName;
+
+                connectStomp(
+                    chatRoomId, jwt.accessToken['accessToken'],
+                    (frame) => {
+                        console.log('connect success', frame);
+                        subscribeToPublicChat(chatRoomId, (pubMsg) => {
+                            console.log('Public message received', pubMsg);
+                        });
+                        subscribeToPrivateChat(chatRoomId, (privMsg) => {
+                            console.log('Private message received, privMsg');
+                        })
+                    },
+                    (frame) => {
+                        console.log('error frame', frame);
+                        if (frame.headers.message.includes('ExpiredJwtException')) {
+                            disconnectStomp();
+                            router.push('/login');
+                        }
+                        // TODO: Add proper handling when jwt expired
+                        console.log('Connect failed', frame);
+                    },
+                    (frame) => {
+                        console.log('disconnect');
+                    })
+            }
+
+        })();
+
+        return function cleanup() {
+            (async () => {
+                await disconnectStomp();
+            })();
+        }
+
+    }, [tagName]);
 
     const tags: Tag[] = [{ tagId: 1, tagName: 'php' }, { tagId: 2, tagName: 'java' }, { tagId: 3, tagName: 'javascript' }];
 

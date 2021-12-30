@@ -1,5 +1,5 @@
 import axios, {AxiosError} from "axios";
-import UnauthorizedException from "../../exception/UnauhtorizedException";
+import UnauthorizedException from "../../exception/UnauthorizedException";
 
 const endpoint = process.env.NEXT_PUBLIC_API_VERIFY_JWT_ENDPOINT;
 

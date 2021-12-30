@@ -6,6 +6,11 @@ import TwitterProvider from "next-auth/providers/twitter"
 import Auth0Provider from "next-auth/providers/auth0"
 import {AuthProviderEnum} from "@models/AuthProvider";
 import {findUserByProviderAndOauthId, loginUser, registerUser} from "@apiclients/feature/authentication/UserService";
+import jwt from 'jsonwebtoken';
+import util from 'util';
+
+const jwtVerifyAsync = util.promisify(jwt.verify);
+
 // import AppleProvider from "next-auth/providers/apple"
 // import EmailProvider from "next-auth/providers/email"
 
@@ -137,12 +142,18 @@ export default NextAuth({
 
     async session({ session, token, user }) {
       if (token.accessToken) {
-        const { accessToken, userId, firstName, profilePic } = token.accessToken;
+        try {
+          const { accessToken, userId, firstName, profilePic } = token.accessToken;
+          await jwtVerifyAsync(accessToken, process.env.SECRET);
 
-        return {
-          userId,
-          user: { name: firstName, image: profilePic },
-          accessToken: { exp: accessToken.exp }
+          return {
+            userId,
+            user: { name: firstName, image: profilePic },
+            accessToken: { exp: accessToken.exp }
+          }
+
+        } catch (e) {
+          return {};
         }
       }
 
