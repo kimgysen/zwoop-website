@@ -39,13 +39,34 @@ export const disconnectStomp = async () => {
     }
 }
 
+export const initPublicChat = (callback: messageCallbackType) => {
+    client.subscribe(`/chatroom/old.public.messages`, callback);
+}
+
 export const subscribeToPublicChat = (chatRoomId: string, callback: messageCallbackType) => {
     client.subscribe(`/topic/${ chatRoomId }.public.messages`, callback);
 }
 
-export const subscribeToPrivateChat = (chatRoomId: string, callback: messageCallbackType) => {
-    client.subscribe(`/user/queue/${ chatRoomId }.private.messages`, callback, {
+export const subscribeToPrivateChat = (callback: messageCallbackType) => {
+    client.subscribe(`/user/queue/private.messages`, callback, {
         'auto-delete': 'true',
         durable: 'false'
     });
+}
+
+export const initConnectedUsers = (callback: messageCallbackType) => {
+    client.subscribe(`/chatroom/connected.users`, callback);
+}
+
+export const subscribeToConnectedUsers = (chatRoomId: string, callback: messageCallbackType) => {
+    client.subscribe(`/topic/${ chatRoomId }.connected.users`, callback);
+}
+
+export const sendPublicMessage = (chatRoomId: string, message: string) => {
+    const pubMessage = { chatRoomId, message }
+    client.publish({
+        destination: "/chatroom/send.message.public",
+        body: JSON.stringify(pubMessage)
+    });
+
 }

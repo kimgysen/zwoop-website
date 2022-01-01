@@ -4,7 +4,6 @@ import AppLayout from "@components/layout/AppLayout";
 import ThreeColumnLayout from "@components/layout/column-layouts/ThreeColumnLayout";
 import WatchList from "@components/widgets/watchlist/WatchList";
 import FeedList from "@components/widgets/feed/FeedList";
-import TronlinkBanner from "@components/pages/home/tronlink-banner/TronlinkBanner";
 import React, {useEffect, useState} from "react";
 import {useRouter} from "next/router";
 import useTronLink from "../../src/service/swr/user/useTronlink";
@@ -14,10 +13,17 @@ import {Heading} from "@chakra-ui/layout/src/heading";
 import {
     connectStomp,
     disconnectStomp,
+    initConnectedUsers,
+    initPublicChat,
+    sendPublicMessage,
+    subscribeToConnectedUsers,
     subscribeToPrivateChat,
     subscribeToPublicChat
 } from "../../src/service/stomp/StompService";
 import {getRawJwt} from "../../src/service/jwt/JwtService";
+import PublicChat from "@components/widgets/chat/public/PublicChat";
+import ChatMessage from "@components/widgets/chat/public/model/ChatMessage";
+import ChatUser from "@components/widgets/chat/public/model/ChatUser";
 
 
 const FeedByTag: NextPage = () => {
@@ -27,7 +33,9 @@ const FeedByTag: NextPage = () => {
     const router = useRouter();
     const { tagName } = router.query;
 
-    const [messages, setMessages] = useState([]);
+    const [connectedUsers, setConnectedUsers] = useState<ChatUser[]>([]);
+    const [messages, setMessages] = useState<ChatMessage[]>([]);
+
 
     useEffect(() => {
         (async () => {
@@ -39,17 +47,28 @@ const FeedByTag: NextPage = () => {
                     chatRoomId, jwt.accessToken['accessToken'],
                     (frame) => {
                         console.log('connect success', frame);
-                        subscribeToPublicChat(chatRoomId, (pubMsg) => {
-                            console.log('Public message received', pubMsg);
+                        initPublicChat((msg) => {
+                            const pubMessages = JSON.parse(msg.body);
+                            setMessages(pubMessages.reverse());
                         });
-                        subscribeToPrivateChat(chatRoomId, (privMsg) => {
+                        subscribeToPublicChat(chatRoomId, (msg) => {
+                            const pubMsg = JSON.parse(msg.body);
+                            setMessages((messages) => [...messages, pubMsg]);
+                        });
+                        subscribeToPrivateChat((privMsg) => {
                             console.log('Private message received, privMsg');
-                        })
+                        });
+                        initConnectedUsers((msg) => {
+                            setConnectedUsers(JSON.parse(msg.body));
+                        });
+                        subscribeToConnectedUsers(chatRoomId, (msg) => {
+                            setConnectedUsers(JSON.parse(msg.body));
+                        });
                     },
                     (frame) => {
                         console.log('error frame', frame);
+                        disconnectStomp();
                         if (frame.headers.message.includes('ExpiredJwtException')) {
-                            disconnectStomp();
                             router.push('/login');
                         }
                         // TODO: Add proper handling when jwt expired
@@ -80,7 +99,6 @@ const FeedByTag: NextPage = () => {
         tags: [{ tagId: 3, tagName: 'javascript'}, { tagId: 4, tagName: 'react'}]
     }];
 
-
     return (
         <>
             <Head>
@@ -109,10 +127,10 @@ const FeedByTag: NextPage = () => {
                     }
                     rightComponent={
                         <>
-                            <TronlinkBanner
-                                isInstalled={ tronLinkAuth?.isTrxWalletInstalled }
-                                isLoggedIn={ tronLinkAuth?.isTrxWalletLoggedIn }
-                                isLoading={ isTronLinkLoading }
+                            <PublicChat
+                                messages={ messages }
+                                sendMessage={ (message) => sendPublicMessage('room-' + tagName, message) }
+                                connectedUsers={ connectedUsers }
                             />
                         </>
                     }
