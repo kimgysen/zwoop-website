@@ -1,12 +1,12 @@
 import React, {FC, useState} from "react";
 import {Box, Button, List, ListItem, useColorModeValue} from "@chakra-ui/react";
 import AutoResizeTextarea from "@components/widgets/chat/public/AutoResizeTextArea";
-import ChatMessage from "@components/widgets/chat/public/model/ChatMessage";
+import PublicChatMessage from "@components/widgets/chat/public/model/PublicChatMessage";
 import {Flex} from "@chakra-ui/layout/src/flex";
 
 
 interface ChatBoxProps {
-    messages: ChatMessage[],
+    messages: PublicChatMessage[],
     sendMessage: (message: string) => void
 }
 

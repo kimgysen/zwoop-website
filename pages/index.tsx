@@ -8,6 +8,7 @@ import WatchList from "@components/widgets/watchlist/WatchList";
 import FeedList from "@components/widgets/feed/FeedList";
 import Tag from "@models/Tag";
 import Post from "@models/Post";
+import {Heading} from "@chakra-ui/layout/src/heading";
 
 
 const HomePage: React.FC = () => {
@@ -18,10 +19,10 @@ const HomePage: React.FC = () => {
     const tags: Tag[] = [{ tagId: '1', tagName: 'php' }, { tagId: '2', tagName: 'java' }, { tagId: '3', tagName: 'javascript' }];
 
     const posts: Post[] = [{ postId: 'abc', asker: { userId: 'abc', nickName: 'kimbo' },
-        postTitle: 'title 1',
-        postText: 'Dummy post text',
+        title: 'title 1',
+        descriptionMd: 'Dummy post text',
         postStatusId: { postStatusId: '1', postStatus: 'OPEN' },
-        bidPrice: 1500,
+        offer: 0.003,
         tags: [{ tagId: 3, tagName: 'javascript'}, { tagId: 4, tagName: 'react'}]
     }];
 
@@ -39,6 +40,16 @@ const HomePage: React.FC = () => {
                     }
                     centerComponent={
                         <>
+                            <Heading
+                                as="h2"
+                                size="md"
+                                py='.5rem'
+                                maxHeight={ "2.8rem" }
+                                sx={{ overflow: 'hidden' }}
+                            >
+                                Latest questions
+                            </Heading>
+
                             <FeedList isLoading={false} posts={posts} />
                         </>
                     }

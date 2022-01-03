@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from "react";
+import React, {FC, useState} from "react";
 import Select, {OnChangeValue} from 'react-select';
 import Tag from "@models/Tag";
 
@@ -10,36 +10,35 @@ type TagOptionType = { label: string, value: string }
 
 interface TagsBoxProps {
   defaultTags: TagOptionType[]
+  tagOptions: TagOptionType[],
   fetchTags: (tagQuery: string) => void,
   tags: TagOptionType[],
-  setTags: (tags: Tag[]) => void
+  setTags: (tags: Tag[]) => void,
+  maxTags: number
 }
 
 
-const TagsBox: FC<TagsBoxProps> = ({ defaultTags, fetchTags, tags = [], setTags }) => {
+const TagsBox: FC<TagsBoxProps> = (
+    { defaultTags, tagOptions, fetchTags, tags = [], setTags, maxTags }) => {
   const TAGS_REQUEST_MIN_CHARS_TRESHOLD = 2;
 
-  const [ options, setOptions ]     = useState(tags);
   const [ menuIsOpen, setMenuOpen ] = useState(false);
 
-
-  useEffect(() => {
-    setOptions(tags);
-  }, [tags]);
 
   const changeInputHandler = (val: string) => {
     if (val.length >= TAGS_REQUEST_MIN_CHARS_TRESHOLD) {
       fetchTags(val);
       setMenuOpen(true);
     } else {
-      setOptions([]);
       setMenuOpen(false);
     }
   };
 
   const addTagHandler = (tags: OnChangeValue<TagOptionType, true>) => {
-    if (tags) {
-      setTags((tags as TagOptionType[]).map((tag) => ({ tagName: tag.label, tagId: tag.value})));
+    if (tags && tags.length < maxTags + 1) {
+      setTags((tags as TagOptionType[])
+          .map((tag) =>
+              ({ tagName: tag.label, tagId: tag.value})));
     }
   };
 
@@ -49,10 +48,12 @@ const TagsBox: FC<TagsBoxProps> = ({ defaultTags, fetchTags, tags = [], setTags 
     cursor: 'pointer',
     color: state.isFocused ? 'blue' : 'black',
   });
+
+
   return (
     <Select
         instanceId='unique-val'
-        defaultValue={defaultTags}
+        value={tags}
         onInputChange={changeInputHandler}
         onChange={addTagHandler}
         menuIsOpen={menuIsOpen}
@@ -60,7 +61,7 @@ const TagsBox: FC<TagsBoxProps> = ({ defaultTags, fetchTags, tags = [], setTags 
         styles={{ clearIndicator: ClearIndicatorStyles }}
         isClearable={ true }
         isMulti
-        options={options}
+        options={tagOptions}
     />
 
   );

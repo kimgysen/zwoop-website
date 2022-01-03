@@ -21,7 +21,7 @@ const FeedItem: FC<FeedItemProps> = ({ post }) => {
                 direction={ 'row' }
                 minH={{ base: '50px' }}
             >
-                <TrxBox price={ post.bidPrice } />
+                <TrxBox price={ post.offer } />
                 <Box
                     flex="1"
                     ml={ "10px" }
@@ -34,13 +34,13 @@ const FeedItem: FC<FeedItemProps> = ({ post }) => {
                         lineHeight={ "1.4em" }
                         sx={{ overflow: 'hidden' }}
                     >
-                        <NextLink href={ '/posts/1' } passHref>
+                        <NextLink href={ '/post/1' } passHref>
                             <Link
                                 _hover={{ textDecoration: "underline" }}
                                 isExternal
                                 d="block"
                             >
-                                { post.postTitle }
+                                { post.title }
                             </Link>
                         </NextLink>
                     </Heading>
@@ -50,7 +50,7 @@ const FeedItem: FC<FeedItemProps> = ({ post }) => {
                         color="gray.600"
                     >
                         <div
-                            dangerouslySetInnerHTML={{ __html: marked(post.postText) }}
+                            dangerouslySetInnerHTML={{ __html: marked(post.descriptionMd) }}
                             style={{
                                 maxHeight: '75px',
                                 WebkitMaskImage: "linear-gradient(180deg, #000 60%, transparent)",

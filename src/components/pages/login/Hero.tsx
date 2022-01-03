@@ -18,13 +18,13 @@ const Hero: React.FC = () => {
                     fontWeight={600}
                     fontSize={{ base: '3xl', sm: '4xl', md: '6xl' }}
                     lineHeight={'110%'}>
-                    Social services {' '}
+                    Code {' '}
                     <Text as={'span'} color={'orange.400'}>
-                        for Programmers
+                        Support
                     </Text>
                 </Heading>
                 <Text color={'gray.500'} maxW={'3xl'}>
-                    Ask experienced developers to help you with your software problem in exchange for TRX.
+                    Ask experienced developers to help you with your software problem in exchange for BNB.
                 </Text>
                 <Stack spacing={6} direction={'row'}>
                     <Button

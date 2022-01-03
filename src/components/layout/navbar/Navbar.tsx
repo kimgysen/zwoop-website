@@ -3,8 +3,8 @@ import {
     Button,
     Collapse,
     Flex,
+    HStack,
     IconButton,
-    Image,
     Stack,
     Text,
     useBreakpointValue,
@@ -14,18 +14,24 @@ import {
 import {CloseIcon, HamburgerIcon,} from '@chakra-ui/icons';
 import React from "react";
 import NextLink from 'next/link'
-import {Link} from "@chakra-ui/layout/src/link";
 import Searchbox from "@components/widgets/searchbox/Searchbox";
 import LoginModal from "@components/layout/navbar/modal/LoginModal";
-import {signOut, useSession} from "next-auth/react";
+import {useSession} from "next-auth/react";
 import {FaPen} from "react-icons/fa";
+import MessageWidget from "@components/layout/navbar/notification/MessageWidget";
+import NotificationWidget from "@components/layout/navbar/notification/NotificationWidget";
+import UserWidget from "@components/layout/navbar/user/UserWidget";
+import {useRouter} from "next/router";
 
 const Navbar: React.FC = () => {
     const { data: session, status } = useSession();
+
     const loading = status === "loading";
 
     const { isOpen: rightMenuIsOpen, onToggle: rightMenuOnToggle } = useDisclosure();
     const { isOpen: modalIsOpen, onToggle: modalOnOpen, onClose: modalOnClose } = useDisclosure();
+
+    const router = useRouter();
 
 
     return (
@@ -56,12 +62,13 @@ const Navbar: React.FC = () => {
                         textAlign={useBreakpointValue({ base: 'center', md: 'left' })}
                         fontFamily={'heading'}
                         color={useColorModeValue('gray.800', 'white')}>
-                        <NextLink href={'/'} passHref>
-                            <Link>Zwoop</Link>
+                        <NextLink href={'/'}>
+                            Zwoop
                         </NextLink>
                     </Text>
                     <Flex display={{ base: 'none', md: 'flex' }} ml={10}>
-                        <Searchbox />
+                        <Searchbox
+                            onSelectTag={ (tag: string) => router.push(`/tags/${ tag }`) } />
                     </Flex>
                 </Flex>
 
@@ -78,41 +85,29 @@ const Navbar: React.FC = () => {
                     {
                         session && (
                             <Flex flex={{ base: 1, md: 2 }} justify={{ base: 'center', md: 'end' }}>
-                                <a
-                                    href={`/api/auth/signout`}
-                                    onClick={(e) => {
-                                        e.preventDefault()
-                                        signOut()
-                                    }}
-                                >
-                                    logout
-                                </a>
-                                <Button
-                                    as={'a'}
-                                    pr='5px'
-                                    mr='5px'
-                                    fontSize={'sm'}
-                                    fontWeight={400}
-                                    variant={'link'}
-                                    href={ `/user/${ session.userId }` }>
-                                    <Image
-                                        w='35px'
-                                        h='35px'
-                                        mr='10px'
-                                        src={ session.user?.image as string }
-                                        alt='profile pic'
+                                <HStack mr='15px'>
+                                    <MessageWidget
+                                        count={1}
+                                        url='/chat'
                                     />
-                                </Button>
-                                <Button
-                                    bg={'blue.400'}
-                                    leftIcon={ <FaPen /> }
-                                    rounded={'full'}
-                                    color={'white'}
-                                    _hover={{ bg: 'blue.500' }}>
-                                    <NextLink href={'/ask'} passHref>
-                                        <Link>Ask</Link>
-                                    </NextLink>
-                                </Button>
+                                    <NotificationWidget
+                                        count={1}
+                                        url='/notifications'
+                                    />
+                                </HStack>
+                                <UserWidget
+                                    userId={ session.userId as string }
+                                    profilePic={ session.user?.image as string } />
+                                <NextLink href={'/ask'}>
+                                    <Button
+                                        bg={'blue.400'}
+                                        leftIcon={ <FaPen /> }
+                                        rounded={'full'}
+                                        color={'white'}
+                                        _hover={{ bg: 'blue.500' }}>
+                                            Ask
+                                    </Button>
+                                </NextLink>
                             </Flex>
                         )
                     }

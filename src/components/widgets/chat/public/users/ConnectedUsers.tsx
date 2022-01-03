@@ -15,6 +15,7 @@ const ConnectedUsers: FC<ConnectedUsersProps> = ({ connectedUsers }) => {
         <List
             spacing={3}
             fontSize='sm'
+            textAlign='left'
         >
             {
                 connectedUsers.map((user, index) => {

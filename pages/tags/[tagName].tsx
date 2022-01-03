@@ -22,7 +22,7 @@ import {
 } from "../../src/service/stomp/StompService";
 import {getRawJwt} from "../../src/service/jwt/JwtService";
 import PublicChat from "@components/widgets/chat/public/PublicChat";
-import ChatMessage from "@components/widgets/chat/public/model/ChatMessage";
+import PublicChatMessage from "@components/widgets/chat/public/model/PublicChatMessage";
 import ChatUser from "@components/widgets/chat/public/model/ChatUser";
 
 
@@ -34,7 +34,7 @@ const FeedByTag: NextPage = () => {
     const { tagName } = router.query;
 
     const [connectedUsers, setConnectedUsers] = useState<ChatUser[]>([]);
-    const [messages, setMessages] = useState<ChatMessage[]>([]);
+    const [messages, setMessages] = useState<PublicChatMessage[]>([]);
 
 
     useEffect(() => {
@@ -44,7 +44,7 @@ const FeedByTag: NextPage = () => {
                 const chatRoomId = 'room-' + tagName;
 
                 connectStomp(
-                    chatRoomId, jwt.accessToken['accessToken'],
+                    chatRoomId, jwt,
                     (frame) => {
                         console.log('connect success', frame);
                         initPublicChat((msg) => {
@@ -92,10 +92,10 @@ const FeedByTag: NextPage = () => {
     const tags: Tag[] = [{ tagId: 1, tagName: 'php' }, { tagId: 2, tagName: 'java' }, { tagId: 3, tagName: 'javascript' }];
 
     const posts: Post[] = [{ postId: 'abc', asker: { userId: 'abc', nickName: 'kimbo' },
-        postTitle: `title ${ tagName } 1`,
-        postText: 'Dummy post text',
+        title: `title ${ tagName } 1`,
+        descriptionMd: 'Dummy post text',
         postStatusId: { postStatusId: 1, postStatus: 'OPEN' },
-        bidPrice: 1500,
+        offer: 0.003,
         tags: [{ tagId: 3, tagName: 'javascript'}, { tagId: 4, tagName: 'react'}]
     }];
 

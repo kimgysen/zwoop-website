@@ -1,9 +1,8 @@
-import React from "react";
+import React, {useState} from "react";
 
 import {
     Box,
     Divider,
-    Input,
     NumberDecrementStepper,
     NumberIncrementStepper,
     NumberInput,
@@ -16,6 +15,7 @@ import MarkdownEditor from "@components/widgets/markdown/MarkdownEditor";
 import TagsBox from "@components/widgets/tags/TagsBox";
 import {findTagsStartingWith} from "@apiclients/feature/tag/TagService";
 import Tag from "@models/Tag";
+import Title from "./Title";
 
 
 export type Post = {
@@ -39,25 +39,23 @@ interface FormDetailsViewProps {
 
 const EditFormDetailsView: React.FC<FormDetailsViewProps> = ({ post, setters }) => {
 
+    const [tagOptions, setTagOptions] = useState([]);
+
     const fetchTags = (tagName: string) => {
         findTagsStartingWith(tagName)
             .then(res => {
-                setters.setTags(res.data)
+                const tagOptions = res.data
+                    .map((tag: any) => ({ label: tag.tagName, value: tag.tagId }));
+                setTagOptions(tagOptions);
             });
     }
 
     return (
         <Card>
-            <Box>
-                <Input
-                    focusBorderColor= 'none'
-                    size            = "lg"
-                    placeholder     = "What is your request?"
-                    backgroundColor = "white"
-                    onChange        = { e => setters.setTitle(e.target.value) }
-                    defaultValue    = { post.title }
-                />
-            </Box>
+            <Title
+                title={ post.title }
+                setTitle={ setters.setTitle }
+            />
             <Box mt='10px' mb='15px'>
                 <MarkdownEditor
                     description     = { post.descriptionMd }
@@ -66,24 +64,29 @@ const EditFormDetailsView: React.FC<FormDetailsViewProps> = ({ post, setters }) 
             </Box>
             <FormCard
                 title='Tags'
-                description={<p>Add max 5 tags:</p>}
+                description={<p>Add max 3 tags:</p>}
             >
                 <TagsBox
                     defaultTags   = { post.tags.map((tag) => ({ label: tag.tagName, value: tag.tagId })) }
+                    tagOptions    = { tagOptions }
                     fetchTags     = { fetchTags }
                     tags          = { post.tags.map((tag) => ({ label: tag.tagName, value: tag.tagId })) }
                     setTags       = { setters.setTags }
+                    maxTags       = { 3 }
                 />
             </FormCard>
             <Divider mt='15px' mb='15px' />
             <FormCard
                 title='Offer price'
-                description='Amount of TRX you offer in exchange for support'>
+                description='Amount of BNB you offer in exchange for support'>
                 <NumberInput
                     size='md'
                     maxW="32"
-                    defaultValue={150}
-                    min={10}
+                    defaultValue={ 0.033 }
+                    inputMode='decimal'
+                    precision={ 3 }
+                    step={ .001 }
+                    min={ .003 }
                     onChange={(valueString: string) => setters.setOffer(valueString)}
                     value={post.offer}
                 >

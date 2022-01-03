@@ -1,6 +1,5 @@
 import {FC} from "react";
 import {Center, Image, keyframes, usePrefersReducedMotion, VStack} from "@chakra-ui/react";
-import millify from "millify";
 
 
 export interface TrxBoxProps {
@@ -29,7 +28,7 @@ export const TrxBox: FC<TrxBoxProps> = ({ price }) => {
                 bgColor="ruby.600"
                 color="white"
             >
-                { millify(price) }
+                { price }
             </Center>
             <Center
                 h={ 15 }
@@ -37,7 +36,7 @@ export const TrxBox: FC<TrxBoxProps> = ({ price }) => {
                 fontWeight={ 600 }
                 color="ruby.600"
             >
-                TRX
+                BNB
             </Center>
             <Center
                 h={ 40 }

@@ -3,11 +3,11 @@ import {Box, Tab, TabList, TabPanel, TabPanels, Tabs} from "@chakra-ui/react";
 import ChatUser from "@components/widgets/chat/public/model/ChatUser";
 import PublicChatBox from "@components/widgets/chat/public/chatbox/PublicChatBox";
 import ConnectedUsers from "@components/widgets/chat/public/users/ConnectedUsers";
-import ChatMessage from "@components/widgets/chat/public/model/ChatMessage";
+import PublicChatMessage from "@components/widgets/chat/public/model/PublicChatMessage";
 
 
 interface PublicChatProps {
-    messages: ChatMessage[],
+    messages: PublicChatMessage[],
     connectedUsers: ChatUser[],
     sendMessage: (message: string) => void,
 }
@@ -16,7 +16,6 @@ const PublicChat: FC<PublicChatProps> = ({ messages, sendMessage, connectedUsers
     return (
         <Box>
             <Tabs
-
                 id='tabs'
                 align='end'
                 size='sm'

@@ -13,6 +13,11 @@ export const getRawJwt = () => {
 
     return axios
         .get(endpoint)
-        .then(res => res.data);
+        .then(res => {
+            if (res.data.accessToken) {
+                return res.data.accessToken['accessToken']
+            }
+            res.data
+        });
 
 }

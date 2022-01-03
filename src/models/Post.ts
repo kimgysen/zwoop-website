@@ -10,9 +10,9 @@ export enum PostStatusEnum {
 export default interface Post {
     postId: string,
     asker: User,
-    postTitle: string,
-    postText: string,
-    bidPrice: number,
+    title: string,
+    descriptionMd: string,
+    offer: string,
     postStatus: PostStatus,
     tags: Tag[]
     createdAt: Date,

@@ -7,16 +7,20 @@ import SaveButton from "./buttons/SaveButton";
 
 interface BtnSaveViewProps {
     onCancel: (e: React.MouseEvent) => void
-    onSave: (e: React.MouseEvent) => void
+    onSave: (e: React.MouseEvent) => void,
+    shouldDisableSave: boolean
 }
 
 
-const BtnCancelSaveView: FC<BtnSaveViewProps> = ({ onCancel, onSave }) => {
+const BtnCancelSaveView: FC<BtnSaveViewProps> = ({ onCancel, onSave, shouldDisableSave }) => {
     return (
         <Flex mt={5} pb={10}>
             <Spacer />
             <CancelButton onCancel={ onCancel } />
-            <SaveButton onSave={ onSave } />
+            <SaveButton
+                onSave={ onSave }
+                shouldDisableSave={ shouldDisableSave }
+            />
         </Flex>
     );
 };
