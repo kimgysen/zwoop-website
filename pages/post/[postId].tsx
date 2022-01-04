@@ -6,13 +6,25 @@ import ThreeColumnLayout from "@components/layout/column-layouts/ThreeColumnLayo
 import WatchList from "@components/widgets/watchlist/WatchList";
 import React from "react";
 import Tag from "@models/Tag";
+import {getPostById} from "@apiclients/feature/post/PostService";
+import PostView from "@components/pages/post/PostView";
 
 
-const Post: NextPage = () => {
+export async function getServerSideProps(ctx: { query: { postId: any; }; }) {
+    const { postId } = ctx.query;
+    const data = await getPostById(postId);
+    // Pass data to the page via props
+    return {
+        props:
+            { post: data }
+    }
+}
 
+const Post: NextPage = (props: any) => {
     const router = useRouter();
     const { postId } = router.query;
 
+    const { post } = props;
     const tags: Tag[] = [{ tagId: 1, tagName: 'php' }, { tagId: 2, tagName: 'java' }, { tagId: 3, tagName: 'javascript' }];
 
 
@@ -29,9 +41,7 @@ const Post: NextPage = () => {
                         </>
                     }
                     centerComponent={
-                        <>
-                            Post page
-                        </>
+                        <PostView post={ post } />
                     }
                     rightComponent={
                         <>

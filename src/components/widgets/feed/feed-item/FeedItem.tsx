@@ -1,10 +1,10 @@
 import NextLink from 'next/link'
 import marked from 'marked';
-import {Box, Flex, Heading, Link} from "@chakra-ui/react";
-import {FC} from "react";
+import {Box, Divider, Flex, Heading, HStack, Image, Link} from "@chakra-ui/react";
+import React, {FC} from "react";
 import Card from "../../../layout/components/card/Card";
 import Post from "@models/Post";
-import {TrxBox} from "./TrxBox";
+import {BnbBox} from "./BnbBox";
 import TagsList from "../../tags/TagsList";
 
 export interface FeedItemProps {
@@ -15,13 +15,14 @@ export interface FeedItemProps {
 //https://marked.js.org/using_advanced#options
 
 const FeedItem: FC<FeedItemProps> = ({ post }) => {
+    console.log('post', post);
     return (
         <Card>
             <Flex
                 direction={ 'row' }
                 minH={{ base: '50px' }}
             >
-                <TrxBox price={ post.offer } />
+                <BnbBox price={ post.offerPrice } />
                 <Box
                     flex="1"
                     ml={ "10px" }
@@ -34,13 +35,13 @@ const FeedItem: FC<FeedItemProps> = ({ post }) => {
                         lineHeight={ "1.4em" }
                         sx={{ overflow: 'hidden' }}
                     >
-                        <NextLink href={ '/post/1' } passHref>
+                        <NextLink href={ `/post/${post.postId}` } passHref>
                             <Link
                                 _hover={{ textDecoration: "underline" }}
                                 isExternal
                                 d="block"
                             >
-                                { post.title }
+                                { post.postTitle }
                             </Link>
                         </NextLink>
                     </Heading>
@@ -50,7 +51,7 @@ const FeedItem: FC<FeedItemProps> = ({ post }) => {
                         color="gray.600"
                     >
                         <div
-                            dangerouslySetInnerHTML={{ __html: marked(post.descriptionMd) }}
+                            dangerouslySetInnerHTML={{ __html: marked(post.postText) }}
                             style={{
                                 maxHeight: '75px',
                                 WebkitMaskImage: "linear-gradient(180deg, #000 60%, transparent)",
@@ -63,6 +64,27 @@ const FeedItem: FC<FeedItemProps> = ({ post }) => {
                     >
                         <TagsList tags={ post.tags } />
                     </Box>
+                    <Divider />
+                    <Flex flex={1}
+                          justifyContent={ 'flex-end' }
+                          pt='10px' pb='10px'
+                          fontSize='sm'
+                    >
+                        <NextLink href={`/user/${ post.asker.userId }`} passHref>
+                            <Link>
+                                <HStack>
+                                    <Image
+                                        w='35px'
+                                        h='35px'
+                                        mr='10px'
+                                        src={ post.asker.profilePic }
+                                        alt='profile pic'
+                                    />
+                                    <Box>{ post.asker.nickName || post.asker.userId }</Box>
+                                </HStack>
+                            </Link>
+                        </NextLink>
+                    </Flex>
                 </Box>
             </Flex>
         </Card>

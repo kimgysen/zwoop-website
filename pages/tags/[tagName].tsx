@@ -8,7 +8,7 @@ import React, {useEffect, useState} from "react";
 import {useRouter} from "next/router";
 import useTronLink from "../../src/service/swr/user/useTronlink";
 import Tag from "@models/Tag";
-import Post from "@models/Post";
+import {PostStatusEnum} from "@models/Post";
 import {Heading} from "@chakra-ui/layout/src/heading";
 import {
     connectStomp,
@@ -24,6 +24,8 @@ import {getRawJwt} from "../../src/service/jwt/JwtService";
 import PublicChat from "@components/widgets/chat/public/PublicChat";
 import PublicChatMessage from "@components/widgets/chat/public/model/PublicChatMessage";
 import ChatUser from "@components/widgets/chat/public/model/ChatUser";
+import {FeedTypeEnum, getFeed} from "@apiclients/feature/post/PostService";
+import ApiResult from "@apiclients/type/ApiResult";
 
 
 const FeedByTag: NextPage = () => {
@@ -33,9 +35,25 @@ const FeedByTag: NextPage = () => {
     const router = useRouter();
     const { tagName } = router.query;
 
+    const [feedResult, setFeedResult] = useState<ApiResult>([]);
     const [connectedUsers, setConnectedUsers] = useState<ChatUser[]>([]);
     const [messages, setMessages] = useState<PublicChatMessage[]>([]);
 
+
+    useEffect(() => {
+        if (tagName) {
+            (async () => {
+                const res = await getFeed(
+                    FeedTypeEnum.FEED_BY_TAG,
+                    PostStatusEnum.OPEN,
+                    tagName as string,
+                    0,
+                    50);
+
+                setFeedResult(res);
+            })();
+        }
+    }, [tagName]);
 
     useEffect(() => {
         (async () => {
@@ -91,14 +109,6 @@ const FeedByTag: NextPage = () => {
 
     const tags: Tag[] = [{ tagId: 1, tagName: 'php' }, { tagId: 2, tagName: 'java' }, { tagId: 3, tagName: 'javascript' }];
 
-    const posts: Post[] = [{ postId: 'abc', asker: { userId: 'abc', nickName: 'kimbo' },
-        title: `title ${ tagName } 1`,
-        descriptionMd: 'Dummy post text',
-        postStatusId: { postStatusId: 1, postStatus: 'OPEN' },
-        offer: 0.003,
-        tags: [{ tagId: 3, tagName: 'javascript'}, { tagId: 4, tagName: 'react'}]
-    }];
-
     return (
         <>
             <Head>
@@ -122,7 +132,10 @@ const FeedByTag: NextPage = () => {
                             >
                                 { tagName }
                             </Heading>
-                            <FeedList isLoading={false} posts={posts} />
+                            <FeedList isLoading={ feedResult.loading }
+                                      posts={ feedResult.result }
+                                      error={ feedResult.error?.toString() }
+                            />
                         </>
                     }
                     rightComponent={

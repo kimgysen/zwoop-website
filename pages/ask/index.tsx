@@ -60,11 +60,15 @@ const Ask: NextPage = () => {
             setSaveError(resp.error);
 
         } else {
-            console.log(resp.result);
+            localStorage.setItem('createPost', JSON.stringify({
+                title: '',
+                descriptionMd: '',
+                tags: [],
+                offer: '0.003'
+            }));
             router.push(resp.result);
         }
     }
-
 
     return (
         <>

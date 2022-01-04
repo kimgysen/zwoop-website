@@ -1,6 +1,7 @@
-import {Box, Flex} from "@chakra-ui/react";
+import {Box, Flex, Link} from "@chakra-ui/react";
 import {FC} from "react";
 import Tag from "@models/Tag";
+import NextLink from 'next/link';
 
 
 interface TagsListProps {
@@ -13,18 +14,22 @@ const TagsList: FC<TagsListProps> = ({ tags }) => (
         flexWrap="wrap"
     >
         { tags.map((tag, index) => (
-            <Box className='tag'
-                 key={`tag-${ tag }-${ index }`}
-                 fontSize={ '80%' }
-                 color="#03254c;"
-                 bgColor="#d0efff"
-                 borderRadius={ '4px' }
-                 mr={ '4px' }
-                 mb={ '5px' }
-                 p="3px 8px 3px"
-            >
-                { tag.tagName }
-            </Box>
+            <NextLink href={`/tags/${ tag.tagName }`} passHref>
+                <Link>
+                    <Box className='tag'
+                         key={`tag-${ tag }-${ index }`}
+                         fontSize={ '80%' }
+                         color="#03254c;"
+                         bgColor="#d0efff"
+                         borderRadius={ '4px' }
+                         mr={ '4px' }
+                         mb={ '5px' }
+                         p="3px 8px 3px"
+                    >
+                        { tag.tagName }
+                    </Box>
+                </Link>
+            </NextLink>
         ))}
     </Flex>
 );

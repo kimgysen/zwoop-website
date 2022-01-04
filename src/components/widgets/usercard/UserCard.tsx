@@ -1,4 +1,4 @@
-import {Avatar, Box, Button, Flex, Heading, Image, Stack, Text, useColorModeValue,} from '@chakra-ui/react';
+import {Avatar, Box, Button, Flex, Heading, Stack, Text, useColorModeValue,} from '@chakra-ui/react';
 import User from "@models/User";
 
 
@@ -15,13 +15,10 @@ const UserCard: React.FC<UserCardProps> = ({ user }) => {
             boxShadow={'2xl'}
             rounded={'md'}
             overflow={'hidden'}>
-            <Image
-                h={'120px'}
+            <Box
+                h={'80px'}
                 w={'full'}
-                src={
-                    'https://images.unsplash.com/photo-1612865547334-09cb8cb455da?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80'
-                }
-                objectFit={'cover'}
+                background={'white'}
             />
             <Flex justify={'center'} mt={-12}>
                 <Avatar

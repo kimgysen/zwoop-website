@@ -2,11 +2,11 @@ import {FC} from "react";
 import {Center, Image, keyframes, usePrefersReducedMotion, VStack} from "@chakra-ui/react";
 
 
-export interface TrxBoxProps {
-    price: number
+export interface BnbBoxProps {
+    price: string
 }
 
-export const TrxBox: FC<TrxBoxProps> = ({ price }) => {
+export const BnbBox: FC<BnbBoxProps> = ({ price }) => {
     const prefersReducedMotion = usePrefersReducedMotion();
     const spin = keyframes`
       from { transform: rotate(0deg); }
@@ -43,7 +43,7 @@ export const TrxBox: FC<TrxBoxProps> = ({ price }) => {
             >
                 <Image
                     animation={ animation }
-                    src='/static/images/trx-logo.svg'
+                    src='/static/images/bnb-icon.svg'
                     w={ 30 }
                     h={ 30 }
                     alt="trx-logo"

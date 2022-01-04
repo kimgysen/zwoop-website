@@ -1,30 +1,36 @@
 import Head from "next/head";
 import AppLayout from "@components/layout/AppLayout";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import useTronLink from "../src/service/swr/user/useTronlink";
 import TronlinkBanner from "@components/pages/home/tronlink-banner/TronlinkBanner";
 import ThreeColumnLayout from "@components/layout/column-layouts/ThreeColumnLayout";
 import WatchList from "@components/widgets/watchlist/WatchList";
 import FeedList from "@components/widgets/feed/FeedList";
 import Tag from "@models/Tag";
-import Post from "@models/Post";
+import {PostStatusEnum} from "@models/Post";
 import {Heading} from "@chakra-ui/layout/src/heading";
+import {FeedTypeEnum, getFeed} from "@apiclients/feature/post/PostService";
+import ApiResult from "@apiclients/type/ApiResult";
 
 
 const HomePage: React.FC = () => {
 
     const { tronLinkAuth, isTronLinkLoading } = useTronLink();
+    const [feedResult, setFeedResult] = useState<ApiResult>({ loading: true, result: [], error: null });
 
+    useEffect(() => {
+        (async () => {
+            const res = await getFeed(
+                FeedTypeEnum.FEED_ALL,
+                PostStatusEnum.OPEN,
+                null,
+                0,
+                50);
+            setFeedResult(res);
+        })();
+    }, []);
 
     const tags: Tag[] = [{ tagId: '1', tagName: 'php' }, { tagId: '2', tagName: 'java' }, { tagId: '3', tagName: 'javascript' }];
-
-    const posts: Post[] = [{ postId: 'abc', asker: { userId: 'abc', nickName: 'kimbo' },
-        title: 'title 1',
-        descriptionMd: 'Dummy post text',
-        postStatusId: { postStatusId: '1', postStatus: 'OPEN' },
-        offer: 0.003,
-        tags: [{ tagId: 3, tagName: 'javascript'}, { tagId: 4, tagName: 'react'}]
-    }];
 
     return (
         <>
@@ -50,7 +56,10 @@ const HomePage: React.FC = () => {
                                 Latest questions
                             </Heading>
 
-                            <FeedList isLoading={false} posts={posts} />
+                            <FeedList isLoading={ feedResult.loading }
+                                      posts={ feedResult.result }
+                                      error={ feedResult.error?.toString() }
+                            />
                         </>
                     }
                     rightComponent={
@@ -69,4 +78,3 @@ const HomePage: React.FC = () => {
 }
 
 export default HomePage;
-

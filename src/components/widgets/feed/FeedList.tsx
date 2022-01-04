@@ -6,10 +6,11 @@ import Card from "@components/layout/components/card/Card";
 
 interface FeedListProps {
     isLoading: boolean,
-    posts: Post[] | undefined
+    posts: Post[] | undefined,
+    error?: string
 }
 
-const FeedList: FC<FeedListProps> = ({ isLoading, posts = [] }) => {
+const FeedList: FC<FeedListProps> = ({ isLoading, posts = [], error }) => {
     return (
         <Box width={'100%'}>
             {
@@ -21,6 +22,19 @@ const FeedList: FC<FeedListProps> = ({ isLoading, posts = [] }) => {
                             <Skeleton height="15px" />
                         </Stack>
                     </Card>
+            }
+            {
+                error && (
+                    <Box>
+                        { error }
+                    </Box>
+                )
+            }
+            {
+                (!posts || posts.length === 0) &&
+                    <Box mt='20px' plr='10px'>
+                        <i>No questions found</i>
+                    </Box>
             }
             {
                 posts.map(post => <FeedItem
