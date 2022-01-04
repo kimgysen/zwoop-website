@@ -6,6 +6,7 @@ import Card from "../../../layout/components/card/Card";
 import Post from "@models/Post";
 import {BnbBox} from "./BnbBox";
 import TagsList from "../../tags/TagsList";
+import TimeAgo from "react-timeago";
 
 export interface FeedItemProps {
     post: Post
@@ -15,7 +16,6 @@ export interface FeedItemProps {
 //https://marked.js.org/using_advanced#options
 
 const FeedItem: FC<FeedItemProps> = ({ post }) => {
-    console.log('post', post);
     return (
         <Card>
             <Flex
@@ -31,6 +31,7 @@ const FeedItem: FC<FeedItemProps> = ({ post }) => {
                         as="h2"
                         size="sm"
                         mt={ -1 }
+                        pb={'10px'}
                         maxHeight={ "2.8em" }
                         lineHeight={ "1.4em" }
                         sx={{ overflow: 'hidden' }}
@@ -45,6 +46,9 @@ const FeedItem: FC<FeedItemProps> = ({ post }) => {
                             </Link>
                         </NextLink>
                     </Heading>
+                    <Box fontSize='xs'>
+                        <TimeAgo date={ post.createdAt } />
+                    </Box>
                     <Box
                         fontSize="90%"
                         mt="5px"

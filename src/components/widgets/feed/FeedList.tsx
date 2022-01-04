@@ -37,7 +37,7 @@ const FeedList: FC<FeedListProps> = ({ isLoading, posts = [], error }) => {
                     </Box>
             }
             {
-                posts.map(post => <FeedItem
+                posts && posts.map(post => <FeedItem
                     key={ post.postId }
                     post={ post }
                 />)

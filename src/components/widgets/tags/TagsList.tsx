@@ -14,10 +14,11 @@ const TagsList: FC<TagsListProps> = ({ tags }) => (
         flexWrap="wrap"
     >
         { tags.map((tag, index) => (
-            <NextLink href={`/tags/${ tag.tagName }`} passHref>
+            <NextLink
+                key={`tag-${ tag }-${ index }`}
+                href={`/tags/${ tag.tagName }`} passHref>
                 <Link>
                     <Box className='tag'
-                         key={`tag-${ tag }-${ index }`}
                          fontSize={ '80%' }
                          color="#03254c;"
                          bgColor="#d0efff"

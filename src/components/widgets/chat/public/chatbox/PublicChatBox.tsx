@@ -76,7 +76,6 @@ const PublicChatBox: FC<ChatBoxProps> = ({ messages, sendMessage }) => {
                 color={'white'}
                 _hover={{ bg: 'blue.500' }}
                 onClick={ () => {
-                    console.log('send message', message);
                     setMessage('');
                     sendMessage(message)
                 }}
