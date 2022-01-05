@@ -22,7 +22,6 @@ export const createPost: (post: CreatePost, jwt: string) => Promise<ApiResult> =
     })
         .then(res => {
             if (res.status === 201) {
-                console.log(res);
                 return {
                     loading: false,
                     result: res.headers.location,

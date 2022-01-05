@@ -3,13 +3,25 @@ import Head from "next/head";
 import AppLayout from "@components/layout/AppLayout";
 import ThreeColumnLayout from "@components/layout/column-layouts/ThreeColumnLayout";
 import WatchList from "@components/widgets/watchlist/WatchList";
-import {Heading} from "@chakra-ui/layout/src/heading";
+import {Box} from "@chakra-ui/react";
 import React from "react";
 import Tag from "@models/Tag";
-import UserCard from "@components/widgets/usercard/UserCard";
+import UserCard from "@components/pages/user/UserCard";
+import {getUserById} from "@apiclients/feature/user/UserService";
+import UserMenu from "@components/pages/user/UserMenu";
 
 
-const UserProfile: NextPage = () => {
+export async function getServerSideProps(ctx: { query: { userId: string } }) {
+    const { userId } = ctx.query;
+    const res = await getUserById(userId);
+
+    return {
+        props: { user: res.result }
+    }
+}
+
+const UserProfile: NextPage = (props: any) => {
+    const { user } = props;
 
     const tags: Tag[] = [{ tagId: 1, tagName: 'php' }, { tagId: 2, tagName: 'java' }, { tagId: 3, tagName: 'javascript' }];
 
@@ -26,18 +38,10 @@ const UserProfile: NextPage = () => {
                         </>
                     }
                     centerComponent={
-                        <>
-                            <Heading
-                                as="h2"
-                                size="md"
-                                py='.5rem'
-                                maxHeight={ "2.8rem" }
-                                sx={{ overflow: 'hidden' }}
-                            >
-                                User profile
-                            </Heading>
-                                <UserCard user={ null } />
-                        </>
+                        <Box>
+                            <UserCard user={ user } />
+                            <UserMenu userId={ user.userId } />
+                        </Box>
                     }
                     rightComponent={
                         <>

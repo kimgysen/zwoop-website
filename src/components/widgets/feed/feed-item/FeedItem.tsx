@@ -84,7 +84,7 @@ const FeedItem: FC<FeedItemProps> = ({ post }) => {
                                         src={ post.asker.profilePic }
                                         alt='profile pic'
                                     />
-                                    <Box>{ post.asker.nickName || post.asker.userId }</Box>
+                                    <Box>{ post.asker.nickName }</Box>
                                 </HStack>
                             </Link>
                         </NextLink>

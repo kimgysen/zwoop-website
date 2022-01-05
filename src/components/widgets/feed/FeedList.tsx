@@ -33,7 +33,7 @@ const FeedList: FC<FeedListProps> = ({ isLoading, posts = [], error }) => {
             {
                 (!posts || posts.length === 0) &&
                     <Box mt='20px' plr='10px'>
-                        <i>No questions found</i>
+                        <i>There are currently no open questions</i>
                     </Box>
             }
             {

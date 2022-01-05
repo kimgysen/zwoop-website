@@ -9,7 +9,6 @@ import {useRouter} from "next/router";
 import useTronLink from "../../src/service/swr/user/useTronlink";
 import Tag from "@models/Tag";
 import {PostStatusEnum} from "@models/Post";
-import {Heading} from "@chakra-ui/layout/src/heading";
 import {
     connectStomp,
     disconnectStomp,
@@ -26,19 +25,33 @@ import PublicChatMessage from "@components/widgets/chat/public/model/PublicChatM
 import ChatUser from "@components/widgets/chat/public/model/ChatUser";
 import {FeedTypeEnum, getFeed} from "@apiclients/feature/post/PostService";
 import ApiResult from "@apiclients/type/ApiResult";
+import TagHeader from "@components/pages/tag/TagHeader";
+import {useSession} from "next-auth/react";
+import {getFollowedTags} from "@apiclients/feature/user/UserService";
 
 
 const FeedByTag: NextPage = () => {
 
     const { tronLinkAuth, isTronLinkLoading } = useTronLink();
 
+    const { data: session, status } = useSession();
+
     const router = useRouter();
     const { tagName } = router.query;
 
-    const [feedResult, setFeedResult] = useState<ApiResult>([]);
+    const [followedTagsResult, setFollowedTagsResult] = useState<ApiResult>({ loading: true, result: null, error: null });
+    const [feedResult, setFeedResult] = useState<ApiResult>({ loading: true, result: null, error: null });
     const [connectedUsers, setConnectedUsers] = useState<ChatUser[]>([]);
     const [messages, setMessages] = useState<PublicChatMessage[]>([]);
 
+    useEffect(() => {
+        (async() => {
+            if (session) {
+                const res = await getFollowedTags(session.userId as string);
+                setFollowedTagsResult(res);
+            }
+        })();
+    }, [session?.userId, tagName]);
 
     useEffect(() => {
         if (tagName) {
@@ -123,15 +136,10 @@ const FeedByTag: NextPage = () => {
                     }
                     centerComponent={
                         <>
-                            <Heading
-                                as="h2"
-                                size="md"
-                                py='.5rem'
-                                maxHeight={ "2.8rem" }
-                                sx={{ overflow: 'hidden' }}
-                            >
-                                { tagName }
-                            </Heading>
+                            <TagHeader
+                                tagName={ tagName }
+                                followedTagsResult={ followedTagsResult }
+                            />
                             <FeedList isLoading={ feedResult.loading }
                                       posts={ feedResult.result }
                                       error={ feedResult.error?.toString() }

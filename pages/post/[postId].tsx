@@ -10,13 +10,12 @@ import {getPostById} from "@apiclients/feature/post/PostService";
 import PostView from "@components/pages/post/PostView";
 
 
-export async function getServerSideProps(ctx: { query: { postId: any; }; }) {
+export async function getServerSideProps(ctx: { query: { postId: string } }) {
     const { postId } = ctx.query;
-    const data = await getPostById(postId);
-    // Pass data to the page via props
+    const post = await getPostById(postId);
+
     return {
-        props:
-            { post: data }
+        props: { post }
     }
 }
 
