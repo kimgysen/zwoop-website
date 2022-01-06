@@ -4,10 +4,12 @@ import Head from "next/head";
 import AppLayout from "@components/layout/AppLayout";
 import ThreeColumnLayout from "@components/layout/column-layouts/ThreeColumnLayout";
 import WatchList from "@components/widgets/watchlist/WatchList";
-import React from "react";
-import Tag from "@models/Tag";
+import React, {useEffect, useState} from "react";
 import {getPostById} from "@apiclients/feature/post/PostService";
 import PostView from "@components/pages/post/PostView";
+import {useSession} from "next-auth/react";
+import ApiRes from "@apiclients/type/ApiResult";
+import {getFollowedTags} from "@apiclients/feature/user/UserService";
 
 
 export async function getServerSideProps(ctx: { query: { postId: string } }) {
@@ -23,20 +25,33 @@ const Post: NextPage = (props: any) => {
     const router = useRouter();
     const { postId } = router.query;
 
-    const { post } = props;
-    const tags: Tag[] = [{ tagId: 1, tagName: 'php' }, { tagId: 2, tagName: 'java' }, { tagId: 3, tagName: 'javascript' }];
+    const { data: session, status } = useSession();
 
+    const { post } = props;
+    const [followedTagsRes, setFollowedTagsRes] = useState<ApiRes>({ loading: true, success: null, error: null });
+
+    useEffect(() => {
+        (async() => {
+            if (session) {
+                const res = await getFollowedTags(session.userId as string);
+                setFollowedTagsRes(res);
+            }
+        })();
+    }, [session?.userId]);
 
     return (
         <>
             <Head>
-                <title>Home</title>
+                <title>Post</title>
             </Head>
             <AppLayout>
                 <ThreeColumnLayout
                     leftComponent={
                         <>
-                            <WatchList tags={ tags } />
+                            {
+                                session?.userId &&
+                                <WatchList tagsRes={ followedTagsRes } />
+                            }
                         </>
                     }
                     centerComponent={

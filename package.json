@@ -36,6 +36,7 @@
     "@types/sockjs-client": "^1.5.1",
     "axios": "^0.21.1",
     "framer-motion": "^5.3.3",
+    "github-markdown-css": "^5.1.0",
     "highlight": "^0.2.4",
     "highlight.js": "^11.2.0",
     "jsonwebtoken": "^8.5.1",

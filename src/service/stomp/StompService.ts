@@ -14,7 +14,6 @@ const connectUri = uri! + path!;
 let client: Client;
 
 // Public methods
-
 export const connectStomp = (chatRoomId: string,
                              jwt: string,
                              onConnectCallback: frameCallbackType,
@@ -68,5 +67,4 @@ export const sendPublicMessage = (chatRoomId: string, message: string) => {
         destination: "/chatroom/send.message.public",
         body: JSON.stringify(pubMessage)
     });
-
 }

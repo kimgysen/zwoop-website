@@ -25,7 +25,7 @@ export async function middleware(req: NextRequest) {
     // @ts-ignore
     const jwt: JWT | null = await getToken({ req, secret: secret! });
 
-    if (jwt) {
+    if (jwt && jwt.accessToken) {
         const token = (jwt?.accessToken as any).accessToken;
 
         try {

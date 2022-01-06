@@ -1,5 +1,4 @@
 import NextLink from 'next/link'
-import marked from 'marked';
 import {Box, Divider, Flex, Heading, HStack, Image, Link} from "@chakra-ui/react";
 import React, {FC} from "react";
 import Card from "../../../layout/components/card/Card";
@@ -7,6 +6,8 @@ import Post from "@models/Post";
 import {BnbBox} from "./BnbBox";
 import TagsList from "../../tags/TagsList";
 import TimeAgo from "react-timeago";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 export interface FeedItemProps {
     post: Post
@@ -18,14 +19,14 @@ export interface FeedItemProps {
 const FeedItem: FC<FeedItemProps> = ({ post }) => {
     return (
         <Card>
-            <Flex
-                direction={ 'row' }
+            <HStack
                 minH={{ base: '50px' }}
+                align={'top'}
             >
                 <BnbBox price={ post.offerPrice } />
                 <Box
-                    flex="1"
                     ml={ "10px" }
+                    width={'80%'}
                 >
                     <Heading
                         as="h2"
@@ -50,18 +51,20 @@ const FeedItem: FC<FeedItemProps> = ({ post }) => {
                         <TimeAgo date={ post.createdAt } />
                     </Box>
                     <Box
+                        className='markdown-body'
                         fontSize="90%"
                         mt="5px"
                         color="gray.600"
                     >
                         <div
-                            dangerouslySetInnerHTML={{ __html: marked(post.postText) }}
                             style={{
                                 maxHeight: '75px',
                                 WebkitMaskImage: "linear-gradient(180deg, #000 60%, transparent)",
                                 maskImage: "linear-gradient(180deg, #000 60%, transparent)"
                             }}
-                        />
+                        >
+                            <ReactMarkdown remarkPlugins={ [remarkGfm] }>{ post.postText }</ReactMarkdown>
+                        </div>
                     </Box>
                     <Box
                         mt={ '10px' }
@@ -90,7 +93,7 @@ const FeedItem: FC<FeedItemProps> = ({ post }) => {
                         </NextLink>
                     </Flex>
                 </Box>
-            </Flex>
+            </HStack>
         </Card>
     )
 }

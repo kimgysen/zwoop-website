@@ -6,17 +6,30 @@ import TronlinkBanner from "@components/pages/home/tronlink-banner/TronlinkBanne
 import ThreeColumnLayout from "@components/layout/column-layouts/ThreeColumnLayout";
 import WatchList from "@components/widgets/watchlist/WatchList";
 import FeedList from "@components/widgets/feed/FeedList";
-import Tag from "@models/Tag";
 import {PostStatusEnum} from "@models/Post";
 import {Heading} from "@chakra-ui/layout/src/heading";
 import {FeedTypeEnum, getFeed} from "@apiclients/feature/post/PostService";
 import ApiResult from "@apiclients/type/ApiResult";
+import ApiRes from "@apiclients/type/ApiResult";
+import {getFollowedTags} from "@apiclients/feature/user/UserService";
+import {useSession} from "next-auth/react";
 
 
 const HomePage: React.FC = () => {
 
     const { tronLinkAuth, isTronLinkLoading } = useTronLink();
-    const [feedResult, setFeedResult] = useState<ApiResult>({ loading: true, result: [], error: null });
+    const { data: session, status } = useSession();
+    const [feedResult, setFeedResult] = useState<ApiResult>({ loading: true, success: [], error: null });
+    const [followedTagsRes, setFollowedTagsRes] = useState<ApiRes>({ loading: true, success: null, error: null });
+
+    useEffect(() => {
+        (async() => {
+            if (session) {
+                const res = await getFollowedTags(session.userId as string);
+                setFollowedTagsRes(res);
+            }
+        })();
+    }, [session?.userId]);
 
     useEffect(() => {
         (async () => {
@@ -30,8 +43,6 @@ const HomePage: React.FC = () => {
         })();
     }, []);
 
-    const tags: Tag[] = [{ tagId: '1', tagName: 'php' }, { tagId: '2', tagName: 'java' }, { tagId: '3', tagName: 'javascript' }];
-
     return (
         <>
             <Head>
@@ -41,7 +52,10 @@ const HomePage: React.FC = () => {
                 <ThreeColumnLayout
                     leftComponent={
                         <>
-                            <WatchList tags={ tags } />
+                        {
+                            session?.userId &&
+                                <WatchList tagsRes={ followedTagsRes } />
+                        }
                         </>
                     }
                     centerComponent={
@@ -57,7 +71,7 @@ const HomePage: React.FC = () => {
                             </Heading>
 
                             <FeedList isLoading={ feedResult.loading }
-                                      posts={ feedResult.result }
+                                      posts={ feedResult.success }
                                       error={ feedResult.error?.toString() }
                             />
                         </>

@@ -1,30 +1,61 @@
-import React, {FC, useEffect, useState} from "react";
+import React, {Dispatch, FC, SetStateAction, useEffect, useState} from "react";
 import {Box, Button, Flex, Heading, Spacer} from "@chakra-ui/react";
 import ApiResult from "@apiclients/type/ApiResult";
 import Tag from "@models/Tag";
 import {FaEye, FaEyeSlash} from 'react-icons/fa';
 import Card from "@components/layout/components/card/Card";
+import {unwatchTag, watchTag} from "@apiclients/feature/tag/TagService";
+import {getRawJwt} from "../../../service/jwt/JwtService";
 
 
 interface TagHeaderProps {
-    tagName: string
-    followedTagsResult: ApiResult
+    tagName: string,
+    followedTagsRes: ApiResult,
+    setFollowedTagsRes: Dispatch<SetStateAction<ApiResult>>
 }
 
-const TagHeader: FC<TagHeaderProps> = ({ tagName, followedTagsResult }) => {
+const TagHeader: FC<TagHeaderProps> = (
+    { tagName, followedTagsRes, setFollowedTagsRes }) => {
 
-    const [userFollowsTag, setUserFollowsTag] = useState<Boolean>(false);
+    let defaultUserFollowsTag = { loading: false, success: null, error: null };
+    const [userFollowsTagRes, setUserFollowsTagRes] = useState<ApiResult>(defaultUserFollowsTag);
+
+    const findTagNameInTags = (tag: string, tags: Tag[]) => tags.find(tag => tag.tagName === tagName);
 
     useEffect(() => {
-        if (followedTagsResult.result) {
-            const found = (followedTagsResult.result as Tag[])
-                .find(tag => tag.tagName === tagName);
-            setUserFollowsTag(!!found);
+        if (tagName && followedTagsRes.success) {
+            const found = !!findTagNameInTags(tagName, followedTagsRes.success as Tag[]);
+            setUserFollowsTagRes({ ...defaultUserFollowsTag, success: { followsTag: found }});
         }
-    }, [followedTagsResult]);
+    }, [followedTagsRes, tagName]);
 
-    const handleWatch = () => {
-        console.log('watch or unwatch');
+    const handleToggleWatch = async () => {
+        setUserFollowsTagRes({ ...defaultUserFollowsTag, loading: true });
+        const jwt = await getRawJwt();
+
+        if (userFollowsTagRes.success.followsTag) {
+            const resUnwatch = await unwatchTag(tagName, jwt);
+            setUserFollowsTagRes({ ...resUnwatch, success: { followsTag: false } });
+            const followedTags = followedTagsRes.success as Tag[];
+            const tagToRemoveIndex = followedTags.findIndex((item) => item.tagName === tagName);
+
+            if (tagToRemoveIndex !== -1) {
+                followedTags.splice(tagToRemoveIndex, 1);
+                setFollowedTagsRes({
+                    ...followedTagsRes,
+                    success: [...followedTags]
+                });
+            }
+
+        } else {
+            const resWatch = await watchTag(tagName, jwt);
+            setUserFollowsTagRes({ ...resWatch, success: { followsTag: true } });
+            const followedTags = followedTagsRes.success as Tag[];
+            setFollowedTagsRes({
+                ...followedTagsRes,
+                success: [...followedTags, resWatch.success]
+            });
+        }
     }
 
     return (
@@ -42,11 +73,11 @@ const TagHeader: FC<TagHeaderProps> = ({ tagName, followedTagsResult }) => {
                 <Spacer />
                 <Box>
                     {
-                        followedTagsResult.error &&
+                        followedTagsRes.error &&
                         <Box>Watch button could not be loaded</Box>
                     }
                     {
-                        followedTagsResult.loading
+                        followedTagsRes.loading || userFollowsTagRes.loading
                         && (
                             <Button
                                 isLoading
@@ -57,26 +88,28 @@ const TagHeader: FC<TagHeaderProps> = ({ tagName, followedTagsResult }) => {
                         )
                     }
                     {
-                        followedTagsResult.result
-                        && userFollowsTag
+                        userFollowsTagRes.success
+                        && userFollowsTagRes.success.followsTag
                         && (
                             <Button
                                 leftIcon={<FaEyeSlash />}
                                 colorScheme='teal'
                                 variant='solid'
+                                onClick={ handleToggleWatch }
                             >
                                 Unwatch
                             </Button>
                         )
                     }
                     {
-                        followedTagsResult.result
-                        && !userFollowsTag
+                        userFollowsTagRes.success
+                        && !(userFollowsTagRes.success.followsTag)
                         && (
                             <Button
                                 leftIcon={<FaEye />}
                                 colorScheme='teal'
                                 variant='solid'
+                                onClick={ handleToggleWatch }
                             >
                                 Watch
                             </Button>

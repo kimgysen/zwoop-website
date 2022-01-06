@@ -4,26 +4,37 @@ import AppLayout from "@components/layout/AppLayout";
 import ThreeColumnLayout from "@components/layout/column-layouts/ThreeColumnLayout";
 import WatchList from "@components/widgets/watchlist/WatchList";
 import {Box} from "@chakra-ui/react";
-import React from "react";
-import Tag from "@models/Tag";
+import React, {useEffect, useState} from "react";
 import UserCard from "@components/pages/user/UserCard";
-import {getUserById} from "@apiclients/feature/user/UserService";
+import {getFollowedTags, getUserById} from "@apiclients/feature/user/UserService";
 import UserMenu from "@components/pages/user/UserMenu";
+import {useSession} from "next-auth/react";
+import ApiRes from "@apiclients/type/ApiResult";
 
 
 export async function getServerSideProps(ctx: { query: { userId: string } }) {
     const { userId } = ctx.query;
-    const res = await getUserById(userId);
+    const userRes = await getUserById(userId);
 
     return {
-        props: { user: res.result }
+        props: userRes
     }
 }
 
 const UserProfile: NextPage = (props: any) => {
-    const { user } = props;
+    const userRes = props;
+    const { data: session, status } = useSession();
 
-    const tags: Tag[] = [{ tagId: 1, tagName: 'php' }, { tagId: 2, tagName: 'java' }, { tagId: 3, tagName: 'javascript' }];
+    const [followedTagsRes, setFollowedTagsRes] = useState<ApiRes>({ loading: true, success: null, error: null });
+
+    useEffect(() => {
+        (async() => {
+            if (session?.userId) {
+                const res = await getFollowedTags(session.userId as string);
+                setFollowedTagsRes(res);
+            }
+        })();
+    }, [session?.userId]);
 
     return (
         <>
@@ -34,14 +45,20 @@ const UserProfile: NextPage = (props: any) => {
                 <ThreeColumnLayout
                     leftComponent={
                         <>
-                            <WatchList tags={ tags } />
+                            {
+                                session?.userId &&
+                                    <WatchList tagsRes={ followedTagsRes } />
+                            }
                         </>
                     }
                     centerComponent={
-                        <Box>
-                            <UserCard user={ user } />
-                            <UserMenu userId={ user.userId } />
-                        </Box>
+                        userRes.success &&
+                            <Box>
+                                <UserCard user={ userRes.success }
+                                          loggedInUserId={ session?.userId as string }
+                                />
+                                <UserMenu userId={ userRes.success.userId } />
+                            </Box>
                     }
                     rightComponent={
                         <>
