@@ -1,5 +1,6 @@
 import axios, {AxiosError} from "axios";
 import ApiResult from "../../type/ApiResult";
+import {handleAxiosError, handleAxiosResponse} from "@apiclients/util/ResponseUtil";
 
 const userApiEndpoint = process.env.NEXT_PUBLIC_API_USER_BASE_URI;
 const userApiPrefix = process.env.NEXT_PUBLIC_API_V1_PUBLIC_USER_PREFIX;
@@ -12,26 +13,12 @@ export const findUserByProviderAndOauthId: (authProviderId: number, oauthId: str
 
     return axios
         .get(url, { params: { authProviderId, oauthId } })
-        .then(res => ({
-            loading: false,
-            result: res.data,
-            error: null
-        }))
-        .catch((reason: AxiosError) => {
-            if (reason.response!.status === 404) {
-                return {
-                    loading: false,
-                    result: null,
-                    error: 'User not found'
-                };
-            } else {
-                return {
-                    loading: false,
-                    result: null,
-                    error: 'Something went wrong at the server.'
-                }
-            }
-        });
+        .then(res => handleAxiosResponse({
+            res,
+            successStatus: 200,
+            successProp: res.data
+        })).catch((reason: AxiosError) =>
+            handleAxiosError(reason, [{ status: 404, message: 'User not found' }]));
 }
 
 export const registerUser: (body: { authProviderId: number, authId: string, profilePic: String, firstName: string, lastName: string, email: string }) =>
@@ -47,18 +34,11 @@ export const registerUser: (body: { authProviderId: number, authId: string, prof
             profilePic,
             email
         })
-        .then(res => ({
-            loading: false,
-            result: res.data,
-            error: null
-        }))
-        .catch((reason: AxiosError) => {
-            return {
-                loading: false,
-                result: null,
-                error: 'Something went wrong at the server.'
-            }
-        });
+        .then(res => handleAxiosResponse({
+            res,
+            successStatus: 200,
+            successProp: res.data
+        })).catch((reason: AxiosError) => handleAxiosError(reason));
 }
 
 export const loginUser: (body: { authProviderId: number, authId: string }) =>
@@ -70,16 +50,9 @@ export const loginUser: (body: { authProviderId: number, authId: string }) =>
             authProviderId,
             authId
         })
-        .then(res => ({
-            loading: false,
-            result: res.data,
-            error: null
-        }))
-        .catch((reason: AxiosError) => {
-            return {
-                loading: false,
-                result: null,
-                error: 'Something went wrong at the server.'
-            }
-        });
+        .then(res => handleAxiosResponse({
+            res,
+            successStatus: 200,
+            successProp: res.data,
+        })).catch((reason: AxiosError) => handleAxiosError(reason));
 }

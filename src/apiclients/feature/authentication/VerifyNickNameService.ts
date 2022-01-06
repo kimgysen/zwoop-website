@@ -11,20 +11,20 @@ export const verifyNickName: (nickName: string) => Promise<ApiResult> = (nickNam
         .get(url, { params: { nickName }})
         .then(res => ({
             loading: false,
-            result: { success: false },
+            success: { success: false },
             error: 'User already exists'
         }))
         .catch((reason: AxiosError) => {
             if (reason.response!.status === 404) {
                 return {
                     loading: false,
-                    result: { success: true, nickName },
+                    success: { success: true, nickName },
                     error: null
                 };
             } else {
                 return {
                     loading: false,
-                    result: { success: false },
+                    success: { success: false },
                     error: 'Something went wrong at the server.'
                 }
             }

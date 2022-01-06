@@ -8,12 +8,12 @@ import TimeAgo from 'react-timeago';
 import TagsList from "@components/widgets/tags/TagsList";
 import NextLink from "next/link";
 
+
 interface PostViewProps {
     post: Post
 }
 
 const PostView: React.FC<PostViewProps> = ({ post }) => {
-    console.log(post);
     return (
         <Card>
             <Heading as='h2'
@@ -23,8 +23,10 @@ const PostView: React.FC<PostViewProps> = ({ post }) => {
                 <TimeAgo date={ post.createdAt } />
             </Box>
             <Divider />
-            <Box pt='10px' pb='10px' overflowX='scroll' class='custom-html-style'>
-                <ReactMarkdown remarkPlugins={ [remarkGfm] }>{ post.postText }</ReactMarkdown>
+            <Box pt='10px' pb='10px' overflowX='scroll'>
+                <Box className='markdown-body'>
+                    <ReactMarkdown remarkPlugins={ [remarkGfm] }>{ post.postText }</ReactMarkdown>
+                </Box>
             </Box>
             <Box pt='10px' pb='10px'>
                 <TagsList tags={post.tags} />

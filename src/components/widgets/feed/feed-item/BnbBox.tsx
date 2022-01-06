@@ -19,11 +19,12 @@ export const BnbBox: FC<BnbBoxProps> = ({ price }) => {
     return (
         <VStack
             h={ '100px' }
-            w={ '75px' }
+            w={ '85px' }
             align="stretch"
         >
             <Center
                 h={ 40 }
+                p={'10px'}
                 fontWeight={ 600 }
                 bgColor="ruby.600"
                 color="white"

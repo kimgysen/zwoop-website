@@ -24,8 +24,8 @@ interface RegisterFragmentProps {
     publicAddressTrx: string | undefined
 }
 
-const apiResultInitState = { loading: false, result: null, error: null }
-const nickApiResultInitState = { ...apiResultInitState, result: { success: false } };
+const apiResultInitState = { loading: false, success: null, error: null }
+const nickApiResultInitState = { ...apiResultInitState, success: { success: false } };
 
 const RegisterFragment: React.FC<RegisterFragmentProps> = ({ initialState, state, setState, publicAddressTrx }) => {
 
@@ -36,8 +36,8 @@ const RegisterFragment: React.FC<RegisterFragmentProps> = ({ initialState, state
 
         try {
             validateNickName(nickName);
-            const { result, error } = await verifyNickName(nickName);
-            setNickApiResult({ ...nickApiResultInitState, result, error });
+            const { success, error } = await verifyNickName(nickName);
+            setNickApiResult({ ...nickApiResultInitState, success, error });
 
         } catch (e: any) {
             setNickApiResult({ ...nickApiResultInitState, error: e.message });
@@ -72,7 +72,7 @@ const RegisterFragment: React.FC<RegisterFragmentProps> = ({ initialState, state
                             nickApiResult.loading && <Spinner size="sm" />
                         }
                         {
-                            nickApiResult.result!.success &&
+                            nickApiResult.success!.success &&
                             <CheckCircleIcon
                                 h="1.75rem"
                                 size="sm"
@@ -94,7 +94,7 @@ const RegisterFragment: React.FC<RegisterFragmentProps> = ({ initialState, state
             </Box>
 
             <Button
-                disabled={ !nickApiResult.result!.success }
+                disabled={ !nickApiResult.success!.success }
                 display={{ base: 'none', md: 'inline-flex' }}
                 mt={ '10px' }
                 fontSize={'sm'}

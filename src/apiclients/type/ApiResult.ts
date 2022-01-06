@@ -1,7 +1,7 @@
 
 type ApiResult = {
     loading: boolean,
-    result: any | null,
+    success: any | null,
     error: string | null
 }
 

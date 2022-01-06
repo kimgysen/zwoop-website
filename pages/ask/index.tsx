@@ -66,7 +66,7 @@ const Ask: NextPage = () => {
                 tags: [],
                 offer: '0.003'
             }));
-            router.push(resp.result);
+            router.push(resp.success);
         }
     }
 

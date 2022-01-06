@@ -25,14 +25,12 @@ import {useRouter} from "next/router";
 
 const Navbar: React.FC = () => {
     const { data: session, status } = useSession();
-
     const loading = status === "loading";
 
     const { isOpen: rightMenuIsOpen, onToggle: rightMenuOnToggle } = useDisclosure();
     const { isOpen: modalIsOpen, onToggle: modalOnOpen, onClose: modalOnClose } = useDisclosure();
 
     const router = useRouter();
-
 
     return (
         <Box
@@ -104,7 +102,8 @@ const Navbar: React.FC = () => {
                                         leftIcon={ <FaPen /> }
                                         rounded={'full'}
                                         color={'white'}
-                                        _hover={{ bg: 'blue.500' }}>
+                                        _hover={{ bg: 'blue.500' }}
+                                    >
                                             Ask
                                     </Button>
                                 </NextLink>

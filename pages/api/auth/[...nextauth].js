@@ -112,9 +112,9 @@ export default NextAuth({
     // async redirect({ url, baseUrl }) { return baseUrl },
     async jwt({ token, user, account, profile, isNewUser }) {
       if (user && account && profile) {
-          const { result } = await findUserByProviderAndOauthId(AuthProviderEnum[account.provider], profile.sub);
-
-          if (!result) {
+          const { success } = await findUserByProviderAndOauthId(AuthProviderEnum[account.provider], profile.sub);
+          console.log(success);
+          if (!success) {
             const { result: accessToken, userId, firstName, profilePic } = await registerUser({
               authProviderId: AuthProviderEnum[account.provider],
               authId: profile.sub,
@@ -128,7 +128,7 @@ export default NextAuth({
 
           } else {
             // Just log in
-            const { result: accessToken, userId, firstName, profilePic } = await loginUser({
+            const { success: accessToken, userId, firstName, profilePic } = await loginUser({
               authProviderId: AuthProviderEnum[account.provider],
               authId: profile.sub
             });

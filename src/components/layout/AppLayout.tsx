@@ -2,7 +2,7 @@ import {Box, Container} from "@chakra-ui/react";
 import React from "react";
 import Navbar from "@components/layout/navbar/Navbar";
 import Footer from "@components/layout/footer/Footer";
-import "react-markdown-editor-lite/lib/index.css";
+import 'github-markdown-css';
 
 
 const AppLayout: React.FC = ({ children }) => {

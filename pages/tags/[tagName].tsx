@@ -6,41 +6,29 @@ import WatchList from "@components/widgets/watchlist/WatchList";
 import FeedList from "@components/widgets/feed/FeedList";
 import React, {useEffect, useState} from "react";
 import {useRouter} from "next/router";
-import useTronLink from "../../src/service/swr/user/useTronlink";
-import Tag from "@models/Tag";
 import {PostStatusEnum} from "@models/Post";
-import {
-    connectStomp,
-    disconnectStomp,
-    initConnectedUsers,
-    initPublicChat,
-    sendPublicMessage,
-    subscribeToConnectedUsers,
-    subscribeToPrivateChat,
-    subscribeToPublicChat
-} from "../../src/service/stomp/StompService";
+import {disconnectStomp, sendPublicMessage} from "../../src/service/stomp/StompService";
 import {getRawJwt} from "../../src/service/jwt/JwtService";
 import PublicChat from "@components/widgets/chat/public/PublicChat";
 import PublicChatMessage from "@components/widgets/chat/public/model/PublicChatMessage";
 import ChatUser from "@components/widgets/chat/public/model/ChatUser";
 import {FeedTypeEnum, getFeed} from "@apiclients/feature/post/PostService";
-import ApiResult from "@apiclients/type/ApiResult";
+import ApiRes from "@apiclients/type/ApiResult";
 import TagHeader from "@components/pages/tag/TagHeader";
 import {useSession} from "next-auth/react";
 import {getFollowedTags} from "@apiclients/feature/user/UserService";
+import {connectChatRoom} from "../../src/service/stomp/PublicChatStompService";
 
 
 const FeedByTag: NextPage = () => {
-
-    const { tronLinkAuth, isTronLinkLoading } = useTronLink();
 
     const { data: session, status } = useSession();
 
     const router = useRouter();
     const { tagName } = router.query;
 
-    const [followedTagsResult, setFollowedTagsResult] = useState<ApiResult>({ loading: true, result: null, error: null });
-    const [feedResult, setFeedResult] = useState<ApiResult>({ loading: true, result: null, error: null });
+    const [followedTagsRes, setFollowedTagsRes] = useState<ApiRes>({ loading: true, success: null, error: null });
+    const [feedRes, setFeedRes] = useState<ApiRes>({ loading: true, success: null, error: null });
     const [connectedUsers, setConnectedUsers] = useState<ChatUser[]>([]);
     const [messages, setMessages] = useState<PublicChatMessage[]>([]);
 
@@ -48,103 +36,72 @@ const FeedByTag: NextPage = () => {
         (async() => {
             if (session) {
                 const res = await getFollowedTags(session.userId as string);
-                setFollowedTagsResult(res);
+                setFollowedTagsRes(res);
             }
         })();
-    }, [session?.userId, tagName]);
+    }, [session?.userId]);
 
     useEffect(() => {
         if (tagName) {
             (async () => {
-                const res = await getFeed(
-                    FeedTypeEnum.FEED_BY_TAG,
-                    PostStatusEnum.OPEN,
-                    tagName as string,
-                    0,
-                    50);
-
-                setFeedResult(res);
+                await getQuestionsFeed();
+                await connectToChatRoom();
             })();
         }
-    }, [tagName]);
-
-    useEffect(() => {
-        (async () => {
-            if (tagName) {
-                const jwt = await getRawJwt();
-                const chatRoomId = 'room-' + tagName;
-
-                connectStomp(
-                    chatRoomId, jwt,
-                    (frame) => {
-                        console.log('connect success', frame);
-                        initPublicChat((msg) => {
-                            const pubMessages = JSON.parse(msg.body);
-                            setMessages(pubMessages.reverse());
-                        });
-                        subscribeToPublicChat(chatRoomId, (msg) => {
-                            const pubMsg = JSON.parse(msg.body);
-                            setMessages((messages) => [...messages, pubMsg]);
-                        });
-                        subscribeToPrivateChat((privMsg) => {
-                            console.log('Private message received, privMsg');
-                        });
-                        initConnectedUsers((msg) => {
-                            setConnectedUsers(JSON.parse(msg.body));
-                        });
-                        subscribeToConnectedUsers(chatRoomId, (msg) => {
-                            setConnectedUsers(JSON.parse(msg.body));
-                        });
-                    },
-                    (frame) => {
-                        console.log('error frame', frame);
-                        disconnectStomp();
-                        if (frame.headers.message.includes('ExpiredJwtException')) {
-                            router.push('/login');
-                        }
-                        // TODO: Add proper handling when jwt expired
-                        console.log('Connect failed', frame);
-                    },
-                    (frame) => {
-                        console.log('disconnect');
-                    })
-            }
-
-        })();
 
         return function cleanup() {
             (async () => {
                 await disconnectStomp();
             })();
         }
-
     }, [tagName]);
 
-    const tags: Tag[] = [{ tagId: 1, tagName: 'php' }, { tagId: 2, tagName: 'java' }, { tagId: 3, tagName: 'javascript' }];
+    const getQuestionsFeed = async () => {
+        const res = await getFeed(
+            FeedTypeEnum.FEED_BY_TAG,
+            PostStatusEnum.OPEN,
+            tagName as string,
+            0,
+            50);
+        setFeedRes(res);
+    }
+
+    const connectToChatRoom = async () => {
+        const jwt = await getRawJwt();
+        const chatRoomId = 'room-' + tagName;
+
+        connectChatRoom({chatRoomId, jwt, messages, setMessages, setConnectedUsers, router});
+    }
 
     return (
         <>
             <Head>
-                <title>Home</title>
+                <title>Questions per tag</title>
             </Head>
             <AppLayout>
                 <ThreeColumnLayout
                     leftComponent={
                         <>
-                            <WatchList tags={ tags } />
+                            {
+                                session?.userId &&
+                                <WatchList tagsRes={ followedTagsRes } />
+                            }
                         </>
                     }
                     centerComponent={
-                        <>
-                            <TagHeader
-                                tagName={ tagName }
-                                followedTagsResult={ followedTagsResult }
-                            />
-                            <FeedList isLoading={ feedResult.loading }
-                                      posts={ feedResult.result }
-                                      error={ feedResult.error?.toString() }
-                            />
-                        </>
+                        tagName && (
+                            <>
+                                <TagHeader
+                                    tagName={ tagName as string }
+                                    followedTagsRes={ followedTagsRes }
+                                    setFollowedTagsRes={ setFollowedTagsRes }
+                                />
+                                <FeedList isLoading={ feedRes.loading }
+                                          posts={ feedRes.success }
+                                          error={ feedRes.error?.toString() }
+                                />
+                            </>
+                        )
                     }
                     rightComponent={
                         <>
