@@ -56,7 +56,7 @@ export const updateNickName: (userId: string, nickName: string, jwt: string) => 
 
 export const updateAbout: (userId: string, aboutText: string, jwt: string) => Promise<ApiResult> = (userId, aboutText, jwt) => {
     const url = userApiBaseUri! + userApiPrivateEndpoint!;
-
+    console.log(jwt);
     return axios.put(`${ url }/${userId}/about`, { aboutText }, {
         headers: {
             Authorization: `Bearer ${ jwt }`

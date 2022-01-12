@@ -4,38 +4,42 @@ import {
     initConnectedUsers,
     initPublicChat,
     subscribeToConnectedUsers,
-    subscribeToPrivateChat,
     subscribeToPublicChat
 } from "./StompService";
 import {NextRouter} from "next/router";
 import {Dispatch, SetStateAction} from "react";
-import ChatUser from "@components/widgets/chat/public/model/ChatUser";
-import PublicChatMessage from "@components/widgets/chat/public/model/PublicChatMessage";
+import ChatRoomUserReceiveDto from "./receive/ChatRoomUserReceiveDto";
+import PublicMessageReceiveDto from "./receive/PublicMessageReceiveDto";
+import {HEADER_CHATROOM_ID, HEADER_CONNECT_TYPE} from "./types/StompHeader";
+import {ConnectTypeEnum, stringFromConnectTypeEnum} from "./types/ConnectType";
 
-interface connectChatRoomProps {
+interface connectPublicChatRoomProps {
     chatRoomId: string,
     jwt: string,
-    messages: PublicChatMessage[],
-    setMessages: Dispatch<SetStateAction<PublicChatMessage[]>>,
-    setConnectedUsers: Dispatch<SetStateAction<ChatUser[]>>,
+    setMessagesLoading: Dispatch<SetStateAction<boolean>>,
+    setMessages: Dispatch<SetStateAction<PublicMessageReceiveDto[]>>,
+    setConnectedUsers: Dispatch<SetStateAction<ChatRoomUserReceiveDto[]>>,
     router: NextRouter,
 }
 
-export const connectChatRoom = ({ chatRoomId, jwt, messages, setMessages, setConnectedUsers, router }: connectChatRoomProps) => {
+export const connectPublicChatRoom = ({
+    chatRoomId, jwt, setMessages, setMessagesLoading, setConnectedUsers, router }: connectPublicChatRoomProps
+) => {
     connectStomp(
-        chatRoomId, jwt,
+        {
+            [HEADER_CONNECT_TYPE]: stringFromConnectTypeEnum(ConnectTypeEnum.PUBLIC_CHAT),
+            [HEADER_CHATROOM_ID]: chatRoomId
+        }, jwt,
         (frame) => {
-            console.log('connect success', frame);
+            console.log('Public chat connect success', frame);
             initPublicChat((msg) => {
+                setMessagesLoading(false);
                 const pubMessages = JSON.parse(msg.body);
-                setMessages(pubMessages.reverse() as PublicChatMessage[]);
+                setMessages(pubMessages as PublicMessageReceiveDto[]);
             });
             subscribeToPublicChat(chatRoomId, (msg) => {
                 const pubMsg = JSON.parse(msg.body);
-                setMessages((messages: PublicChatMessage[]) => [...messages, pubMsg]);
-            });
-            subscribeToPrivateChat((privMsg) => {
-                console.log('Private message received, privMsg');
+                setMessages((messages: PublicMessageReceiveDto[]) => [pubMsg, ...messages]);
             });
             initConnectedUsers((msg) => {
                 setConnectedUsers(JSON.parse(msg.body));

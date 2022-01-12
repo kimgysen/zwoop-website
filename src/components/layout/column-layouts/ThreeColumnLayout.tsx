@@ -28,7 +28,7 @@ const ThreeColumnLayout: React.FC<ThreeColumnLayoutProps> = ({ leftComponent, ce
                 </Box>
                 <Box
                     display={{ base: 'none', md: 'block' }}
-                    width={{ md: '30%' }}
+                    width={{ md: '35%' }}
                     ml={{ md: '20px' }}
                 >
                     { rightComponent }

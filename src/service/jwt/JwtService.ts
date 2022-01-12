@@ -14,7 +14,7 @@ export const getRawJwt = () => {
     return axios
         .get(endpoint)
         .then(res => {
-            if (res.data.accessToken) {
+            if (res.data?.accessToken) {
                 return res.data.accessToken['accessToken']
             }
             res.data

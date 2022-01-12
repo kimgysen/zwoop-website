@@ -95,7 +95,7 @@ const Navbar: React.FC = () => {
                                 </HStack>
                                 <UserWidget
                                     userId={ session.userId as string }
-                                    profilePic={ session.user?.image as string } />
+                                    profilePic={ session.user?.image + '?referrerpolicy="no-referrer"' as string } />
                                 <NextLink href={'/ask'}>
                                     <Button
                                         bg={'blue.400'}

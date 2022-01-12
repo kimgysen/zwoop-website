@@ -1,4 +1,4 @@
-import {Box, Divider, Heading, HStack, Icon, IconButton, Image, useDisclosure, VStack} from '@chakra-ui/react';
+import {Box, Divider, Flex, Heading, Icon, IconButton, Image, useDisclosure, VStack} from '@chakra-ui/react';
 import User from "@models/User";
 import Card from "@components/layout/components/card/Card";
 import React, {useState} from "react";
@@ -9,6 +9,7 @@ import remarkGfm from "remark-gfm";
 import TagsList from "@components/widgets/tags/TagsList";
 import EditAboutModal from "@components/pages/user/edit/EditAboutModal";
 import EditNickModal from "@components/pages/user/edit/EditNickModal";
+import {HStack} from "@chakra-ui/layout/src/stack";
 
 
 interface UserCardProps {
@@ -26,17 +27,23 @@ const UserCard: React.FC<UserCardProps> = ({ user, loggedInUserId }) => {
         <Box>
             <Card>
                 <VStack align='left'>
-                    <HStack align='top'>
-                        <Image
-                            w='50px'
-                            h='50px'
-                            mr='10px'
-                            src={ user.profilePic }
-                            alt='profile pic'
-                        />
-                        <Heading fontSize={'xl'} fontWeight={500} fontFamily={'body'}>
-                            { currentUser.nickName }
-                        </Heading>
+                    <Flex direction='row' justifyContent='space-between'>
+                        <HStack>
+                            <Image
+                                w='50px'
+                                h='50px'
+                                mr='10px'
+                                src={ user.profilePic }
+                                onError={({ currentTarget }) => {
+                                    currentTarget.onerror = null; // prevents looping
+                                    currentTarget.src="/static/images/profile_fallback.jpg";
+                                }}
+                                alt='profile pic'
+                            />
+                            <Heading fontSize={'xl'} fontWeight={500} fontFamily={'body'}>
+                                { currentUser.nickName }
+                            </Heading>
+                        </HStack>
                         {
                             user.userId === loggedInUserId && (
                                 <IconButton
@@ -50,7 +57,7 @@ const UserCard: React.FC<UserCardProps> = ({ user, loggedInUserId }) => {
                                 />
                             )
                         }
-                    </HStack>
+                    </Flex>
                     <Box
                         pb='10px'
                         fontSize='sm'
@@ -69,16 +76,6 @@ const UserCard: React.FC<UserCardProps> = ({ user, loggedInUserId }) => {
                     <Divider />
                     <Box>
                         {
-                            currentUser.aboutText &&
-                                <Box className='markdown-body'>
-                                    <ReactMarkdown remarkPlugins={ [remarkGfm] }>{ currentUser.aboutText }</ReactMarkdown>
-                                </Box>
-                        }
-                        {
-                            !currentUser.aboutText &&
-                                <i>Write something about yourself</i>
-                        }
-                        {
                             user.userId === loggedInUserId && (
                                 <IconButton
                                     float='right'
@@ -90,6 +87,16 @@ const UserCard: React.FC<UserCardProps> = ({ user, loggedInUserId }) => {
                                     onClick={ onEditAboutOpen }
                                 />
                             )
+                        }
+                        {
+                            currentUser.aboutText &&
+                                <Box className='markdown-body'>
+                                    <ReactMarkdown remarkPlugins={ [remarkGfm] }>{ currentUser.aboutText }</ReactMarkdown>
+                                </Box>
+                        }
+                        {
+                            !currentUser.aboutText &&
+                                <i>Write something about yourself</i>
                         }
                     </Box>
                 </VStack>

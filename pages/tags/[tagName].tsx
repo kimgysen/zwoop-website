@@ -10,14 +10,16 @@ import {PostStatusEnum} from "@models/Post";
 import {disconnectStomp, sendPublicMessage} from "../../src/service/stomp/StompService";
 import {getRawJwt} from "../../src/service/jwt/JwtService";
 import PublicChat from "@components/widgets/chat/public/PublicChat";
-import PublicChatMessage from "@components/widgets/chat/public/model/PublicChatMessage";
-import ChatUser from "@components/widgets/chat/public/model/ChatUser";
+import PublicMessageReceiveDto from "../../src/service/stomp/receive/PublicMessageReceiveDto";
+import ChatRoomUserReceiveDto from "../../src/service/stomp/receive/ChatRoomUserReceiveDto";
 import {FeedTypeEnum, getFeed} from "@apiclients/feature/post/PostService";
 import ApiRes from "@apiclients/type/ApiResult";
 import TagHeader from "@components/pages/tag/TagHeader";
 import {useSession} from "next-auth/react";
 import {getFollowedTags} from "@apiclients/feature/user/UserService";
-import {connectChatRoom} from "../../src/service/stomp/PublicChatStompService";
+import {connectPublicChatRoom} from "../../src/service/stomp/PublicChatStompService";
+import Card from "@components/layout/components/card/Card";
+import {Spinner} from "@chakra-ui/react";
 
 
 const FeedByTag: NextPage = () => {
@@ -27,10 +29,13 @@ const FeedByTag: NextPage = () => {
     const router = useRouter();
     const { tagName } = router.query;
 
+    const chatRoomId = `room-tag-` + tagName;
+
     const [followedTagsRes, setFollowedTagsRes] = useState<ApiRes>({ loading: true, success: null, error: null });
     const [feedRes, setFeedRes] = useState<ApiRes>({ loading: true, success: null, error: null });
-    const [connectedUsers, setConnectedUsers] = useState<ChatUser[]>([]);
-    const [messages, setMessages] = useState<PublicChatMessage[]>([]);
+    const [connectedUsers, setConnectedUsers] = useState<ChatRoomUserReceiveDto[]>([]);
+    const [messagesLoading, setMessagesLoading] = useState<boolean>(true);
+    const [messages, setMessages] = useState<PublicMessageReceiveDto[]>([]);
 
     useEffect(() => {
         (async() => {
@@ -68,9 +73,9 @@ const FeedByTag: NextPage = () => {
 
     const connectToChatRoom = async () => {
         const jwt = await getRawJwt();
-        const chatRoomId = 'room-' + tagName;
-
-        connectChatRoom({chatRoomId, jwt, messages, setMessages, setConnectedUsers, router});
+        connectPublicChatRoom({
+            chatRoomId, jwt, setMessagesLoading, setMessages, setConnectedUsers, router
+        });
     }
 
     return (
@@ -104,13 +109,20 @@ const FeedByTag: NextPage = () => {
                         )
                     }
                     rightComponent={
-                        <>
-                            <PublicChat
-                                messages={ messages }
-                                sendMessage={ (message) => sendPublicMessage('room-' + tagName, message) }
-                                connectedUsers={ connectedUsers }
-                            />
-                        </>
+                        <Card>
+                            {
+                                messagesLoading
+                                && <Spinner />
+                            }
+                            {
+                                !messagesLoading
+                                && <PublicChat
+                                        messages={ messages }
+                                        sendMessage={ (message) => sendPublicMessage({ chatRoomId: 'room-tag-' + tagName, message }) }
+                                        connectedUsers={ connectedUsers }
+                                />
+                            }
+                        </Card>
                     }
                 />
             </AppLayout>

@@ -1,14 +1,14 @@
 import React, {FC} from "react";
 import {Box, Tab, TabList, TabPanel, TabPanels, Tabs} from "@chakra-ui/react";
-import ChatUser from "@components/widgets/chat/public/model/ChatUser";
+import ChatRoomUserReceiveDto from "../../../../service/stomp/receive/ChatRoomUserReceiveDto";
 import PublicChatBox from "@components/widgets/chat/public/chatbox/PublicChatBox";
 import ConnectedUsers from "@components/widgets/chat/public/users/ConnectedUsers";
-import PublicChatMessage from "@components/widgets/chat/public/model/PublicChatMessage";
+import PublicMessageReceiveDto from "../../../../service/stomp/receive/PublicMessageReceiveDto";
 
 
 interface PublicChatProps {
-    messages: PublicChatMessage[],
-    connectedUsers: ChatUser[],
+    messages: PublicMessageReceiveDto[],
+    connectedUsers: ChatRoomUserReceiveDto[],
     sendMessage: (message: string) => void,
 }
 

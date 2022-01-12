@@ -1,16 +1,20 @@
 import {Box} from "@chakra-ui/react";
 import {FC} from "react";
 
+interface CardProps {
+    p?: number
+}
 
-const Card: FC = ({ children }) =>
-        <Box
-            sx={{ width: '100%'}}
-            bg='white'
-            rounded='md'
-            p={ 5 }
-            mb={3}
-        >
+const Card: FC<CardProps> = ({ children, p }) => (
+    <Box
+        sx={{ width: '100%'}}
+        bg='white'
+        rounded='md'
+        p={ p || 5 }
+        mb={3}
+    >
             { children }
-        </Box>
+    </Box>
+);
 
 export default Card;
