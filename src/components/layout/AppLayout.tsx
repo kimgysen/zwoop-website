@@ -5,7 +5,9 @@ import Footer from "@components/layout/footer/Footer";
 import 'github-markdown-css';
 
 
-const AppLayout: React.FC = ({ children }) => {
+const AppLayout: React.FC = (
+    { children}) => {
+
     return (
         <Box bg="#ced7e2">
             <Navbar />

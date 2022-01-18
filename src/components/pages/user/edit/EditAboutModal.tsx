@@ -11,7 +11,7 @@ import {
     ModalOverlay,
     VStack
 } from "@chakra-ui/react";
-import User from "@models/User";
+import User from "@models/user/User";
 import MarkdownEditor from "@components/widgets/markdown/MarkdownEditor";
 import ApiResult from "@apiclients/type/ApiResult";
 import {getRawJwt} from "../../../../service/jwt/JwtService";

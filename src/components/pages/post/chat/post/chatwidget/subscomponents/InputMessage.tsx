@@ -2,28 +2,49 @@ import {FC, useState} from "react";
 import {Box, HStack, Input} from "@chakra-ui/react";
 import styles from '../PostChatWidget.module.css';
 import {FaPaperPlane} from 'react-icons/fa';
-import {ChatPartner} from "../../../../../../../pages/post/[postId]";
+import ChatPartner from "@models/chat/ChatPartner";
+import {sendStartTyping, sendStopTyping} from "../../../../../../../service/stomp/StompService";
 
 
 interface InputMessageProps {
+    postId: string,
     partner: ChatPartner,
     isLoading: boolean,
-    sendMessage: (partner: ChatPartner, message: string) => void
+    sendMessage: (postId: string, partner: ChatPartner, message: string) => void,
+    setPartnerUnread: () => void
 }
 
-const InputMessage: FC<InputMessageProps> = ({ partner: partner, isLoading, sendMessage }) => {
+const InputMessage: FC<InputMessageProps> = ({ postId, partner: partner, isLoading, sendMessage, setPartnerUnread }) => {
 
     const [inputMessage, setInputMessage] = useState('');
+    const [isTyping, setIsTyping] = useState(false);
 
     const loadingClass = isLoading ? styles['chatApp__convButton--loading'] : null;
 
+
     const handleChange = (e: any) => {
-        setInputMessage(e.target.value);
+        const message = e.target.value;
+        setInputMessage(message);
+
+        if (message.length > 0 && !isTyping) {
+            sendStartTyping(partner?.partnerId);
+            setIsTyping(true);
+
+        } else if (message.length === 0 && isTyping) {
+            sendStopTyping(partner?.partnerId);
+            setIsTyping(false);
+        }
     }
 
     const handleSendMessage = (partner: ChatPartner, message: string) => {
-        sendMessage(partner, message);
-        setInputMessage('');
+        if (!!message) {
+            sendMessage(postId, partner, message);
+            setPartnerUnread();
+
+            setInputMessage('');
+            setIsTyping(false);
+            sendStopTyping(partner?.partnerId);
+        }
     }
 
     const handleTyping = () => {

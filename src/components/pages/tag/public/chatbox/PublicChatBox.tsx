@@ -1,9 +1,10 @@
 import React, {FC, useState} from "react";
 import {Box, Button, Image, List, ListItem, useColorModeValue} from "@chakra-ui/react";
-import AutoResizeTextarea from "@components/widgets/chat/public/AutoResizeTextArea";
+import AutoResizeTextarea from "@components/pages/tag/public/AutoResizeTextArea";
 import PublicMessageReceiveDto from "../../../../../service/stomp/receive/PublicMessageReceiveDto";
 import {Flex} from "@chakra-ui/layout/src/flex";
-import styles from "@components/widgets/chat/post/chatwidget/PostChatWidget.module.css";
+import styles from "@components/pages/post/chat/post/chatwidget/PostChatWidget.module.css";
+import dayjs from 'dayjs';
 
 
 interface ChatBoxProps {
@@ -51,6 +52,11 @@ const PublicChatBox: FC<ChatBoxProps> = ({ messages, sendMessage }) => {
                                              alignItems='center'
                                              py='8px'
                                         >
+                                            <Box
+                                                color='grey.50'
+                                            >
+                                                { dayjs(chatMessage.date).format('DD-MM-YYYY hh:mm') }
+                                            </Box>
                                             <Image
                                                 src={ chatMessage.fromUserAvatar }
                                                 alt={ chatMessage.fromUserId }

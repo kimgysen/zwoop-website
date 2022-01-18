@@ -15,7 +15,7 @@ import {
 import {updateNickName} from "@apiclients/feature/user/UserService";
 import {getRawJwt} from "../../../../service/jwt/JwtService";
 import ApiResult from "@apiclients/type/ApiResult";
-import User from "@models/User";
+import User from "@models/user/User";
 
 
 interface EditNickModalProps {

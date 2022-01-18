@@ -1,5 +1,5 @@
 import {Box, Divider, Flex, Heading, Icon, IconButton, Image, useDisclosure, VStack} from '@chakra-ui/react';
-import User from "@models/User";
+import User from "@models/user/User";
 import Card from "@components/layout/components/card/Card";
 import React, {useState} from "react";
 import ReactTimeago from "react-timeago";

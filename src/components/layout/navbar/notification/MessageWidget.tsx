@@ -1,15 +1,36 @@
 import {Circle, IconButton} from '@chakra-ui/react';
 import {css} from '@emotion/react';
 import {FaComment} from 'react-icons/fa';
-import React, {FC} from "react";
+import React, {FC, useEffect, useState} from "react";
 import NextLink from "next/link";
+import {getPrivateMessageDispatcher} from "../../../../event_dispatchers/private_messages/PrivateMessageDispatcher";
+import PrivateMessageReceiveDto from "../../../../service/stomp/receive/PrivateMessageReceiveDto";
+import InboxItemReceiveDto from "../../../../service/stomp/receive/InboxItemReceiveDto";
+
 
 interface MessageWidgetProps {
-    url: string,
-    count: number
+    url: string
 }
 
-const MessageWidget: FC<MessageWidgetProps> = ({ url, count }) => {
+const MessageWidget: FC<MessageWidgetProps> = ({ url }) => {
+    const privateMessageDispatcher = getPrivateMessageDispatcher();
+
+    const [inboxItems, setInboxItems] = useState<InboxItemReceiveDto[]>([]);
+
+
+    useEffect(() => {
+        const listener = (ev: CustomEvent<PrivateMessageReceiveDto>) => {
+            const message = ev.detail;
+            console.log('navbar message received', message);
+        }
+
+        privateMessageDispatcher.addListener(listener);
+
+        return function cleanUp() {
+            privateMessageDispatcher.removeListener(listener);
+        }
+    });
+
     return (
         <NextLink href={ url }>
             <IconButton
@@ -31,7 +52,7 @@ const MessageWidget: FC<MessageWidgetProps> = ({ url, count }) => {
                             fontSize={'0.8rem'}
                             bgColor={'red'}
                             zIndex={9999} p={'1px'}>
-                        {count}
+                        1
                     </Circle>
                 </>}
             />

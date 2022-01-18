@@ -1,8 +1,8 @@
 import React, {FC} from "react";
 import {Box, Tab, TabList, TabPanel, TabPanels, Tabs} from "@chakra-ui/react";
 import ChatRoomUserReceiveDto from "../../../../service/stomp/receive/ChatRoomUserReceiveDto";
-import PublicChatBox from "@components/widgets/chat/public/chatbox/PublicChatBox";
-import ConnectedUsers from "@components/widgets/chat/public/users/ConnectedUsers";
+import PublicChatBox from "@components/pages/tag/public/chatbox/PublicChatBox";
+import ConnectedUsers from "@components/pages/tag/public/users/ConnectedUsers";
 import PublicMessageReceiveDto from "../../../../service/stomp/receive/PublicMessageReceiveDto";
 
 

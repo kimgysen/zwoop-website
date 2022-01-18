@@ -1,4 +1,4 @@
-import {FC} from "react";
+import React, {FC, useState} from "react";
 import {Box, Image} from "@chakra-ui/react";
 import styles from '../PostChatWidget.module.css';
 
@@ -13,7 +13,13 @@ interface MessageItemProps {
 const MessageItem: FC<MessageItemProps> =
     ({ ownerId, senderId, senderAvatar, message }) => {
 
-    /* message position formatting - right if I'm the author */
+    const [imageSrc, setImageSrc] = useState(senderAvatar);
+
+    const handleError = () => {
+        setImageSrc('/static/images/profile_fallback.jpg');
+    }
+
+        /* message position formatting - right if I'm the author */
     let messagePosition = ownerId == senderId
         ? styles['chatApp__convMessageItem--right']
         : styles['chatApp__convMessageItem--left'];
@@ -21,7 +27,8 @@ const MessageItem: FC<MessageItemProps> =
     return (
         <Box className={`${ styles.chatApp__convMessageItem} ${messagePosition} clearfix` }>
             <Image
-                src={ senderAvatar }
+                src={ imageSrc }
+                onError={ handleError }
                 alt={ senderId }
                 className={ styles.chatApp__convMessageAvatar }
             />

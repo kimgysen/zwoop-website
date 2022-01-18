@@ -1,5 +1,5 @@
 import type {NextApiRequest, NextApiResponse} from "next";
-import User from "@models/User";
+import User from "@models/user/User";
 
 const jwt = require('jsonwebtoken');
 

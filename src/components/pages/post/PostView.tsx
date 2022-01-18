@@ -3,7 +3,7 @@ import Card from "@components/layout/components/card/Card";
 import {Box, Divider, Flex, Heading, HStack, Image, Link} from "@chakra-ui/react";
 import remarkGfm from "remark-gfm";
 import ReactMarkdown from "react-markdown";
-import React from "react";
+import React, {useState} from "react";
 import TimeAgo from 'react-timeago';
 import TagsList from "@components/widgets/tags/TagsList";
 import NextLink from "next/link";
@@ -14,6 +14,13 @@ interface PostViewProps {
 }
 
 const PostView: React.FC<PostViewProps> = ({ post }) => {
+
+    const [imageSrc, setImageSrc] = useState(post?.asker?.profilePic);
+
+    const handleError = () => {
+        setImageSrc('/static/images/profile_fallback.jpg');
+    }
+
     return (
         <Card>
             <Heading as='h2'
@@ -44,7 +51,8 @@ const PostView: React.FC<PostViewProps> = ({ post }) => {
                                 w='35px'
                                 h='35px'
                                 mr='10px'
-                                src={ post.asker.profilePic }
+                                src={ imageSrc }
+                                onError={ handleError }
                                 alt='profile pic'
                             />
                             <Box>{ post.asker.nickName || post.asker.userId }</Box>

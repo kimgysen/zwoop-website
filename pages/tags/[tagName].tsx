@@ -9,7 +9,7 @@ import {useRouter} from "next/router";
 import {PostStatusEnum} from "@models/Post";
 import {disconnectStomp, sendPublicMessage} from "../../src/service/stomp/StompService";
 import {getRawJwt} from "../../src/service/jwt/JwtService";
-import PublicChat from "@components/widgets/chat/public/PublicChat";
+import PublicChat from "@components/pages/tag/public/PublicChat";
 import PublicMessageReceiveDto from "../../src/service/stomp/receive/PublicMessageReceiveDto";
 import ChatRoomUserReceiveDto from "../../src/service/stomp/receive/ChatRoomUserReceiveDto";
 import {FeedTypeEnum, getFeed} from "@apiclients/feature/post/PostService";

@@ -4,7 +4,7 @@ import FacebookProvider from "next-auth/providers/facebook"
 import GithubProvider from "next-auth/providers/github"
 import TwitterProvider from "next-auth/providers/twitter"
 import Auth0Provider from "next-auth/providers/auth0"
-import {AuthProviderEnum} from "@models/AuthProvider";
+import {AuthProviderEnum} from "@models/user/AuthProvider";
 import {findUserByProviderAndOauthId, loginUser, registerUser} from "@apiclients/feature/authentication/UserService";
 import jwt from 'jsonwebtoken';
 import util from 'util';

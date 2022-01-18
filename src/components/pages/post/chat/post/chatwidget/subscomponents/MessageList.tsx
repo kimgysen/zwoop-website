@@ -1,8 +1,8 @@
 import {FC} from "react";
 import {Box} from "@chakra-ui/react";
-import MessageItem from "@components/widgets/chat/post/chatwidget/subscomponents/MessageItem";
+import MessageItem from "@components/pages/post/chat/post/chatwidget/subscomponents/MessageItem";
 import styles from '../PostChatWidget.module.css';
-import PrivateMessageReceiveDto from "../../../../../../service/stomp/receive/PrivateMessageReceiveDto";
+import PrivateMessageReceiveDto from "../../../../../../../service/stomp/receive/PrivateMessageReceiveDto";
 
 
 interface MessageListProps {
@@ -16,7 +16,7 @@ const MessageList: FC<MessageListProps> = ({ ownerId, messages }) => {
             {
                 messages
                     && messages.length > 0
-                    && messages.slice(0).reverse().map(
+                    && messages.map(
                         (messageItem: PrivateMessageReceiveDto, index) => (
                             <MessageItem
                                 key={ `message-${index}` }

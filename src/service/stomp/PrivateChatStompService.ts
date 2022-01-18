@@ -1,22 +1,41 @@
-import {connectStomp, disconnectStomp, initPrivateChat, subscribeToPrivateChat} from "./StompService";
-import {NextRouter} from "next/router";
-import {Dispatch, SetStateAction} from "react";
+import {
+    connectStomp,
+    disconnectStomp,
+    initPartnerRead,
+    initPrivateChat,
+    subscribeToPartnerRead,
+    subscribeToPrivateChat,
+    subscribeToStartTyping,
+    subscribeToStopTyping
+} from "./StompService";
 import PrivateMessageReceiveDto from "./receive/PrivateMessageReceiveDto";
 import {HEADER_CONNECT_TYPE, HEADER_POST_ID} from "./types/StompHeader";
 import {ConnectTypeEnum, stringFromConnectTypeEnum} from "./types/ConnectType";
+import {getPrivateMessageDispatcher} from "../../event_dispatchers/private_messages/PrivateMessageDispatcher";
+import {getInitPrivateMessagesDispatcher} from "../../event_dispatchers/private_messages/InitPrivateMessagesDispatcher";
+import {getPartnerReadDispatcher} from "../../event_dispatchers/private_messages/PartnerReadDispatcher";
+import PartnerReadDto from "./receive/PartnerReadDto";
+import {getInitPartnerReadDispatcher} from "../../event_dispatchers/private_messages/InitPartnerReadDispatcher";
+import TypingDto from "./receive/TypingDto";
+import {getStartTypingDispatcher} from "../../event_dispatchers/private_messages/StartTypingDispatcher";
+import {getStopTypingDispatcher} from "../../event_dispatchers/private_messages/StopTypingDispatcher";
 
 interface connectPrivateChatRoomProps {
-    postId: string,
     jwt: string,
-    partnerId: string,
-    setMessages: Dispatch<SetStateAction<PrivateMessageReceiveDto[]>>,
-    router: NextRouter,
-    markInboxItemAsRead: (partnerId: string) => void
+    postId: string,
+    partnerId?: string,
+    redirectToLogin: () => void
 }
 
+const initPrivateMessagesDispatcher = getInitPrivateMessagesDispatcher();
+const privateMessageDispatcher = getPrivateMessageDispatcher();
+const initPartnerReadDispatcher = getInitPartnerReadDispatcher();
+const partnerReadDispatcher = getPartnerReadDispatcher();
+const startTypingDispatcher = getStartTypingDispatcher();
+const stopTypingDispatcher = getStopTypingDispatcher();
+
 export const connectPrivateChat = ({
-    postId, jwt, partnerId, setMessages, router, markInboxItemAsRead
-}: connectPrivateChatRoomProps) => {
+    postId, jwt, partnerId, redirectToLogin }: connectPrivateChatRoomProps) => {
     connectStomp(
         {
             [HEADER_CONNECT_TYPE]: stringFromConnectTypeEnum(ConnectTypeEnum.PRIVATE_CHAT),
@@ -26,25 +45,43 @@ export const connectPrivateChat = ({
             console.log('connect private chat success', frame);
 
             if (partnerId) {
-                initPrivateChat(postId, partnerId, (msg) => {
-                    const privMessages = JSON.parse(msg.body);
-                    setMessages(privMessages.reverse() as PrivateMessageReceiveDto[]);
-                    markInboxItemAsRead(partnerId);
+                initPrivateChat(partnerId, (msg) => {
+                    const messages = JSON.parse(msg.body) as PrivateMessageReceiveDto[];
+                    initPrivateMessagesDispatcher.dispatch(messages);
                 });
 
-                subscribeToPrivateChat(postId,(msg) => {
-                    const privMsg = JSON.parse(msg.body);
-                    console.log('Private message received, privMsg', JSON.parse(msg.body));
-                    setMessages((messages: PrivateMessageReceiveDto[]) => [...messages, privMsg]);
+                initPartnerRead(partnerId, (msg) => {
+                    const partnerHasRead = JSON.parse(msg.body) as boolean;
+                    initPartnerReadDispatcher.dispatch(partnerHasRead);
                 });
             }
+
+            subscribeToPrivateChat((msg) => {
+                const message = JSON.parse(msg.body) as PrivateMessageReceiveDto;
+                privateMessageDispatcher.dispatch(message);
+            });
+
+            subscribeToPartnerRead((msg) => {
+                const message = JSON.parse(msg.body) as PartnerReadDto;
+                partnerReadDispatcher.dispatch(message);
+            });
+
+            subscribeToStartTyping((msg) => {
+                const message = JSON.parse(msg.body) as TypingDto;
+                startTypingDispatcher.dispatch(message);
+            });
+
+            subscribeToStopTyping((msg) => {
+                const message = JSON.parse(msg.body) as TypingDto;
+                stopTypingDispatcher.dispatch(message);
+            });
         },
         (frame) => {
             console.log('error frame', frame);
             if (frame.headers.message.includes('ExpiredJwtException')) {
                 // TODO: Add proper handling when jwt expired
                 disconnectStomp();
-                router.push('/login');
+                redirectToLogin();
             }
         },
         (frame) => {

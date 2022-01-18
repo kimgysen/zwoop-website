@@ -42,15 +42,15 @@ export const disconnectStomp = async () => {
 
 // Public chat
 export const initPublicChat = (callback: messageCallbackType) => {
-    client.subscribe(`/chatroom/old.public.messages`, callback);
+    client.subscribe(`/app/chatroom.old.messages`, callback);
 }
 
 export const subscribeToPublicChat = (chatRoomId: string, callback: messageCallbackType) => {
-    client.subscribe(`/topic/${ chatRoomId }.public.messages`, callback);
+    client.subscribe(`/topic/${ chatRoomId }.chatroom.messages`, callback);
 }
 
 export const initConnectedUsers = (callback: messageCallbackType) => {
-    client.subscribe(`/chatroom/connected.users`, callback);
+    client.subscribe(`/app/chatroom.connected.users`, callback);
 }
 
 export const subscribeToConnectedUsers = (chatRoomId: string, callback: messageCallbackType) => {
@@ -59,34 +59,64 @@ export const subscribeToConnectedUsers = (chatRoomId: string, callback: messageC
 
 export const sendPublicMessage = (publicMessage: PublicMessageSendDto) => {
     client.publish({
-        destination: "/chatroom/send.message.public",
+        destination: "/app/send.message.chatroom",
         body: JSON.stringify(publicMessage)
     });
 }
 
-// Private chat
+// Subscriptions
 export const initInbox = (callback: messageCallbackType) => {
-    client.subscribe(`/chatroom/inbox.items`, callback);
+    client.subscribe(`/app/post.inbox.items`, callback);
 }
 
-export const initPrivateChat = (chatRoomId: string, partnerId: string, callback: messageCallbackType) => {
-    client.subscribe(`/chatroom/old.private.messages/${ partnerId }`, callback);
+export const initPrivateChat = (partnerId: string, callback: messageCallbackType) => {
+    client.subscribe(`/app/old.private.messages/${ partnerId }`, callback);
 }
 
-export const subscribeToPrivateChat = (chatRoomId: string, callback: messageCallbackType) => {
-    client.subscribe(`/user/exchange/amq.direct/${ chatRoomId }.private.messages`, callback);
+export const initPartnerRead = (partnerId: string, callback: messageCallbackType) => {
+    client.subscribe(`/app/old.private.messages/${ partnerId }/read`, callback);
 }
 
+export const subscribeToStartTyping = (callback: messageCallbackType) => {
+    client.subscribe(`/user/exchange/amq.direct/start.typing`, callback);
+}
+
+export const subscribeToStopTyping = (callback: messageCallbackType) => {
+    client.subscribe(`/user/exchange/amq.direct/stop.typing`, callback);
+}
+
+export const subscribeToPrivateChat = (callback: messageCallbackType) => {
+    client.subscribe(`/user/exchange/amq.direct/private.messages`, callback);
+}
+
+export const subscribeToPartnerRead = (callback: messageCallbackType) => {
+    client.subscribe(`/user/exchange/amq.direct/partner.read`, callback);
+}
+
+// Send
 export const sendPrivateMessage = (privateMessage: PrivateMessageSendDto) => {
     client.publish({
-        destination: '/chatroom/send.message.private',
+        destination: '/app/send.message.private',
         body: JSON.stringify(privateMessage)
     });
 }
 
 export const sendMarkInboxItemAsRead = (partnerId: string) => {
     client.publish({
-        destination: '/chatroom/mark.as.read',
+        destination: '/app/mark.as.read',
         body: JSON.stringify({ partnerId })
+    })
+}
+
+export const sendStartTyping = (partnerId: string) => {
+    client.publish({
+        destination: `/app/start.typing/${ partnerId }`
+    });
+}
+
+export const sendStopTyping = (partnerId: string) => {
+    console.log('send stop command');
+    client.publish({
+        destination: `/app/stop.typing/${ partnerId }`
     })
 }

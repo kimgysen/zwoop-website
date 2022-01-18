@@ -1,6 +1,6 @@
 
 export default interface PrivateMessageReceiveDto {
-    chatRoomId: string,
+    postId: string,
     userId: string,
     partnerId: string,
     date: Date,

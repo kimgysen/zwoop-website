@@ -3,8 +3,6 @@ export enum ConnectTypeEnum {
     GENERAL_APP,
     PUBLIC_CHAT,
     PRIVATE_CHAT,
-    GENERAL_INBOX,
-    NOTIFICATIONS,
     POST_INBOX
 }
 

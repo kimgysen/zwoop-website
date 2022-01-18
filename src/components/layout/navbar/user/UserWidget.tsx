@@ -1,4 +1,4 @@
-import React, {FC} from "react";
+import React, {FC, useState} from "react";
 import NextLink from "next/link";
 import {signOut} from "next-auth/react";
 import {FaSignOutAlt, FaUser} from 'react-icons/fa';
@@ -25,6 +25,13 @@ interface UserWidgetProps {
 }
 
 const UserWidget: FC<UserWidgetProps> = ({ userId, profilePic }) => {
+
+    const [avatar, setAvatar] = useState(profilePic);
+
+    const handleError = () => {
+        setAvatar('/static/images/profile_fallback.jpg');
+    }
+
     return (
         <Popover
             closeOnBlur={true}
@@ -43,7 +50,8 @@ const UserWidget: FC<UserWidgetProps> = ({ userId, profilePic }) => {
                         w='35px'
                         h='35px'
                         mr='10px'
-                        src={ profilePic }
+                        src={ avatar }
+                        onError={handleError}
                         alt='profile pic'
                     />
                 </Button>

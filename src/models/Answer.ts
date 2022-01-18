@@ -1,4 +1,4 @@
-import User from "./User";
+import User from "./user/User";
 import AnswerStatus from "./AnswerStatus";
 
 export enum AnswerStatusEnum {

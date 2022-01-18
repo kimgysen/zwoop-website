@@ -1,6 +1,6 @@
 import React, {Dispatch, FC, SetStateAction} from "react";
 import {Divider, Heading, HStack, IconButton, Text} from "@chakra-ui/react";
-import {InboxDetail} from "../../../../../pages/post/[postId]";
+import {InboxDetail} from "../../../../../../pages/post/[postId]";
 import {FaChevronLeft} from 'react-icons/fa';
 
 

@@ -1,4 +1,4 @@
-import User from "./User";
+import User from "./user/User";
 import Tag from "./Tag";
 import PostStatus from "./PostStatus";
 import Answer from "@models/Answer";

@@ -114,9 +114,15 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
 .chatApp__convMessageItem--left .chatApp__convMessageAvatar {
     float: left;
 }
+
+.chatApp__convMessageItem--left .chatApp__convMessageDate {
+    float: left;
+}
+
 .chatApp__convMessageItem--left .chatApp__convMessageValue {
     float: left;
     text-align: left;
@@ -136,6 +142,9 @@
     border-color: transparent #4870df transparent transparent;
 }
 .chatApp__convMessageItem--right .chatApp__convMessageAvatar {
+    float: right;
+}
+.chatApp__convMessageItem--right .chatApp__convMessageDate {
     float: right;
 }
 .chatApp__convMessageItem--right .chatApp__convMessageValue {

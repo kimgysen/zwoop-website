@@ -1,9 +1,9 @@
 import React, {Dispatch, FC, SetStateAction} from "react";
 import {Avatar, Box, HStack, Tag, Text, VStack} from "@chakra-ui/react";
-import InboxItemReceiveDto from "../../../../../service/stomp/receive/InboxItemReceiveDto";
+import InboxItemReceiveDto from "../../../../../../service/stomp/receive/InboxItemReceiveDto";
 import TimeAgo from "react-timeago";
-import {ChatPartner, InboxDetail} from "../../../../../../pages/post/[postId]";
-
+import ChatPartner from "@models/chat/ChatPartner";
+import InboxDetail from "@models/chat/InboxDetail";
 
 interface InboxItemProps {
     inboxItem: InboxItemReceiveDto,

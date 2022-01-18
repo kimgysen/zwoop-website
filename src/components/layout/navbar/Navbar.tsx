@@ -84,10 +84,7 @@ const Navbar: React.FC = () => {
                         session && (
                             <Flex flex={{ base: 1, md: 2 }} justify={{ base: 'center', md: 'end' }}>
                                 <HStack mr='15px'>
-                                    <MessageWidget
-                                        count={1}
-                                        url='/chat'
-                                    />
+                                    <MessageWidget url='/chat' />
                                     <NotificationWidget
                                         count={1}
                                         url='/notifications'
