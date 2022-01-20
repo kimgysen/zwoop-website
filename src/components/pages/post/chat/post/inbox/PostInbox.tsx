@@ -3,21 +3,23 @@ import {Box, Divider, Spinner} from "@chakra-ui/react";
 import PostInboxItem from "@components/pages/post/chat/post/inbox/PostInboxItem";
 import InboxItemReceiveDto, {mapFromNewPrivateMessage} from "../../../../../../service/stomp/receive/InboxItemReceiveDto";
 import InboxDetail from "@models/chat/InboxDetail";
-import {getInitInboxDispatcher} from "../../../../../../event_dispatchers/inbox/post_inbox/InitPostInboxDispatcher";
+import {getInitPostInboxDispatcher} from "../../../../../../event_dispatchers/inbox/post_inbox/InitPostInboxDispatcher";
 import {getPrivateMessageDispatcher} from "../../../../../../event_dispatchers/private_messages/PrivateMessageDispatcher";
 import PrivateMessageReceiveDto from "../../../../../../service/stomp/receive/PrivateMessageReceiveDto";
-import {addInboxLoadingListener, addInitInboxListener} from "@components/pages/post/helpers/InboxHelper";
+import {addInboxLoadingListener, addInitPostInboxListener} from "@components/pages/post/helpers/PostInboxHelper";
 import {addPrivateMessageListener} from "@components/pages/post/helpers/PrivateChatHelper";
 
 
 interface PostInboxProps {
+    postId: string,
+    principalId: string,
     setInboxDetail: Dispatch<SetStateAction<InboxDetail>>
 }
 
 const PostInbox: FC<PostInboxProps> = (
-    { setInboxDetail }) => {
+    { postId, principalId, setInboxDetail }) => {
 
-    const initInboxItemsDispatcher = getInitInboxDispatcher();
+    const initPostInboxItemsDispatcher = getInitPostInboxDispatcher();
     const privateMessageDispatcher = getPrivateMessageDispatcher();
 
     const [inboxLoading, setInboxLoading] = useState<boolean>(true);
@@ -30,10 +32,10 @@ const PostInbox: FC<PostInboxProps> = (
     }
 
     useEffect(() => {
-        const initInboxLoadingListener = addInboxLoadingListener(
+        const initPostInboxLoadingListener = addInboxLoadingListener(
             (isLoading: boolean) => setInboxLoading(isLoading));
 
-        const initInboxItemsListener = addInitInboxListener((inboxItems: InboxItemReceiveDto[]) => {
+        const initPostInboxItemsListener = addInitPostInboxListener((inboxItems: InboxItemReceiveDto[]) => {
             setInboxLoading(false);
             setSortedInboxItems(inboxItems);
         });
@@ -43,8 +45,8 @@ const PostInbox: FC<PostInboxProps> = (
         });
 
         return function cleanUp() {
-            initInboxItemsDispatcher.removeListenerLoading(initInboxLoadingListener)
-            initInboxItemsDispatcher.removeListener(initInboxItemsListener);
+            initPostInboxItemsDispatcher.removeListenerLoading(initPostInboxLoadingListener)
+            initPostInboxItemsDispatcher.removeListener(initPostInboxItemsListener);
             privateMessageDispatcher.removeListener(privateMessageListener);
         }
 
@@ -86,6 +88,8 @@ const PostInbox: FC<PostInboxProps> = (
                     inboxItems.map((inboxItem, index) => (
                         <Box key={`inboxItem-${ index }`}>
                             <PostInboxItem
+                                postId={ postId }
+                                principalId={ principalId }
                                 inboxItem={ inboxItem }
                                 setInboxDetail={ setInboxDetail }
                             />

@@ -14,9 +14,7 @@ class PrivateMessageDispatcher extends BaseDispatcher<PrivateMessageReceiveDto> 
 let dispatcher: PrivateMessageDispatcher;
 
 export const getPrivateMessageDispatcher = () => {
-    if (dispatcher) {
-        return dispatcher;
-    } else {
-        return new PrivateMessageDispatcher();
-    }
+    return dispatcher
+        ? dispatcher
+        : new PrivateMessageDispatcher();
 }

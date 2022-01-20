@@ -1,6 +1,7 @@
 import {
     connectStomp,
     disconnectStomp,
+    initPartnerIsWriting,
     initPartnerRead,
     initPrivateChat,
     subscribeToPartnerRead,
@@ -19,6 +20,7 @@ import {getInitPartnerReadDispatcher} from "../../event_dispatchers/private_mess
 import TypingDto from "./receive/TypingDto";
 import {getStartTypingDispatcher} from "../../event_dispatchers/private_messages/StartTypingDispatcher";
 import {getStopTypingDispatcher} from "../../event_dispatchers/private_messages/StopTypingDispatcher";
+import {getInitPartnerIsWritingDispatcher} from "../../event_dispatchers/private_messages/InitPartnerIsWritingDispatcher";
 
 interface connectPrivateChatRoomProps {
     jwt: string,
@@ -31,6 +33,7 @@ const initPrivateMessagesDispatcher = getInitPrivateMessagesDispatcher();
 const privateMessageDispatcher = getPrivateMessageDispatcher();
 const initPartnerReadDispatcher = getInitPartnerReadDispatcher();
 const partnerReadDispatcher = getPartnerReadDispatcher();
+const initPartnerIsWritingDispatcher = getInitPartnerIsWritingDispatcher();
 const startTypingDispatcher = getStartTypingDispatcher();
 const stopTypingDispatcher = getStopTypingDispatcher();
 
@@ -53,6 +56,11 @@ export const connectPrivateChat = ({
                 initPartnerRead(partnerId, (msg) => {
                     const partnerHasRead = JSON.parse(msg.body) as boolean;
                     initPartnerReadDispatcher.dispatch(partnerHasRead);
+                });
+
+                initPartnerIsWriting(partnerId, (msg) => {
+                    const partnerIsWriting = JSON.parse(msg.body) as boolean;
+                    initPartnerIsWritingDispatcher.dispatch(partnerIsWriting);
                 });
             }
 

@@ -3,9 +3,9 @@ import {css} from '@emotion/react';
 import {FaComment} from 'react-icons/fa';
 import React, {FC, useEffect, useState} from "react";
 import NextLink from "next/link";
-import {getPrivateMessageDispatcher} from "../../../../event_dispatchers/private_messages/PrivateMessageDispatcher";
-import PrivateMessageReceiveDto from "../../../../service/stomp/receive/PrivateMessageReceiveDto";
-import InboxItemReceiveDto from "../../../../service/stomp/receive/InboxItemReceiveDto";
+import {getPrivateMessageDispatcher} from "../../../../../event_dispatchers/private_messages/PrivateMessageDispatcher";
+import PrivateMessageReceiveDto from "../../../../../service/stomp/receive/PrivateMessageReceiveDto";
+import InboxItemReceiveDto from "../../../../../service/stomp/receive/InboxItemReceiveDto";
 
 
 interface MessageWidgetProps {

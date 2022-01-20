@@ -21,7 +21,7 @@ import {
     handleSendPrivateMessage,
     isPostOwner
 } from "@components/pages/post/helpers/PrivateChatHelper";
-import {connectToInbox} from "@components/pages/post/helpers/InboxHelper";
+import {connectToPostInbox} from "@components/pages/post/helpers/PostInboxHelper";
 import InboxDetail from "@models/chat/InboxDetail";
 
 
@@ -80,7 +80,7 @@ const Post: NextPage = (props: any) => {
 
                 } else if (isOwner && !inboxDetail.isActive) {
                     setChatViewState(ChatViewState.INBOX);
-                    await connectToInbox({
+                    await connectToPostInbox({
                         postId: post.postId,
                         router
                     });
@@ -125,19 +125,20 @@ const Post: NextPage = (props: any) => {
                         <PostView post={ post } />
                     }
                     rightComponent={
-                        <Card p={ 1 }>
-                            <PostChatHeader
-                                isOwner={ isOwner as boolean }
-                                partnerNickName={ isOwner ? null : post.asker.nickName }
-                                inboxDetail={ inboxDetail }
-                                setInboxDetail={ setInboxDetail }
-                            />
-                            {
-                                chatViewState === ChatViewState.LOGGED_OFF &&
+                        authState.isLoggedIn &&
+                            <Card p={ 1 }>
+                                <PostChatHeader
+                                    isOwner={ isOwner as boolean }
+                                    partnerNickName={ isOwner ? null : post.asker.nickName }
+                                    inboxDetail={ inboxDetail }
+                                    setInboxDetail={ setInboxDetail }
+                                />
+                                {
+                                    chatViewState === ChatViewState.LOGGED_OFF &&
                                     <></>
-                            }
-                            {
-                                chatViewState === ChatViewState.VISITOR_PRIVATE_CHAT &&
+                                }
+                                {
+                                    chatViewState === ChatViewState.VISITOR_PRIVATE_CHAT &&
                                     <PostChatWidget
                                         postId={ post.postId }
                                         ownerId={ authState.principalId as string }
@@ -149,15 +150,17 @@ const Post: NextPage = (props: any) => {
                                         sendMessage={ handleSendPrivateMessage }
                                         isLoading={ false }
                                     />
-                            }
-                            {
-                                chatViewState === ChatViewState.INBOX &&
+                                }
+                                {
+                                    chatViewState === ChatViewState.INBOX &&
                                     <PostInbox
+                                        principalId={ authState.principalId as string }
+                                        postId={ post.postId }
                                         setInboxDetail={ setInboxDetail }
                                     />
-                            }
-                            {
-                                chatViewState === ChatViewState.INBOX_DETAIL_CHAT &&
+                                }
+                                {
+                                    chatViewState === ChatViewState.INBOX_DETAIL_CHAT &&
                                     <PostChatWidget
                                         postId={ post.postId }
                                         ownerId={ authState.principalId as string }
@@ -165,8 +168,8 @@ const Post: NextPage = (props: any) => {
                                         sendMessage={ handleSendPrivateMessage }
                                         isLoading={ false }
                                     />
-                            }
-                        </Card>
+                                }
+                            </Card>
                     }
                 />
             </AppLayout>

@@ -13,9 +13,7 @@ class StartTypingDispatcher extends BaseDispatcher<TypingDto> {
 let dispatcher: StartTypingDispatcher;
 
 export const getStartTypingDispatcher = () => {
-    if (dispatcher) {
-        return dispatcher;
-    } else {
-        return new StartTypingDispatcher();
-    }
+    return dispatcher
+        ? dispatcher
+        : new StartTypingDispatcher();
 }

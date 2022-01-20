@@ -14,9 +14,7 @@ class PartnerReadDispatcher extends BaseDispatcher<PartnerReadDto> {
 let dispatcher: PartnerReadDispatcher;
 
 export const getPartnerReadDispatcher = () => {
-    if (dispatcher) {
-        return dispatcher;
-    } else {
-        return new PartnerReadDispatcher();
-    }
+    return dispatcher
+        ? dispatcher
+        : new PartnerReadDispatcher();
 }

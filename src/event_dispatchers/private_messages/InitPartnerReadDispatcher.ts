@@ -13,9 +13,7 @@ class InitPartnerReadDispatcher extends BaseDispatcher<boolean> {
 let dispatcher: InitPartnerReadDispatcher;
 
 export const getInitPartnerReadDispatcher = () => {
-    if (dispatcher) {
-        return dispatcher;
-    } else {
-        return new InitPartnerReadDispatcher();
-    }
+    return dispatcher
+        ? dispatcher
+        : new InitPartnerReadDispatcher();
 }

@@ -13,9 +13,7 @@ class InitPrivateMessagesDispatcher extends BaseDispatcher<PrivateMessageReceive
 let dispatcher: InitPrivateMessagesDispatcher;
 
 export const getInitPrivateMessagesDispatcher = () => {
-    if (dispatcher) {
-        return dispatcher;
-    } else {
-        return new InitPrivateMessagesDispatcher();
-    }
+    return dispatcher
+        ? dispatcher
+        : new InitPrivateMessagesDispatcher();
 }

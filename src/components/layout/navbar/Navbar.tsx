@@ -12,16 +12,17 @@ import {
     useDisclosure,
 } from '@chakra-ui/react';
 import {CloseIcon, HamburgerIcon,} from '@chakra-ui/icons';
-import React from "react";
+import React, {useEffect, useState} from "react";
 import NextLink from 'next/link'
 import Searchbox from "@components/widgets/searchbox/Searchbox";
 import LoginModal from "@components/layout/navbar/modal/LoginModal";
 import {useSession} from "next-auth/react";
 import {FaPen} from "react-icons/fa";
-import MessageWidget from "@components/layout/navbar/notification/MessageWidget";
-import NotificationWidget from "@components/layout/navbar/notification/NotificationWidget";
+import MessageWidget from "@components/layout/navbar/notification/inbox/MessageWidget";
+import NotificationWidget from "@components/layout/navbar/notification/notification/NotificationWidget";
 import UserWidget from "@components/layout/navbar/user/UserWidget";
 import {useRouter} from "next/router";
+import AuthState from "@models/user/AuthState";
 
 const Navbar: React.FC = () => {
     const { data: session, status } = useSession();
@@ -29,6 +30,16 @@ const Navbar: React.FC = () => {
 
     const { isOpen: rightMenuIsOpen, onToggle: rightMenuOnToggle } = useDisclosure();
     const { isOpen: modalIsOpen, onToggle: modalOnOpen, onClose: modalOnClose } = useDisclosure();
+
+    const [authState, setAuthState] = useState<AuthState>({ isLoggedIn: false });
+
+    useEffect(() => {
+        (async() => {
+            if (session && session.userId) {
+                setAuthState({ isLoggedIn: true, principalId: session.userId as string })
+            }
+        })();
+    }, [session?.userId]);
 
     const router = useRouter();
 

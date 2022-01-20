@@ -9,7 +9,6 @@ const PartnerTypingBox: FC = () => {
         <HStack
             fontSize='sm'
             color='gray.600'
-            pl='20px'
             mt='5px'
             className={styles.loading}
         >

@@ -5,7 +5,7 @@ export const ON_INIT_INBOX_ITEMS_LOADING = 'ON_INIT_INBOX_ITEMS_LOADING';
 export const ON_INIT_INBOX_ITEMS_RECEIVED = 'ON_INIT_INBOX_ITEMS_RECEIVED';
 
 
-class InitPostInboxDispatcher extends BaseDispatcher<InboxItemReceiveDto> {
+class InitPostInboxDispatcher extends BaseDispatcher<InboxItemReceiveDto[]> {
     constructor() {
         super(ON_INIT_INBOX_ITEMS_RECEIVED, ON_INIT_INBOX_ITEMS_LOADING)
     }
@@ -13,7 +13,7 @@ class InitPostInboxDispatcher extends BaseDispatcher<InboxItemReceiveDto> {
 
 let dispatcher: InitPostInboxDispatcher;
 
-export const getInitInboxDispatcher = () => {
+export const getInitPostInboxDispatcher = () => {
     if (dispatcher) {
         return dispatcher;
     } else {

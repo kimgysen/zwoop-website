@@ -8,7 +8,6 @@ const PartnerReadBox: FC = () => {
         <HStack
             fontSize='sm'
             color='gray.400'
-            pl='20px'
         >
             <FaEye />
             <i>Read</i>

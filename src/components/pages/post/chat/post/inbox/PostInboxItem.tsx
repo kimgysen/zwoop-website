@@ -1,17 +1,39 @@
-import React, {Dispatch, FC, SetStateAction} from "react";
+import React, {Dispatch, FC, SetStateAction, useEffect, useState} from "react";
 import {Avatar, Box, HStack, Tag, Text, VStack} from "@chakra-ui/react";
 import InboxItemReceiveDto from "../../../../../../service/stomp/receive/InboxItemReceiveDto";
 import TimeAgo from "react-timeago";
 import ChatPartner from "@models/chat/ChatPartner";
 import InboxDetail from "@models/chat/InboxDetail";
+import {getPartnerReadDispatcher} from "../../../../../../event_dispatchers/private_messages/PartnerReadDispatcher";
+import {
+    addPartnerReadListener,
+    addStartTypingListener,
+    addStopTypingListener
+} from "@components/pages/post/helpers/PrivateChatHelper";
+import PartnerReadDto from "../../../../../../service/stomp/receive/PartnerReadDto";
+import {getStartTypingDispatcher} from "../../../../../../event_dispatchers/private_messages/StartTypingDispatcher";
+import TypingDto from "../../../../../../service/stomp/receive/TypingDto";
+import {getStopTypingDispatcher} from "../../../../../../event_dispatchers/private_messages/StopTypingDispatcher";
+import PartnerTypingBox from "@components/pages/post/chat/post/widgets/PartnerTypingBox";
+import PartnerReadBox from "@components/pages/post/chat/post/widgets/PartnerReadBox";
 
 interface InboxItemProps {
+    postId: string,
+    principalId: string,
     inboxItem: InboxItemReceiveDto,
     setInboxDetail: Dispatch<SetStateAction<InboxDetail>>
 }
 
 const PostInboxItem: FC<InboxItemProps> = (
-    { inboxItem, setInboxDetail }) => {
+    { postId, principalId, inboxItem, setInboxDetail }) => {
+
+    const partnerReadDispatcher = getPartnerReadDispatcher();
+    const startTypingDispatcher = getStartTypingDispatcher();
+    const stopTypingDispatcher = getStopTypingDispatcher();
+
+    const [hasPartnerReadDto, setHasPartnerReadDto] = useState<PartnerReadDto|null>(null);
+    const [partnerIsTyping, setPartnerIsTyping] = useState<boolean>(false);
+
 
     const partner: ChatPartner = (inboxItem.userId === inboxItem.fromUserId)
         ? { partnerId: inboxItem.toUserId,
@@ -20,6 +42,30 @@ const PostInboxItem: FC<InboxItemProps> = (
         : { partnerId: inboxItem.fromUserId,
             partnerNickName: inboxItem.fromNickName,
             partnerAvatar: inboxItem.fromAvatar };
+
+    useEffect(() => {
+        const partnerReadListener = addPartnerReadListener((message) => {
+            setHasPartnerReadDto(message);
+        });
+
+        const startTypingListener = addStartTypingListener((typingDto: TypingDto) => {
+            if (typingDto.postId === `post-${postId}` && typingDto.partnerId === partner.partnerId) {
+                setPartnerIsTyping(true);
+            }
+        });
+
+        const stopTypingListener = addStopTypingListener((typingDto: TypingDto) => {
+            if (typingDto.postId === `post-${postId}` && typingDto.partnerId === partner.partnerId) {
+                setPartnerIsTyping(false);
+            }
+        });
+
+        return function cleanUp() {
+            partnerReadDispatcher.removeListener(partnerReadListener);
+            startTypingDispatcher.removeListener(startTypingListener);
+            stopTypingDispatcher.removeListener(stopTypingListener);
+        }
+    }, []);
 
     const handleClickInboxDetail = () => {
         setInboxDetail({
@@ -66,10 +112,22 @@ const PostInboxItem: FC<InboxItemProps> = (
                 <Box>
                     <Text isTruncated
                           color='gray.600'
-                    >
-                        { inboxItem.lastMessage }
+                    >{
+                        inboxItem.fromUserId === principalId
+                            && 'You: '
+                    }
+                    { inboxItem.lastMessage }
                     </Text>
                 </Box>
+                {
+                    inboxItem.fromUserId === principalId &&
+                    (inboxItem.hasPartnerRead || !!hasPartnerReadDto) &&
+                        <PartnerReadBox />
+                }
+                {
+                    partnerIsTyping &&
+                        <PartnerTypingBox />
+                }
                 <Box>
                     <Text fontSize='xs'
                           color='gray.500'

@@ -14,6 +14,7 @@ import {getInitPartnerReadDispatcher} from "../../../../event_dispatchers/privat
 import {getStartTypingDispatcher} from "../../../../event_dispatchers/private_messages/StartTypingDispatcher";
 import {getStopTypingDispatcher} from "../../../../event_dispatchers/private_messages/StopTypingDispatcher";
 import TypingDto from "../../../../service/stomp/receive/TypingDto";
+import {getInitPartnerIsWritingDispatcher} from "../../../../event_dispatchers/private_messages/InitPartnerIsWritingDispatcher";
 
 
 export const isPostOwner = (authState: AuthState, post: Post) =>
@@ -28,6 +29,12 @@ export const lastMessageSentBy = (messages: PrivateMessageReceiveDto[]) => {
     return messages && messages.length
         ? messages[0].fromUserId
         : null;
+}
+
+export const hasPartnerRead = (hasPartnerReadDto: PartnerReadDto|null, postId: string, partner?: ChatPartner) => {
+    return hasPartnerReadDto
+        && hasPartnerReadDto?.postId === `post-${postId}`
+        && hasPartnerReadDto?.partnerId === partner?.partnerId
 }
 
 interface ConnectPrivateChatProps {
@@ -98,6 +105,15 @@ export const addPartnerReadListener = (cb: (message: PartnerReadDto) => void) =>
     }
     partnerReadDispatcher.addListener(partnerReadListener);
     return partnerReadListener;
+}
+
+const initPartnerIsWritingDispatcher = getInitPartnerIsWritingDispatcher();
+export const addInitPartnerIsWritingListener = (cb: (message: boolean) => void) => {
+    const initPartnerIsWritingListener = (ev: CustomEvent<boolean>) => {
+        cb(ev.detail);
+    }
+    initPartnerIsWritingDispatcher.addListener(initPartnerIsWritingListener);
+    return initPartnerIsWritingListener;
 }
 
 const startTypingDispatcher = getStartTypingDispatcher();

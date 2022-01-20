@@ -65,7 +65,7 @@ export const sendPublicMessage = (publicMessage: PublicMessageSendDto) => {
 }
 
 // Subscriptions
-export const initInbox = (callback: messageCallbackType) => {
+export const initPostInbox = (callback: messageCallbackType) => {
     client.subscribe(`/app/post.inbox.items`, callback);
 }
 
@@ -75,6 +75,10 @@ export const initPrivateChat = (partnerId: string, callback: messageCallbackType
 
 export const initPartnerRead = (partnerId: string, callback: messageCallbackType) => {
     client.subscribe(`/app/old.private.messages/${ partnerId }/read`, callback);
+}
+
+export const initPartnerIsWriting = (partnerId: string, callback: messageCallbackType) => {
+    client.subscribe(`/app/writing/partner/${partnerId}`, callback);
 }
 
 export const subscribeToStartTyping = (callback: messageCallbackType) => {
@@ -101,7 +105,15 @@ export const sendPrivateMessage = (privateMessage: PrivateMessageSendDto) => {
     });
 }
 
+const validatePartnerId = (partnerId: string, methodName: string) => {
+    if (!partnerId) {
+        throw Error(`${methodName}: partnerId is null`);
+    }
+    return true;
+}
+
 export const sendMarkInboxItemAsRead = (partnerId: string) => {
+    validatePartnerId(partnerId, 'sendMarkInboxItemAsRead');
     client.publish({
         destination: '/app/mark.as.read',
         body: JSON.stringify({ partnerId })
@@ -109,13 +121,18 @@ export const sendMarkInboxItemAsRead = (partnerId: string) => {
 }
 
 export const sendStartTyping = (partnerId: string) => {
-    client.publish({
-        destination: `/app/start.typing/${ partnerId }`
-    });
+    validatePartnerId(partnerId, 'sendStartTyping');
+    if (partnerId) {
+        client.publish({
+            destination: `/app/start.typing/${ partnerId }`
+        });
+    } else {
+        console.error('sendStartTyping: partnerId is null');
+    }
 }
 
 export const sendStopTyping = (partnerId: string) => {
-    console.log('send stop command');
+    validatePartnerId(partnerId, 'sendStopTyping');
     client.publish({
         destination: `/app/stop.typing/${ partnerId }`
     })

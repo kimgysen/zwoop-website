@@ -13,9 +13,7 @@ class StopTypingDispatcher extends BaseDispatcher<TypingDto> {
 let dispatcher: StopTypingDispatcher;
 
 export const getStopTypingDispatcher = () => {
-    if (dispatcher) {
-        return dispatcher;
-    } else {
-        return new StopTypingDispatcher();
-    }
+    return dispatcher
+        ? dispatcher
+        : new StopTypingDispatcher();
 }
