@@ -35,7 +35,7 @@ const UserWidget: FC<UserWidgetProps> = ({ userId, profilePic }) => {
     return (
         <Popover
             closeOnBlur={true}
-            placement='top-end'
+            placement='top-start'
         >
             <PopoverTrigger>
                 <Button

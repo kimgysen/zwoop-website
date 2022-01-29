@@ -2,14 +2,14 @@ import {NextPage} from "next";
 import Head from "next/head";
 import AppLayout from "@components/layout/AppLayout";
 import ThreeColumnLayout from "@components/layout/column-layouts/ThreeColumnLayout";
-import WatchList from "@components/widgets/watchlist/WatchList";
 import {Box} from "@chakra-ui/react";
 import React, {useEffect, useState} from "react";
 import UserCard from "@components/pages/user/UserCard";
-import {getFollowedTags, getUserById} from "@apiclients/feature/user/UserService";
+import {getUserById} from "../../src/api_clients/feature/user/UserService";
 import UserMenu from "@components/pages/user/UserMenu";
 import {useSession} from "next-auth/react";
-import ApiRes from "@apiclients/type/ApiResult";
+import AuthState from "@models/user/AuthState";
+import WatchListHoc from "@components/widgets/watchlist/WatchListHoc";
 
 
 export async function getServerSideProps(ctx: { query: { userId: string } }) {
@@ -25,16 +25,18 @@ const UserProfile: NextPage = (props: any) => {
     const userRes = props;
     const { data: session, status } = useSession();
 
-    const [followedTagsRes, setFollowedTagsRes] = useState<ApiRes>({ loading: true, success: null, error: null });
+    const [authState, setAuthState] = useState<AuthState>({ isLoggedIn: false });
 
     useEffect(() => {
         (async() => {
-            if (session?.userId) {
-                const res = await getFollowedTags(session.userId as string);
-                setFollowedTagsRes(res);
+            if (session && session.userId) {
+                setAuthState({ isLoggedIn: true, principalId: session.userId as string })
+            } else {
+                setAuthState({ isLoggedIn: false, principalId: null });
             }
         })();
     }, [session?.userId]);
+
 
     return (
         <>
@@ -46,16 +48,18 @@ const UserProfile: NextPage = (props: any) => {
                     leftComponent={
                         <>
                             {
-                                session?.userId &&
-                                    <WatchList tagsRes={ followedTagsRes } />
+                                authState.isLoggedIn &&
+                                    <WatchListHoc
+                                        authState={ authState }
+                                    />
                             }
                         </>
                     }
                     centerComponent={
                         userRes.success &&
                             <Box>
-                                <UserCard user={ userRes.success }
-                                          loggedInUserId={ session?.userId as string }
+                                <UserCard profileUser={ userRes.success }
+                                          principalId={ authState.principalId as string }
                                 />
                                 <UserMenu userId={ userRes.success.userId } />
                             </Box>

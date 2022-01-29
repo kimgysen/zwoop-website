@@ -13,8 +13,8 @@ import FormCard from "@components/widgets/form/FormCard";
 import Card from "@components/layout/components/card/Card";
 import MarkdownEditor from "@components/widgets/markdown/MarkdownEditor";
 import TagsBox from "@components/widgets/tags/TagsBox";
-import {findTagsStartingWith} from "@apiclients/feature/tag/TagService";
-import Tag from "@models/Tag";
+import {findTagsStartingWith} from "../../../api_clients/feature/tag/TagService";
+import Tag from "@models/tag/Tag";
 import Title from "./Title";
 
 
@@ -100,6 +100,5 @@ const EditFormDetailsView: React.FC<FormDetailsViewProps> = ({ post, setters }) 
         </Card>
     );
 }
-
 
 export default EditFormDetailsView;

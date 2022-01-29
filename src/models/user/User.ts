@@ -1,9 +1,10 @@
 import AuthenticatedUser from "./AuthenticatedUser";
-import Tag from "@models/Tag";
+import Tag from "@models/tag/Tag";
 
 export default interface User extends AuthenticatedUser {
     aboutText?: string,
     profilePic: string,
     tags: Tag[],
-    createdAt: Date
+    createdAt: Date,
+    updatedAt: Date
 }

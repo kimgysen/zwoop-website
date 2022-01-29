@@ -2,7 +2,7 @@ import NextLink from 'next/link'
 import {Box, Divider, Flex, Heading, HStack, Image, Link} from "@chakra-ui/react";
 import React, {FC} from "react";
 import Card from "../../../layout/components/card/Card";
-import Post from "@models/Post";
+import Post from "@models/post/Post";
 import {BnbBox} from "./BnbBox";
 import TagsList from "../../tags/TagsList";
 import TimeAgo from "react-timeago";

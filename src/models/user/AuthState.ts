@@ -1,5 +1,5 @@
 
 export default interface AuthState {
     isLoggedIn: boolean,
-    principalId?: string
+    principalId?: string|null
 }

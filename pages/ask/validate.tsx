@@ -1,4 +1,4 @@
-import Tag from "@models/Tag";
+import Tag from "@models/tag/Tag";
 
 
 export const TITLE_MIN_CHARS = 10;

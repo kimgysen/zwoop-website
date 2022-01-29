@@ -1,9 +1,11 @@
 import {
     connectStomp,
     disconnectStomp,
+    initAppInbox,
     initPartnerIsWriting,
     initPartnerRead,
     initPrivateChat,
+    subscribeToInboxUpdates,
     subscribeToPartnerRead,
     subscribeToPrivateChat,
     subscribeToStartTyping,
@@ -12,15 +14,19 @@ import {
 import PrivateMessageReceiveDto from "./receive/PrivateMessageReceiveDto";
 import {HEADER_CONNECT_TYPE, HEADER_POST_ID} from "./types/StompHeader";
 import {ConnectTypeEnum, stringFromConnectTypeEnum} from "./types/ConnectType";
-import {getPrivateMessageDispatcher} from "../../event_dispatchers/private_messages/PrivateMessageDispatcher";
-import {getInitPrivateMessagesDispatcher} from "../../event_dispatchers/private_messages/InitPrivateMessagesDispatcher";
-import {getPartnerReadDispatcher} from "../../event_dispatchers/private_messages/PartnerReadDispatcher";
 import PartnerReadDto from "./receive/PartnerReadDto";
-import {getInitPartnerReadDispatcher} from "../../event_dispatchers/private_messages/InitPartnerReadDispatcher";
 import TypingDto from "./receive/TypingDto";
-import {getStartTypingDispatcher} from "../../event_dispatchers/private_messages/StartTypingDispatcher";
-import {getStopTypingDispatcher} from "../../event_dispatchers/private_messages/StopTypingDispatcher";
-import {getInitPartnerIsWritingDispatcher} from "../../event_dispatchers/private_messages/InitPartnerIsWritingDispatcher";
+import InboxItemReceiveDto from "./receive/InboxItemReceiveDto";
+import {getStompDispatcher} from "../../event_dispatchers/EventDispatcher";
+import {
+    APP_INBOX__ON_INIT_ITEMS_RECEIVED,
+    APP_INBOX__ON_INBOX_UPDATE_RECEIVED,
+    PRIVATE_CHAT__INIT_IS_READ_RECEIVED,
+    PRIVATE_CHAT__INIT_IS_WRITING_RECEIVED,
+    PRIVATE_CHAT__ON_INIT_MESSAGES_RECEIVED,
+    PRIVATE_CHAT__ON_MESSAGE_RECEIVED,
+    PRIVATE_CHAT__ON_READ_RECEIVED, PRIVATE_CHAT__ON_START_TYPING_RECEIVED, PRIVATE_CHAT__ON_STOP_TYPING_RECEIVED
+} from "../../event_dispatchers/config/stompevents";
 
 interface connectPrivateChatRoomProps {
     jwt: string,
@@ -29,13 +35,7 @@ interface connectPrivateChatRoomProps {
     redirectToLogin: () => void
 }
 
-const initPrivateMessagesDispatcher = getInitPrivateMessagesDispatcher();
-const privateMessageDispatcher = getPrivateMessageDispatcher();
-const initPartnerReadDispatcher = getInitPartnerReadDispatcher();
-const partnerReadDispatcher = getPartnerReadDispatcher();
-const initPartnerIsWritingDispatcher = getInitPartnerIsWritingDispatcher();
-const startTypingDispatcher = getStartTypingDispatcher();
-const stopTypingDispatcher = getStopTypingDispatcher();
+const dispatcher = getStompDispatcher();
 
 export const connectPrivateChat = ({
     postId, jwt, partnerId, redirectToLogin }: connectPrivateChatRoomProps) => {
@@ -50,38 +50,58 @@ export const connectPrivateChat = ({
             if (partnerId) {
                 initPrivateChat(partnerId, (msg) => {
                     const messages = JSON.parse(msg.body) as PrivateMessageReceiveDto[];
-                    initPrivateMessagesDispatcher.dispatch(messages);
+                    dispatcher.dispatch(PRIVATE_CHAT__ON_INIT_MESSAGES_RECEIVED, messages);
                 });
 
                 initPartnerRead(partnerId, (msg) => {
                     const partnerHasRead = JSON.parse(msg.body) as boolean;
-                    initPartnerReadDispatcher.dispatch(partnerHasRead);
+                    dispatcher.dispatch(PRIVATE_CHAT__INIT_IS_READ_RECEIVED, partnerHasRead);
                 });
 
                 initPartnerIsWriting(partnerId, (msg) => {
                     const partnerIsWriting = JSON.parse(msg.body) as boolean;
-                    initPartnerIsWritingDispatcher.dispatch(partnerIsWriting);
+                    dispatcher.dispatch(PRIVATE_CHAT__INIT_IS_WRITING_RECEIVED, partnerIsWriting);
                 });
             }
 
+            initAppInbox((msg) => {
+                const inboxItems = JSON.parse(msg.body);
+                dispatcher.dispatch(
+                    APP_INBOX__ON_INIT_ITEMS_RECEIVED,
+                    inboxItems);
+            });
+
+            subscribeToInboxUpdates((msg) => {
+                const inboxItem = JSON.parse(msg.body) as InboxItemReceiveDto;
+                dispatcher.dispatch(
+                    APP_INBOX__ON_INBOX_UPDATE_RECEIVED + `__${ inboxItem.postId }_${ inboxItem.partnerId }`,
+                    inboxItem);
+            });
+
             subscribeToPrivateChat((msg) => {
-                const message = JSON.parse(msg.body) as PrivateMessageReceiveDto;
-                privateMessageDispatcher.dispatch(message);
+                const privateMessageDto = JSON.parse(msg.body) as PrivateMessageReceiveDto;
+                dispatcher.dispatch(PRIVATE_CHAT__ON_MESSAGE_RECEIVED,
+                    privateMessageDto);
             });
 
             subscribeToPartnerRead((msg) => {
-                const message = JSON.parse(msg.body) as PartnerReadDto;
-                partnerReadDispatcher.dispatch(message);
+                const partnerReadDto = JSON.parse(msg.body) as PartnerReadDto;
+                dispatcher.dispatch(
+                    PRIVATE_CHAT__ON_READ_RECEIVED + `__${partnerReadDto.postId}_${ partnerReadDto.partnerId }`,
+                    partnerReadDto);
             });
 
             subscribeToStartTyping((msg) => {
-                const message = JSON.parse(msg.body) as TypingDto;
-                startTypingDispatcher.dispatch(message);
+                const typingDto = JSON.parse(msg.body) as TypingDto;
+                dispatcher.dispatch(
+                    PRIVATE_CHAT__ON_START_TYPING_RECEIVED + `__${typingDto.postId}_${ typingDto.partnerId }`,
+                    typingDto);
             });
 
             subscribeToStopTyping((msg) => {
-                const message = JSON.parse(msg.body) as TypingDto;
-                stopTypingDispatcher.dispatch(message);
+                const typingDto = JSON.parse(msg.body) as TypingDto;
+                dispatcher.dispatch(PRIVATE_CHAT__ON_STOP_TYPING_RECEIVED + `__${typingDto.postId}_${ typingDto.partnerId }`,
+                    typingDto);
             });
         },
         (frame) => {

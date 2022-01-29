@@ -1,92 +1,74 @@
 import Head from "next/head";
 import AppLayout from "@components/layout/AppLayout";
 import React, {useEffect, useState} from "react";
-import useTronLink from "../src/service/swr/user/useTronlink";
-import TronlinkBanner from "@components/pages/home/tronlink-banner/TronlinkBanner";
 import ThreeColumnLayout from "@components/layout/column-layouts/ThreeColumnLayout";
-import WatchList from "@components/widgets/watchlist/WatchList";
-import FeedList from "@components/widgets/feed/FeedList";
-import {PostStatusEnum} from "@models/Post";
+import {PostStatusEnum} from "@models/post/Post";
 import {Heading} from "@chakra-ui/layout/src/heading";
-import {FeedTypeEnum, getFeed} from "@apiclients/feature/post/PostService";
-import ApiResult from "@apiclients/type/ApiResult";
-import ApiRes from "@apiclients/type/ApiResult";
-import {getFollowedTags} from "@apiclients/feature/user/UserService";
 import {useSession} from "next-auth/react";
+import AuthState from "@models/user/AuthState";
+import AppStompConnect from "@components/stomp/app/AppStompConnect";
+import WatchListHoc from "@components/widgets/watchlist/WatchListHoc";
+import FeedListHoc from "@components/widgets/feed/FeedListHoc";
+import {FeedTypeEnum} from "../src/api_clients/feature/post/PostService";
 
 
 const HomePage: React.FC = () => {
 
-    const { tronLinkAuth, isTronLinkLoading } = useTronLink();
     const { data: session, status } = useSession();
-    const [feedResult, setFeedResult] = useState<ApiResult>({ loading: true, success: [], error: null });
-    const [followedTagsRes, setFollowedTagsRes] = useState<ApiRes>({ loading: true, success: null, error: null });
+
+    const [authState, setAuthState] = useState<AuthState>({ isLoggedIn: false });
 
     useEffect(() => {
-        (async() => {
-            if (session) {
-                const res = await getFollowedTags(session.userId as string);
-                setFollowedTagsRes(res);
-            }
-        })();
+        if (session && session.userId) {
+            setAuthState({ isLoggedIn: true, principalId: session.userId as string });
+        } else {
+            setAuthState({ isLoggedIn: false, principalId: null });
+        }
     }, [session?.userId]);
-
-    useEffect(() => {
-        (async () => {
-            const res = await getFeed(
-                FeedTypeEnum.FEED_ALL,
-                PostStatusEnum.OPEN,
-                null,
-                0,
-                50);
-            setFeedResult(res);
-        })();
-    }, []);
 
     return (
         <>
             <Head>
                 <title>Home</title>
             </Head>
-            <AppLayout>
-                <ThreeColumnLayout
-                    leftComponent={
-                        <>
-                        {
-                            session?.userId &&
-                                <WatchList tagsRes={ followedTagsRes } />
+            <AppStompConnect>
+                <AppLayout>
+                    <ThreeColumnLayout
+                        leftComponent={
+                            authState.isLoggedIn
+                            && (
+                                <WatchListHoc
+                                    authState={ authState }
+                                />
+                            )
                         }
-                        </>
-                    }
-                    centerComponent={
-                        <>
-                            <Heading
-                                as="h2"
-                                size="md"
-                                py='.5rem'
-                                maxHeight={ "2.8rem" }
-                                sx={{ overflow: 'hidden' }}
-                            >
-                                Latest questions
-                            </Heading>
+                        centerComponent={
+                            <>
+                                <Heading
+                                    as="h2"
+                                    size="md"
+                                    py='.5rem'
+                                    maxHeight={ "2.8rem" }
+                                    sx={{ overflow: 'hidden' }}
+                                >
+                                    Latest questions
+                                </Heading>
 
-                            <FeedList isLoading={ feedResult.loading }
-                                      posts={ feedResult.success }
-                                      error={ feedResult.error?.toString() }
-                            />
-                        </>
-                    }
-                    rightComponent={
-                        <>
-                            <TronlinkBanner
-                                isInstalled={ tronLinkAuth?.isTrxWalletInstalled }
-                                isLoggedIn={ tronLinkAuth?.isTrxWalletLoggedIn }
-                                isLoading={ isTronLinkLoading }
-                            />
-                        </>
-                    }
-                />
-            </AppLayout>
+                                <FeedListHoc
+                                    feedType={ FeedTypeEnum.FEED_ALL }
+                                    postStatus={ PostStatusEnum.OPEN }
+                                    page={ 0 }
+                                    pageSize={ 50 }
+                                />
+                            </>
+                        }
+                        rightComponent={
+                            <>
+                            </>
+                        }
+                    />
+                </AppLayout>
+            </AppStompConnect>
         </>
     );
 }

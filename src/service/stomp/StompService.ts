@@ -6,6 +6,7 @@ import {Client, frameCallbackType} from '@stomp/stompjs';
 import {messageCallbackType} from "@stomp/stompjs/src/types";
 import PublicMessageSendDto from "./send/PublicMessageSendDto";
 import PrivateMessageSendDto from "./send/PrivateMessageSendDto";
+import InboxItemReceiveDto from "./receive/InboxItemReceiveDto";
 
 const uri = process.env.NEXT_PUBLIC_API_STOMP_BASE_URI;
 const path = process.env.NEXT_PUBLIC_API_STOMP_WS_PATH;
@@ -31,8 +32,11 @@ export const connectStomp = (headerKeys: any,
         onStompError: onFailCallback,
         onDisconnect: onDisconnectCallback
     });
+    // client.debug = (str: string) => console.log(str);
     client.activate();
 }
+
+export const isStompConnected = () => !!client;
 
 export const disconnectStomp = async () => {
     if (client) {
@@ -65,8 +69,12 @@ export const sendPublicMessage = (publicMessage: PublicMessageSendDto) => {
 }
 
 // Subscriptions
-export const initPostInbox = (callback: messageCallbackType) => {
-    client.subscribe(`/app/post.inbox.items`, callback);
+export const initAppInbox = (callback: messageCallbackType) => {
+    client.subscribe(`/app/app.inbox.items`, callback);
+}
+
+export const initPostInbox = (postId: string, callback: messageCallbackType) => {
+    client.subscribe(`/app/post/${postId}/inbox.items`, callback);
 }
 
 export const initPrivateChat = (partnerId: string, callback: messageCallbackType) => {
@@ -97,6 +105,10 @@ export const subscribeToPartnerRead = (callback: messageCallbackType) => {
     client.subscribe(`/user/exchange/amq.direct/partner.read`, callback);
 }
 
+export const subscribeToInboxUpdates = (callback: messageCallbackType) => {
+    client.subscribe(`/user/exchange/amq.direct/inbox.item.received`, callback);
+}
+
 // Send
 export const sendPrivateMessage = (privateMessage: PrivateMessageSendDto) => {
     client.publish({
@@ -117,7 +129,7 @@ export const sendMarkInboxItemAsRead = (partnerId: string) => {
     client.publish({
         destination: '/app/mark.as.read',
         body: JSON.stringify({ partnerId })
-    })
+    });
 }
 
 export const sendStartTyping = (partnerId: string) => {
@@ -135,5 +147,5 @@ export const sendStopTyping = (partnerId: string) => {
     validatePartnerId(partnerId, 'sendStopTyping');
     client.publish({
         destination: `/app/stop.typing/${ partnerId }`
-    })
+    });
 }

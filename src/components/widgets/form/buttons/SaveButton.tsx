@@ -6,7 +6,7 @@ import {Box} from "@chakra-ui/layout/src/box";
 interface ISaveButton {
     onSave: (e: React.MouseEvent) => void,
     shouldDisableSave: boolean,
-    saveError: string | null
+    saveError?: string | null
 }
 
 const SaveButton: FC<ISaveButton> = ({ onSave, shouldDisableSave, saveError }) => {

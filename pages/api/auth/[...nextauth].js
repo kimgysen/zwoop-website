@@ -5,7 +5,7 @@ import GithubProvider from "next-auth/providers/github"
 import TwitterProvider from "next-auth/providers/twitter"
 import Auth0Provider from "next-auth/providers/auth0"
 import {AuthProviderEnum} from "@models/user/AuthProvider";
-import {findUserByProviderAndOauthId, loginUser, registerUser} from "@apiclients/feature/authentication/UserService";
+import {findUserByProviderAndOauthId, loginUser, registerUser} from "@api_clients/feature/authentication/UserService";
 import jwt from 'jsonwebtoken';
 import util from 'util';
 
@@ -113,7 +113,6 @@ export default NextAuth({
     async jwt({ token, user, account, profile, isNewUser }) {
       if (user && account && profile) {
           const { success } = await findUserByProviderAndOauthId(AuthProviderEnum[account.provider], profile.sub);
-          console.log(success);
           if (!success) {
             const { result: accessToken, userId, firstName, profilePic } = await registerUser({
               authProviderId: AuthProviderEnum[account.provider],

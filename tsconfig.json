@@ -26,8 +26,8 @@
       "@models/*": [
         "src/models/*"
       ],
-      "@apiclients/*": [
-        "src/apiclients/*"
+      "@api_clients/*": [
+        "src/api_clients/*"
       ],
       "@styles/*": [
         "src/styles/*"

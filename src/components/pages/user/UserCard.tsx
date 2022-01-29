@@ -13,13 +13,13 @@ import {HStack} from "@chakra-ui/layout/src/stack";
 
 
 interface UserCardProps {
-    user: User,
-    loggedInUserId: string
+    profileUser: User,
+    principalId: string
 }
 
-const UserCard: React.FC<UserCardProps> = ({ user, loggedInUserId }) => {
+const UserCard: React.FC<UserCardProps> = ({ profileUser, principalId }) => {
 
-    const [currentUser, setCurrentUser] = useState<User>(user);
+    const [editUser, setEditUser] = useState<User>(profileUser);
     const { isOpen: isEditNickOpen, onOpen: onEditNickOpen, onClose: onEditNickClose } = useDisclosure();
     const { isOpen: isEditAboutOpen, onOpen: onEditAboutOpen, onClose: onEditAboutClose } = useDisclosure();
 
@@ -33,7 +33,7 @@ const UserCard: React.FC<UserCardProps> = ({ user, loggedInUserId }) => {
                                 w='50px'
                                 h='50px'
                                 mr='10px'
-                                src={ user.profilePic }
+                                src={ profileUser.profilePic }
                                 onError={({ currentTarget }) => {
                                     currentTarget.onerror = null; // prevents looping
                                     currentTarget.src="/static/images/profile_fallback.jpg";
@@ -41,11 +41,11 @@ const UserCard: React.FC<UserCardProps> = ({ user, loggedInUserId }) => {
                                 alt='profile pic'
                             />
                             <Heading fontSize={'xl'} fontWeight={500} fontFamily={'body'}>
-                                { currentUser.nickName }
+                                { editUser.nickName }
                             </Heading>
                         </HStack>
                         {
-                            user.userId === loggedInUserId && (
+                            profileUser.userId === principalId && (
                                 <IconButton
                                     float='right'
                                     align='top'
@@ -63,20 +63,20 @@ const UserCard: React.FC<UserCardProps> = ({ user, loggedInUserId }) => {
                         fontSize='sm'
                     >
                         <Icon as={FaClock} />
-                        <Box as='span' ml={'10px'}>Member since: <ReactTimeago date={ user.createdAt } /></Box>
+                        <Box as='span' ml={'10px'}>Member since: <ReactTimeago date={ profileUser.createdAt } /></Box>
                     </Box>
                     {
-                        user.tags.length > 0 &&
+                        profileUser.tags.length > 0 &&
                         <Box
                             pbt={ '10px' }
                         >
-                            <TagsList tags={ user.tags } />
+                            <TagsList tags={ profileUser.tags } />
                         </Box>
                     }
                     <Divider />
                     <Box>
                         {
-                            user.userId === loggedInUserId && (
+                            profileUser.userId === principalId && (
                                 <IconButton
                                     float='right'
                                     align='top'
@@ -89,31 +89,31 @@ const UserCard: React.FC<UserCardProps> = ({ user, loggedInUserId }) => {
                             )
                         }
                         {
-                            currentUser.aboutText &&
+                            editUser.aboutText &&
                                 <Box className='markdown-body'>
-                                    <ReactMarkdown remarkPlugins={ [remarkGfm] }>{ currentUser.aboutText }</ReactMarkdown>
+                                    <ReactMarkdown remarkPlugins={ [remarkGfm] }>{ editUser.aboutText }</ReactMarkdown>
                                 </Box>
                         }
                         {
-                            !currentUser.aboutText &&
+                            !editUser.aboutText &&
                                 <i>Write something about yourself</i>
                         }
                     </Box>
                 </VStack>
             </Card>
             <EditNickModal
-                userId={ user.userId }
-                setCurrentUser={ setCurrentUser }
+                userId={ principalId }
+                setCurrentUser={ setEditUser }
                 isOpen={ isEditNickOpen }
                 onClose={ onEditNickClose }
-                nickName={ user.nickName as string }
+                nickName={ profileUser.nickName as string }
             />
             <EditAboutModal
-                userId={ user.userId }
-                setCurrentUser={ setCurrentUser }
+                userId={ principalId }
+                setCurrentUser={ setEditUser }
                 isOpen={ isEditAboutOpen }
                 onClose={ onEditAboutClose }
-                aboutText={ user.aboutText }
+                aboutText={ profileUser.aboutText }
             />
         </Box>
     );

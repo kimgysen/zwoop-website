@@ -12,9 +12,9 @@ import {
     ModalOverlay,
     VStack
 } from "@chakra-ui/react";
-import {updateNickName} from "@apiclients/feature/user/UserService";
+import {updateNickName} from "../../../../api_clients/feature/user/UserService";
 import {getRawJwt} from "../../../../service/jwt/JwtService";
-import ApiResult from "@apiclients/type/ApiResult";
+import ApiResult from "../../../../api_clients/type/ApiResult";
 import User from "@models/user/User";
 
 
@@ -31,7 +31,7 @@ const EditNickModal: FC<EditNickModalProps> = ({ userId, setCurrentUser, nickNam
     const defaultUpdateResult = { loading: false, success: null, error: null };
 
     const [updatedNick, setUpdatedNick] = useState<string>(nickName);
-    const [updateResult, setUpdateResult] = useState<ApiResult>(defaultUpdateResult);
+    const [updateResult, setUpdateResult] = useState<ApiResult<User>>(defaultUpdateResult);
 
     const handleChange = (e: any) => {
         setUpdateResult(defaultUpdateResult)

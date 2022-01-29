@@ -1,45 +1,46 @@
 import FeedItem from "./feed-item/FeedItem";
 import {FC} from "react";
-import {Box, Skeleton, Stack} from "@chakra-ui/react";
-import Post from "@models/Post";
-import Card from "@components/layout/components/card/Card";
+import {Box} from "@chakra-ui/react";
+import Post from "@models/post/Post";
+import ApiResult from "../../../api_clients/type/ApiResult";
+import {isEmptyFeed} from "@components/widgets/feed/FeedListHelper";
+import FeedListEmpty from "@components/widgets/feed/fallbackviews/FeedListEmpty";
+import FeedListError from "@components/widgets/feed/fallbackviews/FeedListError";
+import FeedListLoading from "@components/widgets/feed/fallbackviews/FeedListLoading";
 
 interface FeedListProps {
-    isLoading: boolean,
-    posts: Post[] | undefined,
-    error?: string
+    feedListRes: ApiResult<Post[]>
 }
 
-const FeedList: FC<FeedListProps> = ({ isLoading, posts = [], error }) => {
+const FeedList: FC<FeedListProps> = ({ feedListRes }) => {
+
+    const feedList = feedListRes.success || [];
+
     return (
         <Box width={'100%'}>
             {
-                isLoading &&
-                    <Card>
-                        <Stack>
-                            <Skeleton height="20px" />
-                            <Skeleton height="15px" />
-                            <Skeleton height="15px" />
-                        </Stack>
-                    </Card>
+                feedListRes.loading
+                && <FeedListLoading />
             }
             {
-                error && (
-                    <Box>
-                        { error }
-                    </Box>
+                feedListRes.error
+                && (
+                    <FeedListError
+                        errorMsg={ feedListRes.error }
+                    />
                 )
             }
             {
-                (!posts || posts.length === 0) &&
-                    <Box mt='20px' plr='10px'>
-                        <i>There are currently no open questions</i>
-                    </Box>
+                feedListRes.success
+                && isEmptyFeed(feedList)
+                && <FeedListEmpty />
             }
             {
-                posts && posts.map(post => <FeedItem
-                    key={ post.postId }
-                    post={ post }
+                feedListRes.success
+                && feedList.map(post =>
+                    <FeedItem
+                        key={ post.postId }
+                        post={ post }
                 />)
             }
         </Box>

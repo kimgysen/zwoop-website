@@ -1,4 +1,4 @@
-import Post from "@models/Post";
+import Post from "@models/post/Post";
 import Card from "@components/layout/components/card/Card";
 import {Box, Divider, Flex, Heading, HStack, Image, Link} from "@chakra-ui/react";
 import remarkGfm from "remark-gfm";

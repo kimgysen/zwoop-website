@@ -18,14 +18,17 @@ import Searchbox from "@components/widgets/searchbox/Searchbox";
 import LoginModal from "@components/layout/navbar/modal/LoginModal";
 import {useSession} from "next-auth/react";
 import {FaPen} from "react-icons/fa";
-import MessageWidget from "@components/layout/navbar/notification/inbox/MessageWidget";
-import NotificationWidget from "@components/layout/navbar/notification/notification/NotificationWidget";
+import AppInboxButton from "@components/layout/navbar/notification/inbox/AppInboxButton";
+import NotificationButton from "@components/layout/navbar/notification/notification/NotificationButton";
 import UserWidget from "@components/layout/navbar/user/UserWidget";
 import {useRouter} from "next/router";
 import AuthState from "@models/user/AuthState";
 
+
 const Navbar: React.FC = () => {
     const { data: session, status } = useSession();
+    const router = useRouter();
+
     const loading = status === "loading";
 
     const { isOpen: rightMenuIsOpen, onToggle: rightMenuOnToggle } = useDisclosure();
@@ -36,12 +39,10 @@ const Navbar: React.FC = () => {
     useEffect(() => {
         (async() => {
             if (session && session.userId) {
-                setAuthState({ isLoggedIn: true, principalId: session.userId as string })
+                setAuthState({ isLoggedIn: true, principalId: session.userId as string });
             }
         })();
     }, [session?.userId]);
-
-    const router = useRouter();
 
     return (
         <Box
@@ -95,8 +96,10 @@ const Navbar: React.FC = () => {
                         session && (
                             <Flex flex={{ base: 1, md: 2 }} justify={{ base: 'center', md: 'end' }}>
                                 <HStack mr='15px'>
-                                    <MessageWidget url='/chat' />
-                                    <NotificationWidget
+                                    <AppInboxButton url='/chat'
+                                                    authState={ authState }
+                                    />
+                                    <NotificationButton
                                         count={1}
                                         url='/notifications'
                                     />

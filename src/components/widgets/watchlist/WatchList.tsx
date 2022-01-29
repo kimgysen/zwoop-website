@@ -1,20 +1,24 @@
-import {Box, Flex, Heading, Link, Spinner} from "@chakra-ui/react";
+import {Box, Flex, Heading, Link} from "@chakra-ui/react";
 import {FC} from "react";
 import NextLink from "next/link";
-import ApiResult from "@apiclients/type/ApiResult";
-import Tag from "@models/Tag";
+import ApiResult from "../../../api_clients/type/ApiResult";
+import Tag from "@models/tag/Tag";
+import WatchListLoading from "@components/widgets/watchlist/fallbackviews/WatchListLoading";
+import WatchListError from "@components/widgets/watchlist/fallbackviews/WatchListError";
+import WatchListEmpty from "@components/widgets/watchlist/fallbackviews/WatchListEmpty";
+import {isWatchListEmpty, sortTags} from "@components/widgets/watchlist/WatchListHelper";
+import WatchListItem from "@components/widgets/watchlist/WatchListItem";
 
 
 interface TagsListProps {
-    tagsRes: ApiResult
+    tagsRes: ApiResult<Tag[]>
 }
 
 const WatchList: FC<TagsListProps> = ({ tagsRes }) => {
-    if (tagsRes.success) {
-        (tagsRes.success as Tag[])
-            .sort((a, b) =>
-                a.tagName.localeCompare(b.tagName));
-    }
+
+    const tagsList: Tag[] = tagsRes.success
+        ? sortTags(tagsRes.success as Tag[])
+        : [];
 
     return (
         <Box>
@@ -30,37 +34,26 @@ const WatchList: FC<TagsListProps> = ({ tagsRes }) => {
                 flexWrap="wrap"
             >
                 {
-                    tagsRes.loading && <Spinner />
+                    tagsRes.loading
+                    && <WatchListLoading />
                 }
                 {
-                    tagsRes.error && <Box>{ tagsRes.error }</Box>
+                    tagsRes.error
+                    && <WatchListError errorMsg={ tagsRes.error } />
                 }
                 {
-                    tagsRes.success && (tagsRes.success as Tag[]).length === 0 && (
-                        <Box>
-                            <i>Search and watch tags</i>
-                        </Box>
-                    )
+                    tagsRes.success
+                    && isWatchListEmpty(tagsRes.success)
+                    && <WatchListEmpty />
                 }
                 {
-                    tagsRes.success && (tagsRes.success as Tag[]).length > 0 &&
-                        (tagsRes.success as Tag[]).map((tag, index) => (
-
-                        <Box className='tag'
-                             key={`${ tag.tagId }`}
-                             fontSize='sm'
-                             p="10px 5px"
-                        >
-                            <NextLink href={ `/tags/${tag.tagName}` } passHref>
-                                <Link
-                                    _hover={{ textDecoration: "underline" }}
-                                    d="block"
-                                >
-                                    { tag.tagName }
-                                </Link>
-                            </NextLink>
-                        </Box>
-                    ))}
+                    tagsRes.success
+                    && !isWatchListEmpty(tagsRes.success)
+                    && tagsList.map((tag) =>
+                        <WatchListItem
+                            key={`tag-${ tag.tagId }`}
+                            tag={tag}/>)
+                }
             </Flex>
         </Box>
     );

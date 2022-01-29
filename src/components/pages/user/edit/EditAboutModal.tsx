@@ -13,9 +13,9 @@ import {
 } from "@chakra-ui/react";
 import User from "@models/user/User";
 import MarkdownEditor from "@components/widgets/markdown/MarkdownEditor";
-import ApiResult from "@apiclients/type/ApiResult";
+import ApiResult from "../../../../api_clients/type/ApiResult";
 import {getRawJwt} from "../../../../service/jwt/JwtService";
-import {updateAbout} from "@apiclients/feature/user/UserService";
+import {updateAbout} from "../../../../api_clients/feature/user/UserService";
 
 interface EditAboutModalProps {
     userId: string,
@@ -30,7 +30,7 @@ const EditAboutModal: FC<EditAboutModalProps> = ({ userId, setCurrentUser, about
     const defaultUpdateResult = { loading: false, success: null, error: null };
 
     const [updatedAbout, setUpdatedAbout] = useState<string>(aboutText as string || '');
-    const [updateResult, setUpdateResult] = useState<ApiResult>(defaultUpdateResult);
+    const [updateResult, setUpdateResult] = useState<ApiResult<User>>(defaultUpdateResult);
 
 
     const onSave = async () => {

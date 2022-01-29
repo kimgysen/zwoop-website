@@ -1,6 +1,6 @@
 import React, {FC, useState} from "react";
 import Select, {OnChangeValue} from 'react-select';
-import Tag from "@models/Tag";
+import Tag from "@models/tag/Tag";
 
 
 // Types for react-select.

@@ -2,7 +2,7 @@ import {NextPage} from "next";
 import Head from "next/head";
 import AppLayout from "@components/layout/AppLayout";
 import React from "react";
-import PrivateChatBox from "@components/pages/post/chat/private/PrivateChatBox";
+import GeneralAppChatBox from "@components/pages/chat/GeneralAppChatBox";
 
 
 const ChatPage: NextPage = () => {
@@ -12,7 +12,7 @@ const ChatPage: NextPage = () => {
                 <title>Chat</title>
             </Head>
             <AppLayout>
-                <PrivateChatBox messages={[]} />
+                <GeneralAppChatBox messages={[]} />
             </AppLayout>
         </>
     )

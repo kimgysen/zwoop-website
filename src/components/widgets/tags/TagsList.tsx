@@ -1,6 +1,6 @@
 import {Box, Flex, Link} from "@chakra-ui/react";
 import {FC} from "react";
-import Tag from "@models/Tag";
+import Tag from "@models/tag/Tag";
 import NextLink from 'next/link';
 
 
