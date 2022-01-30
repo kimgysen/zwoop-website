@@ -24,14 +24,13 @@ const lastMessageSentBy = (messages: PrivateMessageReceiveDto[]) => {
 
 export const hasPartnerRead = (hasPartnerReadDto: PartnerReadDto|null, postId: string, partner?: ChatPartner) => {
     return hasPartnerReadDto
-        && hasPartnerReadDto?.postId === `post-${postId}`
+        && hasPartnerReadDto?.postId === postId
         && hasPartnerReadDto?.partnerId === partner?.partnerId
 }
 
 export const handleSendPrivateMessage = (postId: string, partner: ChatPartner, message: string) => {
-    const SESS_POST_ID = `post-${ postId }`;
     sendPrivateMessage({
-        postId: SESS_POST_ID,
+        postId,
         message,
         toUserId:  partner.partnerId,
         toUserNickName: partner.partnerNickName,

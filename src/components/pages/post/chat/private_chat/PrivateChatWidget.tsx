@@ -18,7 +18,7 @@ import {
 import {getStompDispatcher} from "../../../../../event_dispatchers/EventDispatcher";
 import {
     PRIVATE_CHAT__INIT_IS_READ_RECEIVED,
-    PRIVATE_CHAT__INIT_IS_WRITING_RECEIVED, PRIVATE_CHAT__ON_INIT_MESSAGES_LOADING,
+    PRIVATE_CHAT__INIT_IS_WRITING_RECEIVED,
     PRIVATE_CHAT__ON_INIT_MESSAGES_RECEIVED,
     PRIVATE_CHAT__ON_MESSAGE_RECEIVED,
     PRIVATE_CHAT__ON_READ_RECEIVED,
@@ -64,7 +64,7 @@ const PrivateChatWidget: FC<PostChatWidgetProps> = ({ postId, principalId, partn
         window.addEventListener('focus', onFocus);
         window.addEventListener('blur', onBlur);
 
-        const eventPostFix = `__post-${ postId }_${ partner?.partnerId }`;
+        const eventPostFix = `__${ postId }_${ partner?.partnerId }`;
 
         stompDispatcher.on(PRIVATE_CHAT__ON_INIT_MESSAGES_RECEIVED, (messages: PrivateMessageReceiveDto[]) => {
             setMessagesLoading(false);
@@ -73,7 +73,6 @@ const PrivateChatWidget: FC<PostChatWidgetProps> = ({ postId, principalId, partn
         });
 
         stompDispatcher.on(PRIVATE_CHAT__ON_MESSAGE_RECEIVED, (message: PrivateMessageReceiveDto) => {
-            console.log('received', message);
             if (partner.partnerId === message.fromUserId || partner.partnerId === message.toUserId ) {
                 setMessages((messages: PrivateMessageReceiveDto[]) => [message, ...messages]);
 
@@ -89,7 +88,7 @@ const PrivateChatWidget: FC<PostChatWidgetProps> = ({ postId, principalId, partn
         stompDispatcher.on(PRIVATE_CHAT__INIT_IS_READ_RECEIVED, (hasRead: boolean) => {
             if (hasRead) {
                 setHasPartnerReadDto({
-                    postId: `post-${postId}`,
+                    postId: postId,
                     partnerId: partner?.partnerId
                 });
             }
@@ -102,13 +101,13 @@ const PrivateChatWidget: FC<PostChatWidgetProps> = ({ postId, principalId, partn
             setPartnerIsTyping(isWriting));
 
         stompDispatcher.on(PRIVATE_CHAT__ON_START_TYPING_RECEIVED + eventPostFix, (typingDto: TypingDto) => {
-            if (typingDto.postId === `post-${postId}` && typingDto.partnerId === partner.partnerId) {
+            if (typingDto.postId === postId && typingDto.partnerId === partner.partnerId) {
                 setPartnerIsTyping(true);
             }
         });
 
         stompDispatcher.on(PRIVATE_CHAT__ON_STOP_TYPING_RECEIVED + eventPostFix, (typingDto: TypingDto) => {
-            if (typingDto.postId === `post-${postId}` && typingDto.partnerId === partner.partnerId) {
+            if (typingDto.postId === postId && typingDto.partnerId === partner.partnerId) {
                 setPartnerIsTyping(false);
             }
         });

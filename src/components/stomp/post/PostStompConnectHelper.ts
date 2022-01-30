@@ -11,11 +11,10 @@ interface ConnectPostInboxProps {
 
 export const connectToPostInbox = async ({ postId, router }: ConnectPostInboxProps) => {
     const jwt = await getRawJwt();
-    const SESS_POST_ID = `post-${ postId }`;
 
     connectPostInbox({
         jwt,
-        postId: SESS_POST_ID,
+        postId,
         router
     });
 }
@@ -30,11 +29,10 @@ interface ConnectPrivateChatProps {
 export const connectToPrivateChat = async (
     { postId, partnerId, router }: ConnectPrivateChatProps) => {
     const jwt = await getRawJwt();
-    const SESS_POST_ID = `post-${ postId }`;
 
     connectPrivateChat({
         jwt,
-        postId: SESS_POST_ID,
+        postId,
         partnerId,
         redirectToLogin: () => redirectToLogin(router)
     });

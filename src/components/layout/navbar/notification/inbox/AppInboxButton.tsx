@@ -39,25 +39,22 @@ const AppInboxButton: FC<AppInboxButtonProps> = ({ authState, url }) => {
 
     useEffect(() => {
         if (authState.isLoggedIn) {
-            console.log('register app inbox');
             stompDispatcher.on(APP_INBOX__ON_INIT_ITEMS_LOADING, (isLoading: boolean) =>
                 setInboxLoading(isLoading));
 
             stompDispatcher.on(APP_INBOX__ON_INIT_ITEMS_RECEIVED, (inboxItems: InboxItemReceiveDto[]) => {
-                console.log('does this work?');
                 setInboxLoading(false);
                 setInboxItems(sortInboxItems(inboxItems));
             });
 
             stompDispatcher.on(APP_INBOX__ON_INBOX_UPDATE_RECEIVED, (inboxItem: InboxItemReceiveDto) => {
-                console.log('pretty please');
                 setLastReceived(inboxItem);
             });
         }
 
         return function cleanUp() {
             stompDispatcher.remove(APP_INBOX__ON_INIT_ITEMS_LOADING);
-            stompDispatcher.remove(APP_INBOX__ON_INBOX_UPDATE_RECEIVED);
+            stompDispatcher.remove(APP_INBOX__ON_INIT_ITEMS_RECEIVED);
             stompDispatcher.remove(APP_INBOX__ON_INBOX_UPDATE_RECEIVED);
         }
     }, [authState.isLoggedIn, inboxItems]);

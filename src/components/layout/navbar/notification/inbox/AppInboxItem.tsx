@@ -4,6 +4,7 @@ import {Avatar, Box, HStack, Tag, Text, VStack} from "@chakra-ui/react";
 import TimeAgo from "react-timeago";
 import ChatPartner from "@models/chat/ChatPartner";
 import AuthState from "@models/user/AuthState";
+import {useRouter} from "next/router";
 
 
 interface AppInboxItemProps {
@@ -13,6 +14,8 @@ interface AppInboxItemProps {
 
 const AppInboxItem: FC<AppInboxItemProps> = ({ authState, inboxItem }) => {
 
+    const router = useRouter();
+
     const partner: ChatPartner = (inboxItem.userId === inboxItem.fromUserId)
         ? { partnerId: inboxItem.toUserId,
             partnerNickName: inboxItem.toNickName,
@@ -21,8 +24,8 @@ const AppInboxItem: FC<AppInboxItemProps> = ({ authState, inboxItem }) => {
             partnerNickName: inboxItem.fromNickName,
             partnerAvatar: inboxItem.fromAvatar };
 
-    const handleClickInboxDetail = () => {
-        console.log('click');
+    const handleClickInboxDetail = async () => {
+        await router.push(`/post/${ inboxItem.postId }?partnerId=${ partner.partnerId }`);
     }
 
     return (

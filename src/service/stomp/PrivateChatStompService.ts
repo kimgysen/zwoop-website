@@ -19,13 +19,15 @@ import TypingDto from "./receive/TypingDto";
 import InboxItemReceiveDto from "./receive/InboxItemReceiveDto";
 import {getStompDispatcher} from "../../event_dispatchers/EventDispatcher";
 import {
-    APP_INBOX__ON_INIT_ITEMS_RECEIVED,
     APP_INBOX__ON_INBOX_UPDATE_RECEIVED,
+    APP_INBOX__ON_INIT_ITEMS_RECEIVED,
     PRIVATE_CHAT__INIT_IS_READ_RECEIVED,
     PRIVATE_CHAT__INIT_IS_WRITING_RECEIVED,
     PRIVATE_CHAT__ON_INIT_MESSAGES_RECEIVED,
     PRIVATE_CHAT__ON_MESSAGE_RECEIVED,
-    PRIVATE_CHAT__ON_READ_RECEIVED, PRIVATE_CHAT__ON_START_TYPING_RECEIVED, PRIVATE_CHAT__ON_STOP_TYPING_RECEIVED
+    PRIVATE_CHAT__ON_READ_RECEIVED,
+    PRIVATE_CHAT__ON_START_TYPING_RECEIVED,
+    PRIVATE_CHAT__ON_STOP_TYPING_RECEIVED
 } from "../../event_dispatchers/config/stompevents";
 
 interface connectPrivateChatRoomProps {
@@ -46,7 +48,6 @@ export const connectPrivateChat = ({
         }, jwt,
         (frame) => {
             console.log('connect private chat success', frame);
-
             if (partnerId) {
                 initPrivateChat(partnerId, (msg) => {
                     const messages = JSON.parse(msg.body) as PrivateMessageReceiveDto[];

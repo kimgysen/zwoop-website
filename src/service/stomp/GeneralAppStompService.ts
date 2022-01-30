@@ -28,7 +28,6 @@ export const connectGeneralApp = ({ jwt, redirectToLogin }: ConnectGeneralInboxP
 
         subscribeToInboxUpdates((msg) => {
             const inboxItem = JSON.parse(msg.body) as InboxItemReceiveDto;
-            console.log('received inboxItem', inboxItem);
             stompDispatcher.dispatch(APP_INBOX__ON_INBOX_UPDATE_RECEIVED, inboxItem);
         });
     },

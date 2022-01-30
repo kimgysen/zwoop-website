@@ -38,7 +38,6 @@ export const connectPublicChatRoom = ({
 
             initPublicChat((msg) => {
                 const pubMessages = JSON.parse(msg.body);
-                console.log('init pub messages', pubMessages);
                 stompDispatcher.dispatch(PUBLIC_CHAT__ON_INIT_MESSAGES_RECEIVED, pubMessages);
             });
 

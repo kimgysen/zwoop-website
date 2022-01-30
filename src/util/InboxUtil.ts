@@ -1,7 +1,8 @@
 import InboxItemReceiveDto from "../service/stomp/receive/InboxItemReceiveDto";
+import ChatPartner from "@models/chat/ChatPartner";
 
 // Public api
-export const rebuildInbox = (lastReceived: InboxItemReceiveDto, inboxItems: InboxItemReceiveDto[]) => {
+export const rebuildInbox = (lastReceived: InboxItemReceiveDto, inboxItems: InboxItemReceiveDto[]): InboxItemReceiveDto[] => {
     let inbox;
     if (inboxIsEmpty(inboxItems)) {
         inbox = [lastReceived];
@@ -16,12 +17,23 @@ export const rebuildInbox = (lastReceived: InboxItemReceiveDto, inboxItems: Inbo
     return inbox;
 }
 
-export const isInboxEmpty = (items: InboxItemReceiveDto[]) =>
+export const isInboxEmpty = (items: InboxItemReceiveDto[]): boolean =>
     items.length === 0;
 
-export const isLastInboxItem = (items: InboxItemReceiveDto[], idx: number) =>
+export const isLastInboxItem = (items: InboxItemReceiveDto[], idx: number): boolean =>
     items.length - 1 === idx;
 
+export const findItemByPartnerId = (inboxItems: InboxItemReceiveDto[], queryPartnerId: string) =>
+    inboxItems.find(item => item.partnerId === queryPartnerId);
+
+export const getPartnerFromInboxItem = (inboxItem: InboxItemReceiveDto): ChatPartner =>
+    inboxItem.userId === inboxItem.fromUserId
+        ? { partnerId: inboxItem.partnerId,
+            partnerNickName: inboxItem.toNickName,
+            partnerAvatar: inboxItem.toAvatar }
+        : { partnerId: inboxItem.partnerId,
+            partnerNickName: inboxItem.fromNickName,
+            partnerAvatar: inboxItem.fromAvatar };
 
 // Private api
 

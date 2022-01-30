@@ -1,12 +1,15 @@
-import {FC} from "react";
-import {Spinner} from "@chakra-ui/react";
+import React, {FC} from "react";
+import {Center, Spinner} from "@chakra-ui/react";
 
 
 const PrivateMessageListLoading: FC = () => {
     return (
-        <>
-            <Spinner />
-        </>
+        <Center
+            py={'20px'}
+            height={'500px'}
+        >
+            <Spinner/>
+        </Center>
     )
 }
 

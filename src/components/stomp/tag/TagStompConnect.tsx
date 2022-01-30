@@ -17,7 +17,7 @@ const TagStompConnect: FC<TagStompConnectProps> = (
 
     useEffect(() => {
         (async() => {
-            if (tagName) {
+            if (authState.isLoggedIn && tagName) {
                 await connectToPublicChat({ tagName, router });
             }
         })();

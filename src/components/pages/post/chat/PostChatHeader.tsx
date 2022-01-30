@@ -1,24 +1,25 @@
-import React, {Dispatch, FC, SetStateAction} from "react";
+import React, {FC} from "react";
 import {Divider, Heading, HStack, IconButton, Text} from "@chakra-ui/react";
 import {FaChevronLeft} from 'react-icons/fa';
-import InboxDetail from "@models/chat/InboxDetail";
+import {useRouter} from "next/router";
+import {PostPageViewState} from "@components/pages/post/PostViewHelper";
 
 
 interface PostChatHeaderProps {
-    isOwner: boolean,
-    partnerNickName?: string | null,
-    inboxDetail: InboxDetail,
-    setInboxDetail: Dispatch<SetStateAction<InboxDetail>>
+    postId: string,
+    viewState: PostPageViewState,
+    partnerNickName: string
 }
 
 const PostChatHeader: FC<PostChatHeaderProps> =
-    ({ isOwner, partnerNickName, inboxDetail, setInboxDetail }) => {
+    ({ postId, viewState, partnerNickName }) => {
+
+    const router = useRouter();
 
     const backToInbox = () => {
-        setInboxDetail({
-            isActive: false,
-            partner: undefined
-        });
+        router.push(
+            `/post/${ postId }`
+        );
     }
 
     return (
@@ -27,11 +28,12 @@ const PostChatHeader: FC<PostChatHeaderProps> =
                      size='sm'
                      p='10px'>
                 {
-                    isOwner && !inboxDetail.isActive &&
-                        <Text>Inbox</Text>
+                    viewState === PostPageViewState.INBOX
+                    && <Text>Inbox</Text>
                 }
                 {
-                    isOwner && inboxDetail.isActive &&
+                    viewState === PostPageViewState.INBOX_DETAIL_CHAT
+                    && (
                         <HStack>
                             <IconButton as='span'
                                  w='5%'
@@ -41,13 +43,14 @@ const PostChatHeader: FC<PostChatHeaderProps> =
                                  icon={<FaChevronLeft />}
                             />
                             <Text w='95%' isTruncated>
-                                { inboxDetail.partner?.partnerNickName }
+                                { partnerNickName }
                             </Text>
                         </HStack>
+                    )
                 }
                 {
-                    !isOwner &&
-                        <Text>{ partnerNickName }</Text>
+                    viewState === PostPageViewState.VISITOR_PRIVATE_CHAT
+                    && <Text>{ partnerNickName }</Text>
                 }
             </Heading>
             <Divider />

@@ -3,12 +3,13 @@ import Head from "next/head";
 import AppLayout from "@components/layout/AppLayout";
 import ThreeColumnLayout from "@components/layout/column-layouts/ThreeColumnLayout";
 import React, {useEffect, useState} from "react";
-import {getPostById} from "../../src/api_clients/feature/post/PostService";
+import {getPostById} from "@api_clients/feature/post/PostService";
 import PostView from "@components/pages/post/PostView";
 import {useSession} from "next-auth/react";
 import AuthState from "@models/user/AuthState";
 import PostChatWidget from "@components/pages/post/PostChatWidget";
 import WatchListHoc from "@components/widgets/watchlist/WatchListHoc";
+import {useRouter} from "next/router";
 
 
 export async function getServerSideProps(ctx: { query: { postId: string } }) {
@@ -21,11 +22,12 @@ export async function getServerSideProps(ctx: { query: { postId: string } }) {
 }
 
 const Post: NextPage = (props: any) => {
-
     const { data: session, status } = useSession();
+    const { query } = useRouter();
     const { post } = props;
 
     const [authState, setAuthState] = useState<AuthState>({ isLoggedIn: false });
+
 
     useEffect(() => {
         if (session && session.userId) {
@@ -60,6 +62,7 @@ const Post: NextPage = (props: any) => {
                             <PostChatWidget
                                 authState={ authState }
                                 post={ post }
+                                queryPartnerId={ query?.partnerId as string }
                             />
                         )
                     }
