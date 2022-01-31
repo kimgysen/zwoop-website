@@ -3,6 +3,7 @@ import {NextRouter} from "next/router";
 import {sendPrivateMessage} from "../../../../../service/stomp/StompService";
 import ChatPartner from "@models/chat/ChatPartner";
 import PartnerReadDto from "../../../../../service/stomp/receive/PartnerReadDto";
+import InboxItemReceiveDto from "../../../../../service/stomp/receive/InboxItemReceiveDto";
 
 
 export const redirectToLogin = (router: NextRouter) => {
@@ -12,9 +13,21 @@ export const redirectToLogin = (router: NextRouter) => {
 export const isEmptyList = (messages: PrivateMessageReceiveDto[]) =>
     messages.length === 0;
 
+export const resetCounterForPartner = (inboxItems: InboxItemReceiveDto[], partnerId: string) => {
+    const idx = findInboxItemIndexByPartnerId(inboxItems, partnerId);
+    if (inboxItems[idx]) {
+        inboxItems[idx].unread = 0;
+    }
+    return inboxItems;
+}
+
 export const lastMessageWasSentByPrincipal = (messages: PrivateMessageReceiveDto[], principalId: string) => {
     return lastMessageSentBy(messages) === principalId;
 }
+
+const findInboxItemIndexByPartnerId = (inboxItems: InboxItemReceiveDto[], partnerId: string) =>
+    inboxItems.findIndex(item => item.partnerId === partnerId);
+
 
 const lastMessageSentBy = (messages: PrivateMessageReceiveDto[]) => {
     return messages && messages.length

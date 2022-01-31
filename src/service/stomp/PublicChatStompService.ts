@@ -1,20 +1,25 @@
 import {
     connectStomp,
     disconnectStomp,
+    initAppInbox,
     initConnectedUsers,
     initPublicChat,
     subscribeToConnectedUsers,
+    subscribeToInboxUpdates,
     subscribeToPublicChat
 } from "./StompService";
 import {HEADER_CHATROOM_ID, HEADER_CONNECT_TYPE} from "./types/StompHeader";
 import {ConnectTypeEnum, stringFromConnectTypeEnum} from "./types/ConnectType";
-import {getStompDispatcher} from "../../event_dispatchers/EventDispatcher";
+import {getStompDispatcher} from "../../event_dispatchers/StompDispatcher";
 import {
+    APP_INBOX__ON_INBOX_UPDATE_RECEIVED,
+    APP_INBOX__ON_INIT_ITEMS_RECEIVED,
     PUBLIC_CHAT__INIT_CONNECTED_USERS,
     PUBLIC_CHAT__ON_INIT_MESSAGES_RECEIVED,
     PUBLIC_CHAT__ON_MESSAGE_RECEIVED,
     PUBLIC_CHAT__ON_USER_CONNECTED
-} from "../../event_dispatchers/config/stompevents";
+} from "../../event_dispatchers/config/StompEvents";
+import InboxItemReceiveDto from "./receive/InboxItemReceiveDto";
 
 interface connectPublicChatRoomProps {
     chatRoomId: string,
@@ -35,6 +40,19 @@ export const connectPublicChatRoom = ({
         }, jwt,
         (frame) => {
             console.log('Public chat connect success', frame);
+            initAppInbox((msg) => {
+                const inboxItems = JSON.parse(msg.body);
+                stompDispatcher.dispatch(
+                    APP_INBOX__ON_INIT_ITEMS_RECEIVED,
+                    inboxItems);
+            });
+
+            subscribeToInboxUpdates((msg) => {
+                const inboxItem = JSON.parse(msg.body) as InboxItemReceiveDto;
+                stompDispatcher.dispatch(
+                    APP_INBOX__ON_INBOX_UPDATE_RECEIVED,
+                    inboxItem);
+            });
 
             initPublicChat((msg) => {
                 const pubMessages = JSON.parse(msg.body);

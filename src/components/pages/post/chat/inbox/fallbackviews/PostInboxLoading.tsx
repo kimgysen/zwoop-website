@@ -1,13 +1,9 @@
 import React, {FC} from "react";
-import {Center, Spinner} from "@chakra-ui/react";
+import DelayedSpinner from "@components/widgets/delayed-spinner/DelayedSpinner";
 
 
 const PostInboxLoading: FC = () => {
-    return (
-        <Center py={'20px'}>
-            <Spinner/>
-        </Center>
-    )
+    return <DelayedSpinner timeOutMs={500} />
 }
 
 export default PostInboxLoading;

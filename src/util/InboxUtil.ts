@@ -35,6 +35,11 @@ export const getPartnerFromInboxItem = (inboxItem: InboxItemReceiveDto): ChatPar
             partnerNickName: inboxItem.fromNickName,
             partnerAvatar: inboxItem.fromAvatar };
 
+export const hasUnreadMessages = (inboxItem: InboxItemReceiveDto) => inboxItem.unread > 0;
+
+export const countUnreadMessages = (inboxItems: InboxItemReceiveDto[]) =>
+    inboxItems.filter(item => item.unread > 0).length;
+
 // Private api
 
 export const sortInboxItems = (inboxItems: InboxItemReceiveDto[]) =>

@@ -15,7 +15,7 @@ import {
     isEmptyList,
     lastMessageWasSentByPrincipal
 } from "@components/pages/post/chat/private_chat/PrivateChatWidgetHelper";
-import {getStompDispatcher} from "../../../../../event_dispatchers/EventDispatcher";
+import {getStompDispatcher} from "../../../../../event_dispatchers/StompDispatcher";
 import {
     PRIVATE_CHAT__INIT_IS_READ_RECEIVED,
     PRIVATE_CHAT__INIT_IS_WRITING_RECEIVED,
@@ -24,11 +24,13 @@ import {
     PRIVATE_CHAT__ON_READ_RECEIVED,
     PRIVATE_CHAT__ON_START_TYPING_RECEIVED,
     PRIVATE_CHAT__ON_STOP_TYPING_RECEIVED
-} from "../../../../../event_dispatchers/config/stompevents";
+} from "../../../../../event_dispatchers/config/StompEvents";
 import PrivateMessageListEmpty
     from "@components/pages/post/chat/private_chat/chatbox/fallbackviews/PrivateMessageListEmpty";
 import PrivateMessageListLoading
     from "@components/pages/post/chat/private_chat/chatbox/fallbackviews/PrivateMessageListLoading";
+import {getAppDispatcher} from "../../../../../event_dispatchers/AppDispatcher";
+import {APP_INBOX__ITEM_READ} from "../../../../../event_dispatchers/config/AppEvents";
 
 
 interface PostChatWidgetProps {
@@ -48,6 +50,7 @@ const PrivateChatWidget: FC<PostChatWidgetProps> = ({ postId, principalId, partn
     const [partnerIsTyping, setPartnerIsTyping] = useState<boolean>(false);
 
     const stompDispatcher = getStompDispatcher();
+    const appDispatcher = getAppDispatcher();
 
     const onFocus = () => {
         setPageVisible(true);
@@ -66,10 +69,12 @@ const PrivateChatWidget: FC<PostChatWidgetProps> = ({ postId, principalId, partn
 
         const eventPostFix = `__${ postId }_${ partner?.partnerId }`;
 
+        stompDispatcher.remove(PRIVATE_CHAT__ON_INIT_MESSAGES_RECEIVED);
         stompDispatcher.on(PRIVATE_CHAT__ON_INIT_MESSAGES_RECEIVED, (messages: PrivateMessageReceiveDto[]) => {
             setMessagesLoading(false);
             setMessages(messages);
             sendMarkInboxItemAsRead(partner?.partnerId);
+            appDispatcher.dispatch(APP_INBOX__ITEM_READ, partner?.partnerId);
         });
 
         stompDispatcher.on(PRIVATE_CHAT__ON_MESSAGE_RECEIVED, (message: PrivateMessageReceiveDto) => {
@@ -79,6 +84,7 @@ const PrivateChatWidget: FC<PostChatWidgetProps> = ({ postId, principalId, partn
                 if (isPageVisible) {
                     sendMarkInboxItemAsRead(partner?.partnerId);
                     setMarkAsReadPending(false);
+                    appDispatcher.dispatch(APP_INBOX__ITEM_READ, partner?.partnerId);
                 } else {
                     setMarkAsReadPending(true);
                 }
@@ -126,7 +132,6 @@ const PrivateChatWidget: FC<PostChatWidgetProps> = ({ postId, principalId, partn
 
         }
     }, [partner?.partnerId, isPageVisible, messages, markAsReadPending, hasPartnerReadDto, partnerIsTyping]);
-
 
 
     return (

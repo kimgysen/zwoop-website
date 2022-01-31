@@ -1,0 +1,4 @@
+
+
+export const APP_INBOX__ITEM_READ = 'APP_INBOX_ITEM_READ';
+

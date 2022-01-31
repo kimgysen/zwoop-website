@@ -9,19 +9,22 @@ import {
     PopoverTrigger,
     useColorModeValue
 } from '@chakra-ui/react';
-import {css} from '@emotion/react';
-import {FaComment} from 'react-icons/fa';
 import React, {FC, useEffect, useState} from "react";
 import InboxItemReceiveDto from "../../../../../service/stomp/receive/InboxItemReceiveDto";
 import AppInbox from "@components/layout/navbar/notification/inbox/AppInbox";
-import {rebuildInbox, sortInboxItems} from "../../../../../util/InboxUtil";
+import {countUnreadMessages, rebuildInbox, sortInboxItems} from "../../../../../util/InboxUtil";
 import AuthState from "@models/user/AuthState";
-import {getStompDispatcher} from "../../../../../event_dispatchers/EventDispatcher";
+import {getStompDispatcher} from "../../../../../event_dispatchers/StompDispatcher";
 import {
     APP_INBOX__ON_INBOX_UPDATE_RECEIVED,
     APP_INBOX__ON_INIT_ITEMS_LOADING,
     APP_INBOX__ON_INIT_ITEMS_RECEIVED
-} from "../../../../../event_dispatchers/config/stompevents";
+} from "../../../../../event_dispatchers/config/StompEvents";
+import {getAppDispatcher} from "../../../../../event_dispatchers/AppDispatcher";
+import {APP_INBOX__ITEM_READ} from "../../../../../event_dispatchers/config/AppEvents";
+import {resetCounterForPartner} from "@components/pages/post/chat/private_chat/PrivateChatWidgetHelper";
+import {css} from "@emotion/react";
+import {FaComment} from "react-icons/fa"
 
 
 interface AppInboxButtonProps {
@@ -34,8 +37,10 @@ const AppInboxButton: FC<AppInboxButtonProps> = ({ authState, url }) => {
     const [inboxLoading, setInboxLoading] = useState<boolean>(true);
     const [inboxItems, setInboxItems] = useState<InboxItemReceiveDto[]>([]);
     const [lastReceived, setLastReceived] = useState<InboxItemReceiveDto>();
+    const [nrUnread, setNrUnread] = useState<number>(0);
 
     const stompDispatcher = getStompDispatcher();
+    const appDispatcher = getAppDispatcher();
 
     useEffect(() => {
         if (authState.isLoggedIn) {
@@ -45,10 +50,18 @@ const AppInboxButton: FC<AppInboxButtonProps> = ({ authState, url }) => {
             stompDispatcher.on(APP_INBOX__ON_INIT_ITEMS_RECEIVED, (inboxItems: InboxItemReceiveDto[]) => {
                 setInboxLoading(false);
                 setInboxItems(sortInboxItems(inboxItems));
+                setNrUnread(countUnreadMessages(inboxItems));
             });
 
             stompDispatcher.on(APP_INBOX__ON_INBOX_UPDATE_RECEIVED, (inboxItem: InboxItemReceiveDto) => {
                 setLastReceived(inboxItem);
+                setNrUnread(countUnreadMessages(inboxItems));
+            });
+
+            appDispatcher.on(APP_INBOX__ITEM_READ, (partnerId: string) => {
+                const updatedItems = resetCounterForPartner(inboxItems, partnerId);
+                setInboxItems(updatedItems);
+                setNrUnread(countUnreadMessages(inboxItems));
             });
         }
 
@@ -56,16 +69,15 @@ const AppInboxButton: FC<AppInboxButtonProps> = ({ authState, url }) => {
             stompDispatcher.remove(APP_INBOX__ON_INIT_ITEMS_LOADING);
             stompDispatcher.remove(APP_INBOX__ON_INIT_ITEMS_RECEIVED);
             stompDispatcher.remove(APP_INBOX__ON_INBOX_UPDATE_RECEIVED);
+            appDispatcher.remove(APP_INBOX__ITEM_READ);
         }
-    }, [authState.isLoggedIn, inboxItems]);
+    }, [authState.isLoggedIn, inboxItems, nrUnread]);
 
     useEffect(() => {
         if (lastReceived) {
             setInboxItems(rebuildInbox(lastReceived, inboxItems));
         }
     }, [lastReceived]);
-
-    const unreadItems = inboxItems.filter(item => item.unread > 0);
 
     return (
         <Popover
@@ -82,18 +94,18 @@ const AppInboxButton: FC<AppInboxButtonProps> = ({ authState, url }) => {
                     icon={<>
                         <FaComment color={'gray.750'} />
                         {
-                            unreadItems.length > 0 &&
-                                <Circle as={'span'}
-                                        size='20px'
-                                        color={'white'}
-                                        position={'absolute'}
-                                        bottom={'4px'}
-                                        right={'4px'}
-                                        fontSize={'0.8rem'}
-                                        bgColor={'red'}
-                                        zIndex={9999} p={'1px'}>
-                                    { unreadItems.length }
-                                </Circle>
+                            nrUnread > 0 &&
+                            <Circle as={'span'}
+                                    size='20px'
+                                    color={'white'}
+                                    position={'absolute'}
+                                    bottom={'4px'}
+                                    right={'4px'}
+                                    fontSize={'0.8rem'}
+                                    bgColor={'red'}
+                                    zIndex={9999} p={'1px'}>
+                                { nrUnread }
+                            </Circle>
                         }
                     </>}
                 />

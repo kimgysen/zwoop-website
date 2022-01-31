@@ -1,15 +1,10 @@
 import React, {FC} from "react";
-import {Center, Spinner} from "@chakra-ui/react";
+import DelayedSpinner from "@components/widgets/delayed-spinner/DelayedSpinner";
 
 
 const PrivateMessageListLoading: FC = () => {
     return (
-        <Center
-            py={'20px'}
-            height={'500px'}
-        >
-            <Spinner/>
-        </Center>
+        <DelayedSpinner timeOutMs={500} />
     )
 }
 

@@ -5,6 +5,7 @@ import TimeAgo from "react-timeago";
 import ChatPartner from "@models/chat/ChatPartner";
 import AuthState from "@models/user/AuthState";
 import {useRouter} from "next/router";
+import {getPartnerFromInboxItem, hasUnreadMessages} from "../../../../../util/InboxUtil";
 
 
 interface AppInboxItemProps {
@@ -16,13 +17,7 @@ const AppInboxItem: FC<AppInboxItemProps> = ({ authState, inboxItem }) => {
 
     const router = useRouter();
 
-    const partner: ChatPartner = (inboxItem.userId === inboxItem.fromUserId)
-        ? { partnerId: inboxItem.toUserId,
-            partnerNickName: inboxItem.toNickName,
-            partnerAvatar: inboxItem.toAvatar }
-        : { partnerId: inboxItem.fromUserId,
-            partnerNickName: inboxItem.fromNickName,
-            partnerAvatar: inboxItem.fromAvatar };
+    const partner: ChatPartner = getPartnerFromInboxItem(inboxItem);
 
     const handleClickInboxDetail = async () => {
         await router.push(`/post/${ inboxItem.postId }?partnerId=${ partner.partnerId }`);
@@ -54,7 +49,7 @@ const AppInboxItem: FC<AppInboxItemProps> = ({ authState, inboxItem }) => {
                              mr='3px'
                         >
                             {
-                                inboxItem.unread > 0 &&
+                                hasUnreadMessages(inboxItem) &&
                                 <Tag>
                                     <b>{ inboxItem.unread }</b>
                                 </Tag>

@@ -7,12 +7,12 @@ import PartnerReadDto from "../../../../../service/stomp/receive/PartnerReadDto"
 import TypingDto from "../../../../../service/stomp/receive/TypingDto";
 import PartnerTypingBox from "@components/pages/post/chat/private_chat/chatbox/subviews/PartnerTypingBox";
 import PartnerReadBox from "@components/pages/post/chat/private_chat/chatbox/subviews/PartnerReadBox";
-import {getStompDispatcher} from "../../../../../event_dispatchers/EventDispatcher";
+import {getStompDispatcher} from "../../../../../event_dispatchers/StompDispatcher";
 import {
     PRIVATE_CHAT__ON_READ_RECEIVED,
     PRIVATE_CHAT__ON_START_TYPING_RECEIVED,
     PRIVATE_CHAT__ON_STOP_TYPING_RECEIVED
-} from "../../../../../event_dispatchers/config/stompevents";
+} from "../../../../../event_dispatchers/config/StompEvents";
 import {getPartnerFromInboxItem} from "../../../../../util/InboxUtil";
 import {useRouter} from "next/router";
 

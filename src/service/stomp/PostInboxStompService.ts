@@ -13,15 +13,16 @@ import {HEADER_CONNECT_TYPE, HEADER_POST_ID} from "./types/StompHeader";
 import {ConnectTypeEnum, stringFromConnectTypeEnum} from "./types/ConnectType";
 import PartnerReadDto from "./receive/PartnerReadDto";
 import TypingDto from "./receive/TypingDto";
-import {getStompDispatcher} from "../../event_dispatchers/EventDispatcher";
+import {getStompDispatcher} from "../../event_dispatchers/StompDispatcher";
 import {
     APP_INBOX__ON_INBOX_UPDATE_RECEIVED,
     APP_INBOX__ON_INIT_ITEMS_RECEIVED,
     POST_INBOX__ON_INBOX_UPDATE_RECEIVED,
     POST_INBOX__ON_INIT_ITEMS_RECEIVED,
     PRIVATE_CHAT__ON_READ_RECEIVED,
-    PRIVATE_CHAT__ON_START_TYPING_RECEIVED, PRIVATE_CHAT__ON_STOP_TYPING_RECEIVED
-} from "../../event_dispatchers/config/stompevents";
+    PRIVATE_CHAT__ON_START_TYPING_RECEIVED,
+    PRIVATE_CHAT__ON_STOP_TYPING_RECEIVED
+} from "../../event_dispatchers/config/StompEvents";
 
 
 interface ConnectPostInboxProps {

@@ -20,7 +20,7 @@ const PostStompConnect: FC<PostStompConnectProps> = (
 
     useEffect(() => {
         (async () => {
-            if (authState.isLoggedIn) {
+            if (authState.isLoggedIn && post?.postId) {
                 switch(viewState) {
                     case PostPageViewState.VISITOR_PRIVATE_CHAT:
                         await connectToPrivateChat({
@@ -31,18 +31,22 @@ const PostStompConnect: FC<PostStompConnectProps> = (
                         break;
 
                     case PostPageViewState.INBOX:
-                        await connectToPostInbox({
-                            postId: post.postId,
-                            router
-                        });
+                        if (!queryPartnerId) {
+                            await connectToPostInbox({
+                                postId: post.postId,
+                                router
+                            });
+                        }
                         break;
 
                     case PostPageViewState.INBOX_DETAIL_CHAT:
-                        await connectToPrivateChat({
-                            postId: post.postId,
-                            partnerId: queryPartnerId as string,
-                            router
-                        });
+                        if (queryPartnerId) {
+                            await connectToPrivateChat({
+                                postId: post.postId,
+                                partnerId: queryPartnerId as string,
+                                router
+                            });
+                        }
                         break;
                 }
 
@@ -55,7 +59,7 @@ const PostStompConnect: FC<PostStompConnectProps> = (
             })();
         }
 
-    }, [viewState, authState.isLoggedIn]);
+    }, [authState.isLoggedIn, viewState, queryPartnerId]);
 
     return (
         <>{ children }</>

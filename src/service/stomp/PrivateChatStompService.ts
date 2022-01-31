@@ -17,7 +17,7 @@ import {ConnectTypeEnum, stringFromConnectTypeEnum} from "./types/ConnectType";
 import PartnerReadDto from "./receive/PartnerReadDto";
 import TypingDto from "./receive/TypingDto";
 import InboxItemReceiveDto from "./receive/InboxItemReceiveDto";
-import {getStompDispatcher} from "../../event_dispatchers/EventDispatcher";
+import {getStompDispatcher} from "../../event_dispatchers/StompDispatcher";
 import {
     APP_INBOX__ON_INBOX_UPDATE_RECEIVED,
     APP_INBOX__ON_INIT_ITEMS_RECEIVED,
@@ -28,7 +28,7 @@ import {
     PRIVATE_CHAT__ON_READ_RECEIVED,
     PRIVATE_CHAT__ON_START_TYPING_RECEIVED,
     PRIVATE_CHAT__ON_STOP_TYPING_RECEIVED
-} from "../../event_dispatchers/config/stompevents";
+} from "../../event_dispatchers/config/StompEvents";
 
 interface connectPrivateChatRoomProps {
     jwt: string,
@@ -51,6 +51,7 @@ export const connectPrivateChat = ({
             if (partnerId) {
                 initPrivateChat(partnerId, (msg) => {
                     const messages = JSON.parse(msg.body) as PrivateMessageReceiveDto[];
+                    console.log(dispatcher);
                     dispatcher.dispatch(PRIVATE_CHAT__ON_INIT_MESSAGES_RECEIVED, messages);
                 });
 
@@ -75,7 +76,7 @@ export const connectPrivateChat = ({
             subscribeToInboxUpdates((msg) => {
                 const inboxItem = JSON.parse(msg.body) as InboxItemReceiveDto;
                 dispatcher.dispatch(
-                    APP_INBOX__ON_INBOX_UPDATE_RECEIVED + `__${ inboxItem.postId }_${ inboxItem.partnerId }`,
+                    APP_INBOX__ON_INBOX_UPDATE_RECEIVED,
                     inboxItem);
             });
 

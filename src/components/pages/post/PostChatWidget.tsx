@@ -20,7 +20,6 @@ interface PostSubViewManagerProps {
 
 const PostChatWidget: FC<PostSubViewManagerProps> = ({ authState, post, queryPartnerId }) => {
     const [viewState, setViewState] = useState<PostPageViewState>(PostPageViewState.LOGGED_OFF);
-    // const [inboxDetail, setInboxDetail] = useState<InboxDetail>({ isActive: !!queryPartnerId, partner: undefined });
     const [partner, setPartner] = useState<ApiResult<User>>();
 
     useEffect(() => {
@@ -63,7 +62,6 @@ const PostChatWidget: FC<PostSubViewManagerProps> = ({ authState, post, queryPar
                 post={ post }
                 queryPartnerId={ queryPartnerId as string }
             >
-
                 <Card p={ 1 }>
                     <PostChatHeader
                         postId={ post.postId }

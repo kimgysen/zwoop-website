@@ -1,14 +1,17 @@
-import React, {FC, useEffect, useRef, useState} from "react";
+import React, {FC, useEffect, useState} from "react";
 import {Box, Tab, TabList, TabPanel, TabPanels, Tabs} from "@chakra-ui/react";
 import ChatRoomUserReceiveDto from "../../../../service/stomp/receive/ChatRoomUserReceiveDto";
 import PublicChatWidget from "@components/pages/tag/chat/public_chat/PublicChatWidget";
 import ConnectedUsers from "@components/pages/tag/chat/connected_users/ConnectedUsers";
 import PublicMessageReceiveDto from "../../../../service/stomp/receive/PublicMessageReceiveDto";
-import {getStompDispatcher} from "../../../../event_dispatchers/EventDispatcher";
+import {getStompDispatcher} from "../../../../event_dispatchers/StompDispatcher";
 import {
-    PUBLIC_CHAT__INIT_CONNECTED_USERS, PUBLIC_CHAT__INIT_MESSAGES_LOADING,
-    PUBLIC_CHAT__ON_INIT_MESSAGES_RECEIVED, PUBLIC_CHAT__ON_MESSAGE_RECEIVED, PUBLIC_CHAT__ON_USER_CONNECTED
-} from "../../../../event_dispatchers/config/stompevents";
+    PUBLIC_CHAT__INIT_CONNECTED_USERS,
+    PUBLIC_CHAT__INIT_MESSAGES_LOADING,
+    PUBLIC_CHAT__ON_INIT_MESSAGES_RECEIVED,
+    PUBLIC_CHAT__ON_MESSAGE_RECEIVED,
+    PUBLIC_CHAT__ON_USER_CONNECTED
+} from "../../../../event_dispatchers/config/StompEvents";
 
 
 interface TagChatProps {
