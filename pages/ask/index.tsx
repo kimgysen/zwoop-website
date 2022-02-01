@@ -7,11 +7,11 @@ import {Box} from "@chakra-ui/layout/src/box";
 import {Flex} from "@chakra-ui/react";
 import EditFormDetailsView from "@components/pages/ask/EditFormDetailsView";
 import Tag from "@models/tag/Tag";
-import {validateForm} from "./validate";
 import {getRawJwt} from "../../src/service/jwt/JwtService";
 import SaveButton from "@components/widgets/form/buttons/SaveButton";
-import {createPost} from "../../src/api_clients/feature/post/PostService";
+import {createPost} from "@api_clients/feature/post/PostService";
 import {useRouter} from "next/router";
+import {validateForm} from "@components/pages/ask/validate";
 
 
 const Ask: NextPage = () => {

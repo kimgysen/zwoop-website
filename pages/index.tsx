@@ -9,7 +9,7 @@ import AuthState from "@models/user/AuthState";
 import AppStompConnect from "@components/stomp/app/AppStompConnect";
 import WatchListHoc from "@components/widgets/watchlist/WatchListHoc";
 import FeedListHoc from "@components/widgets/feed/FeedListHoc";
-import {FeedTypeEnum} from "../src/api_clients/feature/post/PostService";
+import {FeedTypeEnum} from "@api_clients/feature/post/PostService";
 
 
 const HomePage: React.FC = () => {
@@ -24,7 +24,7 @@ const HomePage: React.FC = () => {
         } else {
             setAuthState({ isLoggedIn: false, principalId: null });
         }
-    }, [session?.userId]);
+    }, [session]);
 
     return (
         <>

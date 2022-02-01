@@ -7,7 +7,6 @@ import {
     IconButton,
     Stack,
     Text,
-    useBreakpointValue,
     useColorModeValue,
     useDisclosure,
 } from '@chakra-ui/react';
@@ -69,7 +68,6 @@ const Navbar: React.FC = () => {
                 align={'center'}>
                 <Flex flex={{ base: 1, md: 2 }} justify={{ base: 'center', md: 'start' }}>
                     <Text
-                        textAlign={useBreakpointValue({ base: 'center', md: 'left' })}
                         fontFamily={'heading'}
                         color={useColorModeValue('gray.800', 'white')}>
                         <NextLink href={'/'}>

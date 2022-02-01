@@ -1,10 +1,8 @@
 import {NextRequest, NextResponse} from 'next/server';
 import {getToken, JWT} from "next-auth/jwt";
+import {decode} from 'jwt-simple';
 import {match} from 'node-match-path';
-import jwt from 'jsonwebtoken';
-import util from 'util';
 
-const jwtVerifyAsync = util.promisify(jwt.verify);
 
 const authenticatedPaths = ['/', '/ask', '/tags/*'];
 
@@ -23,16 +21,15 @@ export async function middleware(req: NextRequest) {
     const { pathname } = req.nextUrl;
 
     // @ts-ignore
-    const jwt: JWT | null = await getToken({ req, secret: secret! });
+    const token: JWT | null = await getToken({ req, secret: secret! });
 
-    if (jwt && jwt.accessToken) {
-        const token = (jwt?.accessToken as any).accessToken;
+    if (token && token.accessToken) {
+        const accessToken = (token?.accessToken as any).accessToken;
 
         try {
             // @ts-ignore
-            await jwtVerifyAsync(token, secret);
-
-            if (token) {
+            const decoded = await decode(accessToken, secret)
+            if (decoded) {
                 switch (pathname) {
                     case '/login':
                         return NextResponse.redirect('/');

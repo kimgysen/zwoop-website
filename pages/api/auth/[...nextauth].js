@@ -1,4 +1,5 @@
 import NextAuth from "next-auth"
+import {decode} from "jwt-simple";
 import GoogleProvider from "next-auth/providers/google"
 import FacebookProvider from "next-auth/providers/facebook"
 import GithubProvider from "next-auth/providers/github"
@@ -6,10 +7,9 @@ import TwitterProvider from "next-auth/providers/twitter"
 import Auth0Provider from "next-auth/providers/auth0"
 import {AuthProviderEnum} from "@models/user/AuthProvider";
 import {findUserByProviderAndOauthId, loginUser, registerUser} from "@api_clients/feature/authentication/UserService";
-import jwt from 'jsonwebtoken';
-import util from 'util';
 
-const jwtVerifyAsync = util.promisify(jwt.verify);
+
+const secret = process.env.SECRET;
 
 // import AppleProvider from "next-auth/providers/apple"
 // import EmailProvider from "next-auth/providers/email"
@@ -143,7 +143,7 @@ export default NextAuth({
       if (token.accessToken) {
         try {
           const { accessToken, userId, firstName, profilePic } = token.accessToken;
-          await jwtVerifyAsync(accessToken, process.env.SECRET);
+          await decode(accessToken, secret);
 
           return {
             userId,
@@ -152,6 +152,7 @@ export default NextAuth({
           }
 
         } catch (e) {
+          console.log('error', e);
           return {};
         }
       }

@@ -101,7 +101,7 @@ const PostChatWidget: FC<PostSubViewManagerProps> = ({ authState, post, queryPar
                             &&
                             (
                                 <>
-                                    <i>Couldn 't load the partner</i>
+                                    <i>Couldn&apos;t load the partner</i>
                                 </>
                             )
                         }

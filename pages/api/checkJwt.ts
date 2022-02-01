@@ -1,15 +1,16 @@
 import type {NextApiRequest, NextApiResponse} from "next";
+import {decode} from "jwt-simple";
+
 import User from "@models/user/User";
 
-const jwt = require('jsonwebtoken');
 
-const cookieName: string | undefined = process.env.JWT_COOKIE_NAME;
-const secret: string | undefined = process.env.JWT_SECRET;
+const cookieName: string = process.env.JWT_COOKIE_NAME as string;
+const secret: string = process.env.JWT_SECRET as string;
 
 
 const HTTP_STATUS_UNAUTHORIZED = 401;
 
-export default function handler (req: NextApiRequest, res: NextApiResponse) {
+export default async function handler (req: NextApiRequest, res: NextApiResponse) {
     if (!cookieName) {
         return res
             .status(HTTP_STATUS_UNAUTHORIZED)
@@ -24,15 +25,14 @@ export default function handler (req: NextApiRequest, res: NextApiResponse) {
                 .json({ message: 'Authentication cookie is not set.' });
         }
 
-        jwt.verify(token as string, secret as string, (err: any, user: User) => {
-            if (err)
-                return res
-                    .status(HTTP_STATUS_UNAUTHORIZED)
-                    .json({ message: 'Jwt not successfully verified.' });
+        try{
+            const user:User = await decode(token , secret);
+            return res.json(user);
 
-            else
-                return res.json(user);
-
-        });
+        } catch (e) {
+            return res
+                .status(HTTP_STATUS_UNAUTHORIZED)
+                .json({ message: 'Jwt not successfully verified.' });
+        }
     }
 };
