@@ -1,7 +1,7 @@
 import React, {FC, useState} from "react";
 import {Box, Button, useColorModeValue} from "@chakra-ui/react";
 import AutoResizeTextarea from "@components/pages/tag/chat/public_chat/AutoResizeTextArea";
-import PublicMessageReceiveDto from "../../../../../service/stomp/receive/PublicMessageReceiveDto";
+import PublicMessageReceiveDto from "../../../../../service/stomp/receive/public_chat/PublicMessageReceiveDto";
 import {handleSendPublicMessage, isEmptyList} from "@components/pages/tag/chat/public_chat/PublicChatWidgetHelper";
 import PublicMessageList from "@components/pages/tag/chat/public_chat/chatbox/PublicMessageList";
 import PublicMessageListEmpty from "@components/pages/tag/chat/public_chat/fallbackviews/PublicMessageListEmpty";

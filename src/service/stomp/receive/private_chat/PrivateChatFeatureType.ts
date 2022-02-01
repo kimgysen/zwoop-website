@@ -1,0 +1,7 @@
+
+export enum PrivateChatFeatureType {
+    PRIVATE_MESSAGE = 'PRIVATE_MESSAGE',
+    PARTNER_READ = 'PARTNER_READ',
+    START_TYPING = 'START_TYPING',
+    STOP_TYPING = 'STOP_TYPING'
+}

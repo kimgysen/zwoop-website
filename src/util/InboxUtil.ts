@@ -1,4 +1,4 @@
-import InboxItemReceiveDto from "../service/stomp/receive/InboxItemReceiveDto";
+import InboxItemReceiveDto from "../service/stomp/receive/inbox/InboxItemReceiveDto";
 import ChatPartner from "@models/chat/ChatPartner";
 
 // Public api

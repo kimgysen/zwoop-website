@@ -1,5 +1,5 @@
 import {FC} from "react";
-import PrivateMessageReceiveDto from "../../../../service/stomp/receive/PrivateMessageReceiveDto";
+import PrivateMessageReceiveDto from "../../../../service/stomp/receive/private_chat/PrivateMessageReceiveDto";
 
 
 interface ChatBoxProps {

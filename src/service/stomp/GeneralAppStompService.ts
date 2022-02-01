@@ -1,7 +1,7 @@
 import {connectStomp, disconnectStomp, initAppInbox, subscribeToInboxUpdates} from "./StompService";
 import {HEADER_CONNECT_TYPE} from "./types/StompHeader";
 import {ConnectTypeEnum, stringFromConnectTypeEnum} from "./types/ConnectType";
-import InboxItemReceiveDto from "./receive/InboxItemReceiveDto";
+import InboxItemReceiveDto from "./receive/inbox/InboxItemReceiveDto";
 import {getStompDispatcher} from "../../event_dispatchers/StompDispatcher";
 import {
     APP_INBOX__ON_INBOX_UPDATE_RECEIVED,

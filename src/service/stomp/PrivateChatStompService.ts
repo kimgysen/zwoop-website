@@ -6,17 +6,14 @@ import {
     initPartnerRead,
     initPrivateChat,
     subscribeToInboxUpdates,
-    subscribeToPartnerRead,
-    subscribeToPrivateChat,
-    subscribeToStartTyping,
-    subscribeToStopTyping
+    subscribeToPrivateChatUpdates
 } from "./StompService";
-import PrivateMessageReceiveDto from "./receive/PrivateMessageReceiveDto";
+import PrivateMessageReceiveDto from "./receive/private_chat/PrivateMessageReceiveDto";
 import {HEADER_CONNECT_TYPE, HEADER_POST_ID} from "./types/StompHeader";
 import {ConnectTypeEnum, stringFromConnectTypeEnum} from "./types/ConnectType";
-import PartnerReadDto from "./receive/PartnerReadDto";
-import TypingDto from "./receive/TypingDto";
-import InboxItemReceiveDto from "./receive/InboxItemReceiveDto";
+import PartnerReadDto from "./receive/private_chat/PartnerReadDto";
+import TypingDto from "./receive/private_chat/TypingDto";
+import InboxItemReceiveDto from "./receive/inbox/InboxItemReceiveDto";
 import {getStompDispatcher} from "../../event_dispatchers/StompDispatcher";
 import {
     APP_INBOX__ON_INBOX_UPDATE_RECEIVED,
@@ -29,6 +26,8 @@ import {
     PRIVATE_CHAT__ON_START_TYPING_RECEIVED,
     PRIVATE_CHAT__ON_STOP_TYPING_RECEIVED
 } from "../../event_dispatchers/config/StompEvents";
+import PrivateChatFeatureDto from "./receive/private_chat/PrivateChatFeatureDto";
+import {PrivateChatFeatureType} from "./receive/private_chat/PrivateChatFeatureType";
 
 interface connectPrivateChatRoomProps {
     jwt: string,
@@ -79,31 +78,42 @@ export const connectPrivateChat = ({
                     inboxItem);
             });
 
-            subscribeToPrivateChat((msg) => {
-                const privateMessageDto = JSON.parse(msg.body) as PrivateMessageReceiveDto;
-                dispatcher.dispatch(PRIVATE_CHAT__ON_MESSAGE_RECEIVED,
-                    privateMessageDto);
+            subscribeToPrivateChatUpdates((msg) => {
+                const dto = JSON.parse(msg.body) as PrivateChatFeatureDto<any>;
+                console.log('dto', dto);
+                switch (dto.featureType) {
+                    case PrivateChatFeatureType.PRIVATE_MESSAGE:
+                        dispatcher.dispatch(PRIVATE_CHAT__ON_MESSAGE_RECEIVED, dto.featureDto);
+                        break;
+
+                    case PrivateChatFeatureType.PARTNER_READ:
+                        const partnerReadDto: PartnerReadDto = dto.featureDto;
+                        console.log('dispatch partner read', partnerReadDto);
+                        dispatcher.dispatch(
+                            PRIVATE_CHAT__ON_READ_RECEIVED + `__${partnerReadDto.postId}_${ partnerReadDto.partnerId }`,
+                            dto.featureDto as PartnerReadDto
+                        );
+                        break;
+
+                    case PrivateChatFeatureType.START_TYPING:
+                        const startTypingDto: TypingDto = dto.featureDto;
+                        dispatcher.dispatch(
+                            PRIVATE_CHAT__ON_START_TYPING_RECEIVED + `__${startTypingDto.postId}_${ startTypingDto.partnerId }`,
+                            dto.featureDto as TypingDto
+                        );
+                        break;
+
+                    case PrivateChatFeatureType.STOP_TYPING:
+                        const stopTypingDto: TypingDto = dto.featureDto;
+                        dispatcher.dispatch(
+                            PRIVATE_CHAT__ON_STOP_TYPING_RECEIVED + `__${stopTypingDto.postId}_${ stopTypingDto.partnerId }`,
+                            dto.featureDto as TypingDto
+                        );
+                        break;
+                }
+
             });
 
-            subscribeToPartnerRead((msg) => {
-                const partnerReadDto = JSON.parse(msg.body) as PartnerReadDto;
-                dispatcher.dispatch(
-                    PRIVATE_CHAT__ON_READ_RECEIVED + `__${partnerReadDto.postId}_${ partnerReadDto.partnerId }`,
-                    partnerReadDto);
-            });
-
-            subscribeToStartTyping((msg) => {
-                const typingDto = JSON.parse(msg.body) as TypingDto;
-                dispatcher.dispatch(
-                    PRIVATE_CHAT__ON_START_TYPING_RECEIVED + `__${typingDto.postId}_${ typingDto.partnerId }`,
-                    typingDto);
-            });
-
-            subscribeToStopTyping((msg) => {
-                const typingDto = JSON.parse(msg.body) as TypingDto;
-                dispatcher.dispatch(PRIVATE_CHAT__ON_STOP_TYPING_RECEIVED + `__${typingDto.postId}_${ typingDto.partnerId }`,
-                    typingDto);
-            });
         },
         (frame) => {
             console.log('error frame', frame);

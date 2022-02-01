@@ -1,4 +1,4 @@
-import InboxItemReceiveDto from "../../../../../service/stomp/receive/InboxItemReceiveDto";
+import InboxItemReceiveDto from "../../../../../service/stomp/receive/inbox/InboxItemReceiveDto";
 import React, {FC} from "react";
 import {Avatar, Box, HStack, Tag, Text, VStack} from "@chakra-ui/react";
 import TimeAgo from "react-timeago";

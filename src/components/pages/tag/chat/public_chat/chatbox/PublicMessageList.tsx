@@ -1,5 +1,5 @@
 import React, {FC} from "react";
-import PublicMessageReceiveDto from "../../../../../../service/stomp/receive/PublicMessageReceiveDto";
+import PublicMessageReceiveDto from "../../../../../../service/stomp/receive/public_chat/PublicMessageReceiveDto";
 import {Flex} from "@chakra-ui/layout/src/flex";
 import {List} from "@chakra-ui/react";
 import styles from "@components/pages/tag/chat/public_chat/PublicChatWidget.module.css";

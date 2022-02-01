@@ -1,9 +1,9 @@
 import React, {FC, useEffect, useState} from "react";
 import {Box, Tab, TabList, TabPanel, TabPanels, Tabs} from "@chakra-ui/react";
-import ChatRoomUserReceiveDto from "../../../../service/stomp/receive/ChatRoomUserReceiveDto";
+import ChatRoomUserReceiveDto from "../../../../service/stomp/receive/public_chat/ChatRoomUserReceiveDto";
 import PublicChatWidget from "@components/pages/tag/chat/public_chat/PublicChatWidget";
 import ConnectedUsers from "@components/pages/tag/chat/connected_users/ConnectedUsers";
-import PublicMessageReceiveDto from "../../../../service/stomp/receive/PublicMessageReceiveDto";
+import PublicMessageReceiveDto from "../../../../service/stomp/receive/public_chat/PublicMessageReceiveDto";
 import {getStompDispatcher} from "../../../../event_dispatchers/StompDispatcher";
 import {
     PUBLIC_CHAT__INIT_CONNECTED_USERS,

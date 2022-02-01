@@ -2,7 +2,7 @@ import {FC} from "react";
 import {Box} from "@chakra-ui/react";
 import PrivateMessageItem from "@components/pages/post/chat/private_chat/chatbox/PrivateMessageItem";
 import styles from '../PrivateChatWidget.module.css';
-import PrivateMessageReceiveDto from "../../../../../../service/stomp/receive/PrivateMessageReceiveDto";
+import PrivateMessageReceiveDto from "../../../../../../service/stomp/receive/private_chat/PrivateMessageReceiveDto";
 
 
 interface MessageListProps {

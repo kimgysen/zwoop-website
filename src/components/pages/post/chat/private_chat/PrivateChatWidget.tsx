@@ -3,12 +3,12 @@ import {Box} from "@chakra-ui/layout/src/box";
 import styles from './PrivateChatWidget.module.css';
 import PrivateMessageList from "@components/pages/post/chat/private_chat/chatbox/PrivateMessageList";
 import PrivateInputMessage from "@components/pages/post/chat/private_chat/chatbox/PrivateInputMessage";
-import PrivateMessageReceiveDto from "../../../../../service/stomp/receive/PrivateMessageReceiveDto";
+import PrivateMessageReceiveDto from "../../../../../service/stomp/receive/private_chat/PrivateMessageReceiveDto";
 import ChatPartner from "@models/chat/ChatPartner";
 import {sendMarkInboxItemAsRead} from "../../../../../service/stomp/StompService";
-import PartnerReadDto from "../../../../../service/stomp/receive/PartnerReadDto";
+import PartnerReadDto from "../../../../../service/stomp/receive/private_chat/PartnerReadDto";
 import PartnerReadBox from "@components/pages/post/chat/private_chat/chatbox/subviews/PartnerReadBox";
-import TypingDto from "../../../../../service/stomp/receive/TypingDto";
+import TypingDto from "../../../../../service/stomp/receive/private_chat/TypingDto";
 import PartnerTypingBox from "@components/pages/post/chat/private_chat/chatbox/subviews/PartnerTypingBox";
 import {
     hasPartnerRead,
@@ -69,7 +69,6 @@ const PrivateChatWidget: FC<PostChatWidgetProps> = ({ postId, principalId, partn
 
         const eventPostFix = `__${ postId }_${ partner?.partnerId }`;
 
-        stompDispatcher.remove(PRIVATE_CHAT__ON_INIT_MESSAGES_RECEIVED);
         stompDispatcher.on(PRIVATE_CHAT__ON_INIT_MESSAGES_RECEIVED, (messages: PrivateMessageReceiveDto[]) => {
             setMessagesLoading(false);
             setMessages(messages);
@@ -77,7 +76,7 @@ const PrivateChatWidget: FC<PostChatWidgetProps> = ({ postId, principalId, partn
             appDispatcher.dispatch(APP_INBOX__ITEM_READ, partner?.partnerId);
         });
 
-        stompDispatcher.on(PRIVATE_CHAT__ON_MESSAGE_RECEIVED, (message: PrivateMessageReceiveDto) => {
+        stompDispatcher.on(PRIVATE_CHAT__ON_MESSAGE_RECEIVED,(message: PrivateMessageReceiveDto) => {
             if (partner.partnerId === message.fromUserId || partner.partnerId === message.toUserId ) {
                 setMessages((messages: PrivateMessageReceiveDto[]) => [message, ...messages]);
 

@@ -6,7 +6,6 @@ import {Client, frameCallbackType} from '@stomp/stompjs';
 import {messageCallbackType} from "@stomp/stompjs/src/types";
 import PublicMessageSendDto from "./send/PublicMessageSendDto";
 import PrivateMessageSendDto from "./send/PrivateMessageSendDto";
-import InboxItemReceiveDto from "./receive/InboxItemReceiveDto";
 
 const uri = process.env.NEXT_PUBLIC_API_STOMP_BASE_URI;
 const path = process.env.NEXT_PUBLIC_API_STOMP_WS_PATH;
@@ -89,20 +88,8 @@ export const initPartnerIsWriting = (partnerId: string, callback: messageCallbac
     client.subscribe(`/app/writing/partner/${partnerId}`, callback);
 }
 
-export const subscribeToStartTyping = (callback: messageCallbackType) => {
-    client.subscribe(`/user/exchange/amq.direct/start.typing`, callback);
-}
-
-export const subscribeToStopTyping = (callback: messageCallbackType) => {
-    client.subscribe(`/user/exchange/amq.direct/stop.typing`, callback);
-}
-
-export const subscribeToPrivateChat = (callback: messageCallbackType) => {
-    client.subscribe(`/user/exchange/amq.direct/private.messages`, callback);
-}
-
-export const subscribeToPartnerRead = (callback: messageCallbackType) => {
-    client.subscribe(`/user/exchange/amq.direct/partner.read`, callback);
+export const subscribeToPrivateChatUpdates = (callback: messageCallbackType) => {
+    client.subscribe(`/user/exchange/amq.direct/private.chat.updates`, callback);
 }
 
 export const subscribeToInboxUpdates = (callback: messageCallbackType) => {

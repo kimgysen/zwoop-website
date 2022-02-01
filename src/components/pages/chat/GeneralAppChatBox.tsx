@@ -3,7 +3,7 @@ import Inbox from "@components/pages/chat/subscomponents/Inbox";
 import CenterContainer from "@components/layout/center/CenterContainer";
 import {Box, Flex, useColorModeValue} from "@chakra-ui/react";
 import ChatBox from "@components/pages/chat/subscomponents/ChatBox";
-import PrivateMessageReceiveDto from "../../../service/stomp/receive/PrivateMessageReceiveDto";
+import PrivateMessageReceiveDto from "../../../service/stomp/receive/private_chat/PrivateMessageReceiveDto";
 
 
 interface PrivateChatBoxProps {

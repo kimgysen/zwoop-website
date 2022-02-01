@@ -19,7 +19,7 @@ import {
     PUBLIC_CHAT__ON_MESSAGE_RECEIVED,
     PUBLIC_CHAT__ON_USER_CONNECTED
 } from "../../event_dispatchers/config/StompEvents";
-import InboxItemReceiveDto from "./receive/InboxItemReceiveDto";
+import InboxItemReceiveDto from "./receive/inbox/InboxItemReceiveDto";
 
 interface connectPublicChatRoomProps {
     chatRoomId: string,
