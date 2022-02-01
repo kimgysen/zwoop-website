@@ -2,7 +2,7 @@ import React, {FC} from "react";
 import DelayedSpinner from "@components/widgets/delayed-spinner/DelayedSpinner";
 
 
-const PrivateMessageListLoading: FC = () => {
+const PublicMessageListLoading: FC = () => {
     return (
         <DelayedSpinner
             timeOutMs={500}
@@ -11,4 +11,4 @@ const PrivateMessageListLoading: FC = () => {
     )
 }
 
-export default PrivateMessageListLoading;
+export default PublicMessageListLoading;

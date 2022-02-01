@@ -115,34 +115,9 @@
     text-overflow: ellipsis;
 }
 
-.chatApp__convMessageItem--left .chatApp__convMessageAvatar {
-    float: left;
-}
-
-.chatApp__convMessageItem--left .chatApp__convMessageDate {
-    float: left;
-}
-
-.chatApp__convMessageItem--left .chatApp__convMessageValue {
-    float: left;
-    text-align: left;
-    margin: 0 0 0 1rem;
-    color: #fff;
-    background-color: #4870df;
-}
-.chatApp__convMessageItem--left .chatApp__convMessageValue::before {
-    content: '';
-    position: absolute;
-    top: 14px;
-    left: -8px;
-    width: 0;
-    height: 0;
-    border-style: solid;
-    border-width: 6px 10px 6px 0;
-    border-color: transparent #4870df transparent transparent;
-}
 .chatApp__convMessageItem--right .chatApp__convMessageAvatar {
     float: right;
+
 }
 .chatApp__convMessageItem--right .chatApp__convMessageDate {
     float: right;

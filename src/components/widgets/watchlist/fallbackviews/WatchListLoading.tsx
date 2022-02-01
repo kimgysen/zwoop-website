@@ -1,11 +1,14 @@
 import {FC} from "react";
-import {Spinner} from "@chakra-ui/react";
+import DelayedSpinner from "@components/widgets/delayed-spinner/DelayedSpinner";
 
 
 const WatchListLoading: FC = () => {
     return (
         <>
-            <Spinner />
+            <DelayedSpinner
+                timeOutMs={ 750 }
+                height={'50px'}
+            />
         </>
     )
 }

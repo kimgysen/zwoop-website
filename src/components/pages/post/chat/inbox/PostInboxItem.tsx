@@ -83,6 +83,7 @@ const PostInboxItem: FC<InboxItemProps> = (
                 <Box>
                     <Text isTruncated
                           fontWeight='semibold'
+                          maxW='220px'
                     >
                         <Box as='span'
                              mr='3px'

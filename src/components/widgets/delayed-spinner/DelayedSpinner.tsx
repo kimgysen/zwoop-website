@@ -2,10 +2,11 @@ import React, {FC, useEffect, useState} from 'react';
 import {Center, Spinner} from "@chakra-ui/react";
 
 interface DelayedSpinnerProps {
-    timeOutMs: number
+    timeOutMs: number,
+    height: string
 }
 
-const DelayedSpinner: FC<DelayedSpinnerProps> = ({ timeOutMs }) => {
+const DelayedSpinner: FC<DelayedSpinnerProps> = ({ timeOutMs, height }) => {
     const [showSpinner, setShowSpinner] = useState(false);
 
     useEffect(() => {
@@ -17,7 +18,7 @@ const DelayedSpinner: FC<DelayedSpinnerProps> = ({ timeOutMs }) => {
     return (
         <Center
             py={'20px'}
-            height={'500px'}
+            height={ height }
         >
             {
                 showSpinner && <Spinner/>

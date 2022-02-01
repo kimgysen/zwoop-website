@@ -15,10 +15,11 @@ import {
 
 
 interface TagChatProps {
-    tagName: string
+    tagName: string,
+    principalId: string
 }
 
-const TagChatWidget: FC<TagChatProps> = ({ tagName }) => {
+const TagChatWidget: FC<TagChatProps> = ({ tagName, principalId }) => {
 
     const [isLoading, setLoading] = useState<boolean>(true);
     const [messages, setMessages] = useState<PublicMessageReceiveDto[]>([]);
@@ -77,7 +78,9 @@ const TagChatWidget: FC<TagChatProps> = ({ tagName }) => {
                 <TabPanels>
                     <TabPanel>
                         <PublicChatWidget
+                            principalId={ principalId }
                             tagName={ tagName }
+                            isLoading={ isLoading }
                             messages={ messages }
                         />
                     </TabPanel>

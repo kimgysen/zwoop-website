@@ -21,7 +21,7 @@ const FeedByTag: NextPage = () => {
     const { data: session } = useSession();
 
     const router = useRouter();
-    const { tagName } = router.query;
+    const query = router.query;
 
     const [authState, setAuthState] = useState<AuthState>({ isLoggedIn: false });
     const [isWatchListDirty, setWatchListDirty] = useState<boolean>(true);
@@ -55,11 +55,11 @@ const FeedByTag: NextPage = () => {
                         )
                     }
                     centerComponent={
-                        tagName
+                        query.tagName
                         && (
                             <>
                                 <TagHeaderHoc
-                                    tagName={ tagName as string }
+                                    tagName={ query.tagName as string }
                                     setWatchListDirty={ setWatchListDirty }
                                 />
                                 <FeedListHoc
@@ -67,20 +67,27 @@ const FeedByTag: NextPage = () => {
                                     postStatus={ PostStatusEnum.OPEN }
                                     page={ 0 }
                                     pageSize={ 50 }
-                                    tagName={ tagName as string }
+                                    tagName={ query.tagName as string }
                                 />
                             </>
                         )
                     }
                     rightComponent={
                         <TagStompConnect
-                            tagName={ tagName as string }
+                            tagName={ query.tagName as string }
                             authState={ authState }
                         >
                             <Card>
-                                <TagChatWidget
-                                    tagName={ tagName as string }
-                                />
+                                {
+                                    authState.isLoggedIn
+                                    && query.tagName
+                                    && (
+                                        <TagChatWidget
+                                            tagName={ query.tagName as string }
+                                            principalId={ authState.principalId as string }
+                                        />
+                                    )
+                                }
                             </Card>
                         </TagStompConnect>
                     }

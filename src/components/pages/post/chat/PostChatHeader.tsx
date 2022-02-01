@@ -42,7 +42,11 @@ const PostChatHeader: FC<PostChatHeaderProps> =
                                  aria-label="Search database"
                                  icon={<FaChevronLeft />}
                             />
-                            <Text w='95%' isTruncated>
+                            <Text
+                                w='95%'
+                                maxW='220px'
+                                isTruncated
+                            >
                                 { partnerNickName }
                             </Text>
                         </HStack>

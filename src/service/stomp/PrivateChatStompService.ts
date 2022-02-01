@@ -51,7 +51,6 @@ export const connectPrivateChat = ({
             if (partnerId) {
                 initPrivateChat(partnerId, (msg) => {
                     const messages = JSON.parse(msg.body) as PrivateMessageReceiveDto[];
-                    console.log(dispatcher);
                     dispatcher.dispatch(PRIVATE_CHAT__ON_INIT_MESSAGES_RECEIVED, messages);
                 });
 

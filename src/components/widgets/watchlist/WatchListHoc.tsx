@@ -1,7 +1,7 @@
 import {Dispatch, FC, SetStateAction, useEffect, useState} from "react";
 import ApiRes from "../../../api_clients/type/ApiResult";
 import AuthState from "@models/user/AuthState";
-import {getFollowedTags} from "../../../api_clients/feature/user/UserService";
+import {getFollowedTags} from "@api_clients/feature/user/UserService";
 import WatchList from "@components/widgets/watchlist/WatchList";
 import Tag from "@models/tag/Tag";
 

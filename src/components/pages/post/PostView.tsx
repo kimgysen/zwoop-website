@@ -30,7 +30,11 @@ const PostView: React.FC<PostViewProps> = ({ post }) => {
                 <TimeAgo date={ post.createdAt } />
             </Box>
             <Divider />
-            <Box pt='10px' pb='10px' overflowX='scroll'>
+            <Box
+                maxW='480px'
+                py='10px'
+                overflowX='scroll'
+            >
                 <Box className='markdown-body'>
                     <ReactMarkdown remarkPlugins={ [remarkGfm] }>{ post.postText }</ReactMarkdown>
                 </Box>
