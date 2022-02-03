@@ -114,7 +114,7 @@ export default NextAuth({
       if (user && account && profile) {
           const { success } = await findUserByProviderAndOauthId(AuthProviderEnum[account.provider], profile.sub);
           if (!success) {
-            const { result: accessToken, userId, firstName, profilePic } = await registerUser({
+            const { success: accessToken, userId, firstName, profilePic } = await registerUser({
               authProviderId: AuthProviderEnum[account.provider],
               authId: profile.sub,
               firstName: profile['given_name'],
@@ -122,7 +122,7 @@ export default NextAuth({
               email: profile['email'],
               profilePic: profile['picture']
             });
-
+            console.log({ result: accessToken, userId, firstName, profilePic });
             token = { accessToken, userId, firstName, profilePic };
 
           } else {
@@ -131,7 +131,7 @@ export default NextAuth({
               authProviderId: AuthProviderEnum[account.provider],
               authId: profile.sub
             });
-
+            console.log('session', { accessToken, userId, firstName, profilePic });
             token = { accessToken, userId, firstName, profilePic };
           }
 
@@ -140,7 +140,7 @@ export default NextAuth({
     },
 
     async session({ session, token, user }) {
-      if (token.accessToken) {
+      if (token?.accessToken) {
         try {
           const { accessToken, userId, firstName, profilePic } = token.accessToken;
           await decode(accessToken, secret);

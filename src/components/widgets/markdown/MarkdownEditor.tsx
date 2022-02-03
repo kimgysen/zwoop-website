@@ -25,7 +25,9 @@ const MarkdownEditor: React.FC<MarkdownEditorProps> = ({ description, setDescrip
       }}
       onChange={handleEditorChange}
       renderHTML={text =>
-          <ReactMarkdown remarkPlugins={ [remarkGfm] }>{ text }</ReactMarkdown>
+          <div style={{ maxWidth: '500px' }}>
+              <ReactMarkdown remarkPlugins={ [remarkGfm] }>{ text }</ReactMarkdown>
+          </div>
       }
       config={{
         view: {

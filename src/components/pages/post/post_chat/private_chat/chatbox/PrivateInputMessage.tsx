@@ -4,7 +4,7 @@ import styles from '../PrivateChatWidget.module.css';
 import {FaPaperPlane} from 'react-icons/fa';
 import ChatPartner from "@models/chat/ChatPartner";
 import {sendStartTyping, sendStopTyping} from "../../../../../../service/stomp/StompService";
-import {handleSendPrivateMessage} from "@components/pages/post/chat/private_chat/PrivateChatWidgetHelper";
+import {handleSendPrivateMessage} from "@components/pages/post/post_chat/private_chat/PrivateChatWidgetHelper";
 
 
 interface InputMessageProps {

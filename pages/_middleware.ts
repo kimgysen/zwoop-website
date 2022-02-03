@@ -22,22 +22,23 @@ export async function middleware(req: NextRequest) {
 
     // @ts-ignore
     const token: JWT | null = await getToken({ req, secret: secret! });
-
     if (token && token.accessToken) {
         const accessToken = (token?.accessToken as any).accessToken;
-
         try {
             // @ts-ignore
-            const decoded = await decode(accessToken, secret)
+            const decoded = await decode(accessToken, secret);
+            // Check expiration?
             if (decoded) {
                 switch (pathname) {
                     case '/login':
+                        console.log('called');
                         return NextResponse.redirect('/');
 
                 }
             }
 
         } catch (e) {
+            console.log('error', e);
             if (matchesAuthPath(pathname)) {
                 return NextResponse.redirect('/login');
             }

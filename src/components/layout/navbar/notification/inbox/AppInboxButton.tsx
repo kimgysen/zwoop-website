@@ -22,7 +22,7 @@ import {
 } from "../../../../../event_dispatchers/config/StompEvents";
 import {getAppDispatcher} from "../../../../../event_dispatchers/AppDispatcher";
 import {APP_INBOX__ITEM_READ} from "../../../../../event_dispatchers/config/AppEvents";
-import {resetCounterForPartner} from "@components/pages/post/chat/private_chat/PrivateChatWidgetHelper";
+import {resetCounterForPartner} from "@components/pages/post/post_chat/private_chat/PrivateChatWidgetHelper";
 import {css} from "@emotion/react";
 import {FaComment} from "react-icons/fa"
 

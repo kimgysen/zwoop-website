@@ -5,8 +5,8 @@ import TimeAgo from "react-timeago";
 import ChatPartner from "@models/chat/ChatPartner";
 import PartnerReadDto from "../../../../../service/stomp/receive/private_chat/PartnerReadDto";
 import TypingDto from "../../../../../service/stomp/receive/private_chat/TypingDto";
-import PartnerTypingBox from "@components/pages/post/chat/private_chat/chatbox/subviews/PartnerTypingBox";
-import PartnerReadBox from "@components/pages/post/chat/private_chat/chatbox/subviews/PartnerReadBox";
+import PartnerTypingBox from "@components/pages/post/post_chat/private_chat/chatbox/subviews/PartnerTypingBox";
+import PartnerReadBox from "@components/pages/post/post_chat/private_chat/chatbox/subviews/PartnerReadBox";
 import {getStompDispatcher} from "../../../../../event_dispatchers/StompDispatcher";
 import {
     PRIVATE_CHAT__ON_READ_RECEIVED,

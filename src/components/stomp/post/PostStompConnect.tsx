@@ -1,7 +1,7 @@
 import {FC, useEffect} from "react";
 import AuthState from "@models/user/AuthState";
 import {useRouter} from "next/router";
-import {PostPageViewState} from "@components/pages/post/PostViewHelper";
+import {PostPageViewState} from "@components/pages/post/post_view/PostViewHelper";
 import Post from "@models/post/Post";
 import {disconnectStomp} from "../../../service/stomp/StompService";
 import {connectToPostInbox, connectToPrivateChat} from "@components/stomp/post/PostStompConnectHelper";

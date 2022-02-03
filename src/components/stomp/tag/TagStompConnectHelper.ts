@@ -1,7 +1,7 @@
 import {getRawJwt} from "../../../service/jwt/JwtService";
 import {NextRouter} from "next/router";
 import {connectPublicChatRoom} from "../../../service/stomp/PublicChatStompService";
-import {redirectToLogin} from "@components/pages/post/chat/private_chat/PrivateChatWidgetHelper";
+import {redirectToLogin} from "@components/pages/post/post_chat/private_chat/PrivateChatWidgetHelper";
 
 
 interface ConnectToPubicChatProps {

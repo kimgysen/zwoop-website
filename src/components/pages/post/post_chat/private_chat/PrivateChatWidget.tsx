@@ -1,20 +1,20 @@
 import React, {FC, useEffect, useState} from "react";
 import {Box} from "@chakra-ui/layout/src/box";
 import styles from './PrivateChatWidget.module.css';
-import PrivateMessageList from "@components/pages/post/chat/private_chat/chatbox/PrivateMessageList";
-import PrivateInputMessage from "@components/pages/post/chat/private_chat/chatbox/PrivateInputMessage";
+import PrivateMessageList from "@components/pages/post/post_chat/private_chat/chatbox/PrivateMessageList";
+import PrivateInputMessage from "@components/pages/post/post_chat/private_chat/chatbox/PrivateInputMessage";
 import PrivateMessageReceiveDto from "../../../../../service/stomp/receive/private_chat/PrivateMessageReceiveDto";
 import ChatPartner from "@models/chat/ChatPartner";
 import {sendMarkInboxItemAsRead} from "../../../../../service/stomp/StompService";
 import PartnerReadDto from "../../../../../service/stomp/receive/private_chat/PartnerReadDto";
-import PartnerReadBox from "@components/pages/post/chat/private_chat/chatbox/subviews/PartnerReadBox";
+import PartnerReadBox from "@components/pages/post/post_chat/private_chat/chatbox/subviews/PartnerReadBox";
 import TypingDto from "../../../../../service/stomp/receive/private_chat/TypingDto";
-import PartnerTypingBox from "@components/pages/post/chat/private_chat/chatbox/subviews/PartnerTypingBox";
+import PartnerTypingBox from "@components/pages/post/post_chat/private_chat/chatbox/subviews/PartnerTypingBox";
 import {
     hasPartnerRead,
     isEmptyList,
     lastMessageWasSentByPrincipal
-} from "@components/pages/post/chat/private_chat/PrivateChatWidgetHelper";
+} from "@components/pages/post/post_chat/private_chat/PrivateChatWidgetHelper";
 import {getStompDispatcher} from "../../../../../event_dispatchers/StompDispatcher";
 import {
     PRIVATE_CHAT__INIT_IS_READ_RECEIVED,
@@ -26,9 +26,9 @@ import {
     PRIVATE_CHAT__ON_STOP_TYPING_RECEIVED
 } from "../../../../../event_dispatchers/config/StompEvents";
 import PrivateMessageListEmpty
-    from "@components/pages/post/chat/private_chat/chatbox/fallbackviews/PrivateMessageListEmpty";
+    from "@components/pages/post/post_chat/private_chat/chatbox/fallbackviews/PrivateMessageListEmpty";
 import PrivateMessageListLoading
-    from "@components/pages/post/chat/private_chat/chatbox/fallbackviews/PrivateMessageListLoading";
+    from "@components/pages/post/post_chat/private_chat/chatbox/fallbackviews/PrivateMessageListLoading";
 import {getAppDispatcher} from "../../../../../event_dispatchers/AppDispatcher";
 import {APP_INBOX__ITEM_READ} from "../../../../../event_dispatchers/config/AppEvents";
 

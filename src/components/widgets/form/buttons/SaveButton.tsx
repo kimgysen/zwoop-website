@@ -3,16 +3,17 @@ import {Button, Flex, Spacer} from "@chakra-ui/react";
 import {Box} from "@chakra-ui/layout/src/box";
 
 
-interface ISaveButton {
+interface SaveButtonProps {
+    label: string,
     onSave: (e: React.MouseEvent) => void,
     shouldDisableSave: boolean,
     saveError?: string | null
 }
 
-const SaveButton: FC<ISaveButton> = ({ onSave, shouldDisableSave, saveError }) => {
+const SaveButton: FC<SaveButtonProps> = ({ label, onSave, shouldDisableSave, saveError }) => {
     return (
         <Box>
-            <Flex mt={5} pb={10}>
+            <Flex>
                 <Spacer />
                 <Button
                     bg={'blue.400'}
@@ -21,14 +22,17 @@ const SaveButton: FC<ISaveButton> = ({ onSave, shouldDisableSave, saveError }) =
                     onClick={ e => onSave(e) }
                     disabled={ shouldDisableSave }
                 >
-                    Publish
+                    { label }
                 </Button>
             </Flex>
-            <Flex pb={10}>
+            <Flex>
                 <Spacer />
                 {
                     saveError &&
-                    <Box color='red'>
+                    <Box
+                        color='red'
+                        pb={10}
+                    >
                         { saveError }
                     </Box>
                 }

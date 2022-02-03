@@ -7,7 +7,7 @@ export const DESCRIPTION_MIN_CHARS = 10;
 export const DESCRIPTION_MAX_CHARS = 30000;
 export const TAGS_MIN = 1;
 export const TAGS_MAX = 3;
-export const OFFER_MIN = 0.003;
+export const BID_MIN = 0.01;
 
 
 export const validateTitle = (title: string): boolean => {
@@ -25,13 +25,14 @@ export const validateTags = (tags: Tag[]): boolean => {
         && tags.length <= TAGS_MAX;
 }
 
-export const validateOffer = (offer: number): boolean => {
-    return !!offer && offer >= OFFER_MIN;
+export const validateBidPrice = (bidPrice: number): boolean => {
+    console.log(!!bidPrice && bidPrice >= BID_MIN);
+    return !!bidPrice && bidPrice >= BID_MIN;
 }
 
-export const validateForm = (title: string, descriptionMd: string, tags: Tag[], offer: number): boolean => {
+export const validateForm = (title: string, descriptionMd: string, tags: Tag[], bidPrice: number): boolean => {
     return validateTitle(title)
         && validateDescriptionMd(descriptionMd)
         && validateTags(tags)
-        && validateOffer(offer);
+        && validateBidPrice(bidPrice);
 }

@@ -21,7 +21,7 @@ const Ask: NextPage = () => {
     const [title, setTitle] = useState<string>('');
     const [descriptionMd, setDescriptionMd] = useState<string>('');
     const [tags, setTags] = useState<Tag[]>([]);
-    const [offer, setOffer] = React.useState<string>('0.003');
+    const [bidPrice, setBidPrice] = React.useState<string>('0.01');
     const [isFormValid, setFormValid] = useState(false);
     const [saveError, setSaveError] = useState<string|null>(null);
 
@@ -33,17 +33,17 @@ const Ask: NextPage = () => {
             setTitle(postJson.title);
             setDescriptionMd(postJson.descriptionMd);
             setTags(postJson.tags);
-            setOffer(postJson.offer);
+            setBidPrice(postJson.bidPrice);
         }
     }, []);
 
     useEffect(() => {
-        const formIsValid = validateForm(title, descriptionMd, tags, parseFloat(offer));
+        const formIsValid = validateForm(title, descriptionMd, tags, parseFloat(bidPrice));
+        localStorage.setItem('createPost', JSON.stringify({ title, descriptionMd, tags, bidPrice }));
         if (formIsValid) {
-            localStorage.setItem('createPost', JSON.stringify({ title, descriptionMd, tags, offer }));
+            setFormValid(formIsValid);
         }
-        setFormValid(formIsValid);
-    }, [title, descriptionMd, tags, offer]);
+    }, [title, descriptionMd, tags, bidPrice]);
 
 
     const onSave = async (e: any) => {
@@ -53,7 +53,7 @@ const Ask: NextPage = () => {
             text: descriptionMd,
             tagIds: tags.map(tag => tag.tagId),
             currency: 'BNB',
-            offer
+            bidPrice
         }, jwt);
 
         if (resp.error) {
@@ -64,7 +64,7 @@ const Ask: NextPage = () => {
                 title: '',
                 descriptionMd: '',
                 tags: [],
-                offer: '0.003'
+                bidPrice: '0.01'
             }));
             router.push(resp.success as string);
         }
@@ -84,20 +84,23 @@ const Ask: NextPage = () => {
                         >
                             <Box mt={3}>
                                 <EditFormDetailsView
-                                    post = {{ title, descriptionMd, tags, offer }}
+                                    post = {{ title, descriptionMd, tags, bidPrice }}
                                     setters={{
                                         setTitle,
                                         setDescriptionMd,
                                         setTags,
-                                        setOffer
+                                        setBidPrice
                                     }}
                                 />
                             </Box>
-                            <SaveButton
-                                onSave = { onSave }
-                                shouldDisableSave={ !isFormValid }
-                                saveError={ saveError }
-                            />
+                            <Box mt={5} pb={10}>
+                                <SaveButton
+                                    label='Publish'
+                                    onSave = { onSave }
+                                    shouldDisableSave={ !isFormValid }
+                                    saveError={ saveError }
+                                />
+                            </Box>
                         </Box>
                     </Flex>
                 </CenterContainer>

@@ -23,9 +23,9 @@ const FeedItem: FC<FeedItemProps> = ({ post }) => {
                 minH={{ base: '50px' }}
                 align={'top'}
             >
-                <BnbBox price={ post.offerPrice } />
+                <BnbBox price={ post.bidPrice } />
                 <Box
-                    ml={ "10px" }
+                    ml={ "20px" }
                     width={'80%'}
                 >
                     <Heading

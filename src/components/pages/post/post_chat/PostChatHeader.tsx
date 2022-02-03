@@ -2,7 +2,7 @@ import React, {FC} from "react";
 import {Divider, Heading, HStack, IconButton, Text} from "@chakra-ui/react";
 import {FaChevronLeft} from 'react-icons/fa';
 import {useRouter} from "next/router";
-import {PostPageViewState} from "@components/pages/post/PostViewHelper";
+import {PostPageViewState} from "@components/pages/post/post_view/PostViewHelper";
 
 
 interface PostChatHeaderProps {

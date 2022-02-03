@@ -14,7 +14,7 @@ const ThreeColumnLayout: React.FC<ThreeColumnLayoutProps> = ({ leftComponent, ce
             <Flex pt={{ md: '10px' }}>
                 <Box
                     display={{ base: 'none', lg: 'block' }}
-                    width={{ md: '20%' }}
+                    width={{ md: '15%' }}
                     mr={{ md: '20px' }}
                 >
                     { leftComponent }
@@ -22,7 +22,7 @@ const ThreeColumnLayout: React.FC<ThreeColumnLayoutProps> = ({ leftComponent, ce
                 <Box
                     flex={ 1 }
                     justifyContent={ 'flex-end' }
-                    width={{ sm: '90%', md: '55%' }}
+                    width={{ sm: '90%', md: '60%' }}
                 >
                     { centerComponent }
                 </Box>

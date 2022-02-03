@@ -14,7 +14,7 @@ export default interface Post {
     answers: Answer[],
     asker: User,
     currency: Currency,
-    offerPrice: string,
+    bidPrice: string,
     postStatus: PostStatus,
     postTitle: string,
     postText: string,

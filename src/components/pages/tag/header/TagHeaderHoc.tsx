@@ -22,7 +22,7 @@ const TagHeaderHoc: FC<TagHeaderHoc> = ({ tagName, setWatchListDirty }) => {
             const isWatchingRes = await isWatching(tagName);
             setWatchingRes(isWatchingRes);
         })();
-    }, []);
+    }, [tagName]);
 
     const handleWatch = async (tagName: string) => {
         setWatchingRes({ ...defaultIsWatchingRes, loading: true })

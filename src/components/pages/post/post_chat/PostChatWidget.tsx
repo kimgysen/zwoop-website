@@ -1,12 +1,12 @@
 import React, {FC, useEffect, useState} from "react";
 import AuthState from "@models/user/AuthState";
 import Post from "@models/post/Post";
-import {isPostOwner, PostPageViewState} from "@components/pages/post/PostViewHelper";
+import {isPostOwner, PostPageViewState} from "@components/pages/post/post_view/PostViewHelper";
 import PostStompConnect from "@components/stomp/post/PostStompConnect";
-import PrivateChatWidget from "@components/pages/post/chat/private_chat/PrivateChatWidget";
-import PostInbox from "@components/pages/post/chat/inbox/PostInbox";
+import PrivateChatWidget from "@components/pages/post/post_chat/private_chat/PrivateChatWidget";
+import PostInbox from "@components/pages/post/post_chat/inbox/PostInbox";
 import Card from "@components/layout/components/card/Card";
-import PostChatHeader from "@components/pages/post/chat/PostChatHeader";
+import PostChatHeader from "@components/pages/post/post_chat/PostChatHeader";
 import User from "@models/user/User";
 import {getUserById} from "@api_clients/feature/user/UserService";
 import ApiResult from "@api_clients/type/ApiResult";

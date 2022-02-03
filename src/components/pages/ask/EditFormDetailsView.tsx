@@ -13,7 +13,7 @@ import FormCard from "@components/widgets/form/FormCard";
 import Card from "@components/layout/components/card/Card";
 import MarkdownEditor from "@components/widgets/markdown/MarkdownEditor";
 import TagsBox from "@components/widgets/tags/TagsBox";
-import {findTagsStartingWith} from "../../../api_clients/feature/tag/TagService";
+import {findTagsStartingWith} from "@api_clients/feature/tag/TagService";
 import Tag from "@models/tag/Tag";
 import Title from "./Title";
 
@@ -22,14 +22,14 @@ export type Post = {
     title: string,
     descriptionMd: string,
     tags: Tag[],
-    offer: string
+    bidPrice: string
 }
 
 export type PostSetters = {
     setTitle: (title: string) => void,
     setDescriptionMd: (descriptionMd: string) => void,
     setTags: (tags: Tag[]) => void,
-    setOffer: (offer: string) => void
+    setBidPrice: (bidPrice: string) => void
 }
 
 interface FormDetailsViewProps {
@@ -77,18 +77,18 @@ const EditFormDetailsView: React.FC<FormDetailsViewProps> = ({ post, setters }) 
             </FormCard>
             <Divider mt='15px' mb='15px' />
             <FormCard
-                title='Offer price'
+                title='Bid price'
                 description='Amount of BNB you offer in exchange for support'>
                 <NumberInput
                     size='md'
                     maxW="32"
-                    defaultValue={ 0.033 }
+                    defaultValue={ 0.01 }
                     inputMode='decimal'
-                    precision={ 3 }
-                    step={ .001 }
-                    min={ .003 }
-                    onChange={(valueString: string) => setters.setOffer(valueString)}
-                    value={post.offer}
+                    precision={ 2 }
+                    step={ .01 }
+                    min={ .01 }
+                    onChange={(valueString: string) => setters.setBidPrice(valueString)}
+                    value={post.bidPrice}
                 >
                     <NumberInputField />
                     <NumberInputStepper>

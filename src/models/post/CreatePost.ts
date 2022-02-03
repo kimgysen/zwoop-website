@@ -1,7 +1,7 @@
 export default interface Post {
     title: string,
     text: string,
-    offer: string,
+    bidPrice: string,
     currency: string,
     tagIds: string[]
 }

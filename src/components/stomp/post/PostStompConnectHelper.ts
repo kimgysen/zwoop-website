@@ -1,7 +1,7 @@
 import {NextRouter} from "next/router";
 import {getRawJwt} from "../../../service/jwt/JwtService";
 import {connectPrivateChat} from "../../../service/stomp/PrivateChatStompService";
-import {redirectToLogin} from "@components/pages/post/chat/private_chat/PrivateChatWidgetHelper";
+import {redirectToLogin} from "@components/pages/post/post_chat/private_chat/PrivateChatWidgetHelper";
 import {connectPostInbox} from "../../../service/stomp/PostInboxStompService";
 
 interface ConnectPostInboxProps {

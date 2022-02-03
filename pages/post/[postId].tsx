@@ -4,12 +4,13 @@ import AppLayout from "@components/layout/AppLayout";
 import ThreeColumnLayout from "@components/layout/column-layouts/ThreeColumnLayout";
 import React, {useEffect, useState} from "react";
 import {getPostById} from "@api_clients/feature/post/PostService";
-import PostView from "@components/pages/post/PostView";
+import PostView from "@components/pages/post/post_view/PostView";
 import {useSession} from "next-auth/react";
 import AuthState from "@models/user/AuthState";
-import PostChatWidget from "@components/pages/post/PostChatWidget";
+import PostChatWidget from "@components/pages/post/post_chat/PostChatWidget";
 import WatchListHoc from "@components/widgets/watchlist/WatchListHoc";
 import {useRouter} from "next/router";
+import BiddingListHoc from "@components/pages/post/post_view/subviews/bidding/BiddingListHoc";
 
 
 export async function getServerSideProps(ctx: { query: { postId: string } }) {
@@ -54,7 +55,10 @@ const Post: NextPage = (props: any) => {
                         )
                     }
                     centerComponent={
-                        <PostView post={ post } />
+                        <>
+                            <PostView post={ post } />
+                            <BiddingListHoc postId={ post?.postId } />
+                        </>
                     }
                     rightComponent={
                         authState.isLoggedIn

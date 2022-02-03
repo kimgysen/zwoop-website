@@ -9,7 +9,6 @@ import remarkGfm from "remark-gfm";
 import TagsList from "@components/widgets/tags/TagsList";
 import EditAboutModal from "@components/pages/user/edit/EditAboutModal";
 import EditNickModal from "@components/pages/user/edit/EditNickModal";
-import {HStack} from "@chakra-ui/layout/src/stack";
 
 
 interface UserCardProps {
@@ -28,7 +27,7 @@ const UserCard: React.FC<UserCardProps> = ({ profileUser, principalId }) => {
             <Card>
                 <VStack align='left'>
                     <Flex direction='row' justifyContent='space-between'>
-                        <HStack>
+                        <Flex>
                             <Image
                                 w='50px'
                                 h='50px'
@@ -43,7 +42,7 @@ const UserCard: React.FC<UserCardProps> = ({ profileUser, principalId }) => {
                             <Heading fontSize={'xl'} fontWeight={500} fontFamily={'body'}>
                                 { editUser.nickName }
                             </Heading>
-                        </HStack>
+                        </Flex>
                         {
                             profileUser.userId === principalId && (
                                 <IconButton
