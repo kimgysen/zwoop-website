@@ -3,12 +3,12 @@ import {Box} from "@chakra-ui/layout/src/box";
 import styles from './PrivateChatWidget.module.css';
 import PrivateMessageList from "@components/pages/post/post_chat/private_chat/chatbox/PrivateMessageList";
 import PrivateInputMessage from "@components/pages/post/post_chat/private_chat/chatbox/PrivateInputMessage";
-import PrivateMessageReceiveDto from "../../../../../service/stomp/receive/private_chat/PrivateMessageReceiveDto";
+import PrivateMessageReceiveDto
+    from "../../../../../service/stomp/dto/receive/private_chat/feature/PrivateMessageReceiveDto";
 import ChatPartner from "@models/chat/ChatPartner";
-import {sendMarkInboxItemAsRead} from "../../../../../service/stomp/StompService";
-import PartnerReadDto from "../../../../../service/stomp/receive/private_chat/PartnerReadDto";
+import PartnerReadDto from "../../../../../service/stomp/dto/receive/private_chat/feature/PartnerReadDto";
 import PartnerReadBox from "@components/pages/post/post_chat/private_chat/chatbox/subviews/PartnerReadBox";
-import TypingDto from "../../../../../service/stomp/receive/private_chat/TypingDto";
+import TypingDto from "../../../../../service/stomp/dto/receive/private_chat/feature/TypingDto";
 import PartnerTypingBox from "@components/pages/post/post_chat/private_chat/chatbox/subviews/PartnerTypingBox";
 import {
     hasPartnerRead,
@@ -31,6 +31,7 @@ import PrivateMessageListLoading
     from "@components/pages/post/post_chat/private_chat/chatbox/fallbackviews/PrivateMessageListLoading";
 import {getAppDispatcher} from "../../../../../event_dispatchers/AppDispatcher";
 import {APP_INBOX__ITEM_READ} from "../../../../../event_dispatchers/config/AppEvents";
+import {sendMarkInboxItemAsRead} from "src/service/stomp/publishers/PrivateChatPublisher";
 
 
 interface PostChatWidgetProps {

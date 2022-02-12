@@ -1,6 +1,6 @@
-import axios, {AxiosError} from "axios";
+import axios, {AxiosError, AxiosResponse} from "axios";
 import ApiResult from "../../type/ApiResult";
-import CreatePost from "@models/post/CreatePost";
+import SavePost from "@models/post/SavePost";
 import Post, {PostStatusEnum} from "@models/post/Post";
 import {handleAxiosError, handleAxiosResponse} from "../../util/ResponseUtil";
 
@@ -13,7 +13,7 @@ export enum FeedTypeEnum {
     FEED_BY_TAG
 }
 
-export const createPost: (post: CreatePost, jwt: string) => Promise<ApiResult<string>> = (post, jwt) => {
+export const createPost: (post: SavePost, jwt: string) => Promise<ApiResult<string>> = (post, jwt) => {
     const url = backendBaseUri! + postApiPrivateEndpoint!;
 
     return axios.post(url, post, {
@@ -29,11 +29,25 @@ export const createPost: (post: CreatePost, jwt: string) => Promise<ApiResult<st
         .catch((reason: AxiosError) => handleAxiosError(reason));
 }
 
-export const getPostById: (postId: string) => Promise<ApiResult<Post>> = (postId) => {
+export const updatePost: (postId: string, post: SavePost, jwt: string) => Promise<ApiResult<string>> = (postId, post, jwt) => {
+    const url = backendBaseUri! + postApiPrivateEndpoint! + `/${ postId }`;
+
+    return axios.put(url, post, {
+        headers: {
+            Authorization: `Bearer ${ jwt }`
+        }
+    })
+        .then(res => handleAxiosResponse({
+            res,
+            successStatus: 204,
+            successProp: true
+        }))
+        .catch((reason: AxiosError) => handleAxiosError(reason));
+}
+
+export const getPostById: (postId: string) => Promise<AxiosResponse<Post>> = (postId) => {
     const url = backendBaseUri! + postApiPublicEndpoint!;
-    return axios
-        .get(`${ url }/${ postId }`)
-        .then(res => res.data);
+    return axios.get(`${ url }/${ postId }`);
 }
 
 export const getFeed: (feedType: FeedTypeEnum, postStatus: PostStatusEnum, page: number, size: number, tagName?: string) => Promise<ApiResult<Post[]>> =

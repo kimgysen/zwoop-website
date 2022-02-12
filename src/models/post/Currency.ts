@@ -1,5 +1,5 @@
 
 export default interface Currency {
     currencyId: string,
-    currency: string
+    currencyCode: string
 }

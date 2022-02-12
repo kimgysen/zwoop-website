@@ -21,7 +21,8 @@ const DelayedSpinner: FC<DelayedSpinnerProps> = ({ timeOutMs, height }) => {
             height={ height }
         >
             {
-                showSpinner && <Spinner/>
+                showSpinner
+                && <Spinner/>
             }
         </Center>
     )

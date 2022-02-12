@@ -3,8 +3,8 @@ import {Box, HStack, Input} from "@chakra-ui/react";
 import styles from '../PrivateChatWidget.module.css';
 import {FaPaperPlane} from 'react-icons/fa';
 import ChatPartner from "@models/chat/ChatPartner";
-import {sendStartTyping, sendStopTyping} from "../../../../../../service/stomp/StompService";
 import {handleSendPrivateMessage} from "@components/pages/post/post_chat/private_chat/PrivateChatWidgetHelper";
+import {sendStartTyping, sendStopTyping} from "src/service/stomp/publishers/PrivateChatPublisher";
 
 
 interface InputMessageProps {

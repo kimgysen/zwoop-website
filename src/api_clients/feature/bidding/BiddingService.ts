@@ -1,7 +1,9 @@
 import ApiResult from "@api_clients/type/ApiResult";
 import axios, {AxiosError} from "axios";
 import {handleAxiosError, handleAxiosResponse} from "@api_clients/util/ResponseUtil";
-import Bidding from "@models/post/Bidding";
+import Bidding from "@models/post/bidding/Bidding";
+import CreateBidding from "@models/post/bidding/CreateBidding";
+import DeleteBidding from "@models/post/bidding/DeleteBidding";
 
 
 const backendBaseUri = process.env.NEXT_PUBLIC_API_BACKEND_BASE_URI;
@@ -15,19 +17,40 @@ export const getBiddingsForPost: (url: string) => Promise<Bidding[]> = (url) => 
 }
 
 
-export const saveBidding: (postId: string, userId: string, askPrice: string, jwt: string)
-    => Promise<ApiResult<void>> = (postId, userId, askPrice, jwt) => {
-    const url = `${ backendBaseUri! }/${ postApiPrivateEndpoint! }/${ postId }/bidding`;
+export const saveBiddingApi: (bidding: CreateBidding, jwt: string)
+    => Promise<ApiResult<boolean>> = (bidding, jwt) => {
+    const url = `${ backendBaseUri! }${ postApiPrivateEndpoint! }/${ bidding.postId }/bidding/respondent`;
 
-    return axios.put(`${ url }/${ userId }`, { askPrice }, {
+    return axios.put(`${ url }/${ bidding.userId }`, {
+            askPrice: bidding.askPrice,
+            currencyCode: bidding.currencyCode
+        },
+        {
             headers: {
                 Authorization: `Bearer ${ jwt }`
             }
         })
         .then(res => handleAxiosResponse({
             res,
-            successStatus: 200,
-            successProp: res.data
+            successStatus: 204,
+            successProp: true
+        }))
+        .catch((reason: AxiosError) => handleAxiosError(reason));
+}
+
+export const deleteBiddingApi: (bidding: DeleteBidding, jwt: string)
+    => Promise<ApiResult<boolean>> = (bidding, jwt) => {
+    const url = `${ backendBaseUri! }${ postApiPrivateEndpoint! }/${ bidding.postId }/bidding/respondent`;
+
+    return axios.delete(`${ url }/${ bidding.userId }`, {
+            headers: {
+                Authorization: `Bearer ${ jwt }`
+            }
+        })
+        .then(res => handleAxiosResponse({
+            res,
+            successStatus: 204,
+            successProp: true
         }))
         .catch((reason: AxiosError) => handleAxiosError(reason));
 }

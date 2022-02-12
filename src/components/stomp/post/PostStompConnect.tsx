@@ -1,10 +1,10 @@
 import {FC, useEffect} from "react";
 import AuthState from "@models/user/AuthState";
 import {useRouter} from "next/router";
-import {PostPageViewState} from "@components/pages/post/post_view/PostViewHelper";
 import Post from "@models/post/Post";
 import {disconnectStomp} from "../../../service/stomp/StompService";
-import {connectToPostInbox, connectToPrivateChat} from "@components/stomp/post/PostStompConnectHelper";
+import {connectToPostInbox, connectToPostPrivateChat} from "@components/stomp/post/PostStompConnectHelper";
+import {PostPageViewState} from "@components/pages/post/PostPageHelper";
 
 
 interface PostStompConnectProps {
@@ -23,7 +23,7 @@ const PostStompConnect: FC<PostStompConnectProps> = (
             if (authState.isLoggedIn && post?.postId) {
                 switch(viewState) {
                     case PostPageViewState.VISITOR_PRIVATE_CHAT:
-                        await connectToPrivateChat({
+                        await connectToPostPrivateChat({
                             postId: post.postId,
                             partnerId: post.asker.userId,
                             router
@@ -41,7 +41,7 @@ const PostStompConnect: FC<PostStompConnectProps> = (
 
                     case PostPageViewState.INBOX_DETAIL_CHAT:
                         if (queryPartnerId) {
-                            await connectToPrivateChat({
+                            await connectToPostPrivateChat({
                                 postId: post.postId,
                                 partnerId: queryPartnerId as string,
                                 router

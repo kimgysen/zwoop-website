@@ -1,5 +1,5 @@
 import React, {FC} from "react";
-import InboxItemReceiveDto from "../../../../../service/stomp/receive/inbox/InboxItemReceiveDto";
+import InboxItemReceiveDto from "../../../../../service/stomp/dto/receive/inbox/InboxItemReceiveDto";
 import {Box, Divider} from "@chakra-ui/react";
 import AppInboxItem from "@components/layout/navbar/notification/inbox/AppInboxItem";
 import AuthState from "@models/user/AuthState";

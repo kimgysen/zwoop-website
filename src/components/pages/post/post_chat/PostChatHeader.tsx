@@ -2,7 +2,7 @@ import React, {FC} from "react";
 import {Divider, Heading, HStack, IconButton, Text} from "@chakra-ui/react";
 import {FaChevronLeft} from 'react-icons/fa';
 import {useRouter} from "next/router";
-import {PostPageViewState} from "@components/pages/post/post_view/PostViewHelper";
+import {PostPageViewState} from "@components/pages/post/PostPageHelper";
 
 
 interface PostChatHeaderProps {
@@ -38,8 +38,9 @@ const PostChatHeader: FC<PostChatHeaderProps> =
                             <IconButton as='span'
                                  w='5%'
                                  onClick={ backToInbox }
-                                 colorScheme="blue"
-                                 aria-label="Search database"
+                                 variant='outline'
+                                 colorScheme='teal'
+                                 aria-label="Back to inbox"
                                  icon={<FaChevronLeft />}
                             />
                             <Text

@@ -1,7 +1,7 @@
 import React, {FC, useEffect, useState} from "react";
 import {Box, Divider} from "@chakra-ui/react";
 import PostInboxItem from "@components/pages/post/post_chat/inbox/PostInboxItem";
-import InboxItemReceiveDto from "../../../../../service/stomp/receive/inbox/InboxItemReceiveDto";
+import InboxItemReceiveDto from "../../../../../service/stomp/dto/receive/inbox/InboxItemReceiveDto";
 import {isInboxEmpty, isLastInboxItem, rebuildInbox, sortInboxItems} from "../../../../../util/InboxUtil";
 import {getStompDispatcher} from "../../../../../event_dispatchers/StompDispatcher";
 import {

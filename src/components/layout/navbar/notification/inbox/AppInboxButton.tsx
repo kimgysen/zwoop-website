@@ -10,7 +10,7 @@ import {
     useColorModeValue
 } from '@chakra-ui/react';
 import React, {FC, useEffect, useState} from "react";
-import InboxItemReceiveDto from "../../../../../service/stomp/receive/inbox/InboxItemReceiveDto";
+import InboxItemReceiveDto from "../../../../../service/stomp/dto/receive/inbox/InboxItemReceiveDto";
 import AppInbox from "@components/layout/navbar/notification/inbox/AppInbox";
 import {countUnreadMessages, rebuildInbox, sortInboxItems} from "../../../../../util/InboxUtil";
 import AuthState from "@models/user/AuthState";

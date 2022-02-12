@@ -1,6 +1,6 @@
 import {NextRouter} from "next/router";
 import {getRawJwt} from "../../../service/jwt/JwtService";
-import {connectPrivateChat} from "../../../service/stomp/PrivateChatStompService";
+import {connectPostPrivateChat} from "../../../service/stomp/PrivateChatStompService";
 import {redirectToLogin} from "@components/pages/post/post_chat/private_chat/PrivateChatWidgetHelper";
 import {connectPostInbox} from "../../../service/stomp/PostInboxStompService";
 
@@ -20,17 +20,17 @@ export const connectToPostInbox = async ({ postId, router }: ConnectPostInboxPro
 }
 
 
-interface ConnectPrivateChatProps {
+interface ConnectPostPrivateChatProps {
     postId: string,
     partnerId: string,
     router: NextRouter
 }
 
-export const connectToPrivateChat = async (
-    { postId, partnerId, router }: ConnectPrivateChatProps) => {
+export const connectToPostPrivateChat = async (
+    { postId, partnerId, router }: ConnectPostPrivateChatProps) => {
     const jwt = await getRawJwt();
 
-    connectPrivateChat({
+    connectPostPrivateChat({
         jwt,
         postId,
         partnerId,

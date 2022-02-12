@@ -51,8 +51,8 @@ const Ask: NextPage = () => {
         const resp = await createPost({
             title,
             text: descriptionMd,
-            tagIds: tags.map(tag => tag.tagId),
-            currency: 'BNB',
+            tags,
+            currencyCode: 'BNB',
             bidPrice
         }, jwt);
 

@@ -1,5 +1,6 @@
 import {FormControl, FormErrorMessage, FormHelperText, Input} from "@chakra-ui/react";
 import React, {useState} from "react";
+import {TITLE_MAX_CHARS, TITLE_MIN_CHARS} from "@components/pages/ask/validate";
 
 
 interface TitleProps {
@@ -7,8 +8,6 @@ interface TitleProps {
     setTitle: (title: string) => void
 }
 
-const TITLE_MIN_CHARS = 10;
-const TITLE_MAX_CHARS = 100;
 
 const Title: React.FC<TitleProps> = ({ title, setTitle }) => {
     const [isErrorMinChars, setErrorMinChars] = useState(false);

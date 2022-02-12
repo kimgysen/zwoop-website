@@ -1,7 +1,6 @@
 import User from "../user/User";
 import Tag from "../tag/Tag";
 import PostStatus from "./PostStatus";
-import Answer from "@models/post/Answer";
 import Currency from "@models/post/Currency";
 
 export enum PostStatusEnum {
@@ -11,7 +10,6 @@ export enum PostStatusEnum {
 
 export default interface Post {
     postId: string,
-    answers: Answer[],
     asker: User,
     currency: Currency,
     bidPrice: string,

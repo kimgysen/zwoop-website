@@ -2,7 +2,7 @@ import Tag from "@models/tag/Tag";
 
 
 export const TITLE_MIN_CHARS = 10;
-export const TITLE_MAX_CHARS = 100;
+export const TITLE_MAX_CHARS = 200;
 export const DESCRIPTION_MIN_CHARS = 10;
 export const DESCRIPTION_MAX_CHARS = 30000;
 export const TAGS_MIN = 1;
@@ -25,10 +25,8 @@ export const validateTags = (tags: Tag[]): boolean => {
         && tags.length <= TAGS_MAX;
 }
 
-export const validateBidPrice = (bidPrice: number): boolean => {
-    console.log(!!bidPrice && bidPrice >= BID_MIN);
-    return !!bidPrice && bidPrice >= BID_MIN;
-}
+export const validateBidPrice = (bidPrice: number): boolean =>
+    !!bidPrice && bidPrice >= BID_MIN;
 
 export const validateForm = (title: string, descriptionMd: string, tags: Tag[], bidPrice: number): boolean => {
     return validateTitle(title)

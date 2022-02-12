@@ -31,7 +31,6 @@ export async function middleware(req: NextRequest) {
             if (decoded) {
                 switch (pathname) {
                     case '/login':
-                        console.log('called');
                         return NextResponse.redirect('/');
 
                 }

@@ -1,6 +1,5 @@
-import {Box, Flex, Heading, Link} from "@chakra-ui/react";
+import {Box, Flex, Heading} from "@chakra-ui/react";
 import {FC} from "react";
-import NextLink from "next/link";
 import ApiResult from "../../../api_clients/type/ApiResult";
 import Tag from "@models/tag/Tag";
 import WatchListLoading from "@components/widgets/watchlist/fallbackviews/WatchListLoading";

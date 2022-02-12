@@ -48,8 +48,9 @@ const UserCard: React.FC<UserCardProps> = ({ profileUser, principalId }) => {
                                 <IconButton
                                     float='right'
                                     align='top'
+                                    variant='outline'
                                     colorScheme='teal'
-                                    aria-label='Call Segun'
+                                    aria-label='Edit nickname'
                                     size='xs'
                                     icon={<FaPencilAlt/>}
                                     onClick={ onEditNickOpen }
@@ -80,7 +81,8 @@ const UserCard: React.FC<UserCardProps> = ({ profileUser, principalId }) => {
                                     float='right'
                                     align='top'
                                     colorScheme='teal'
-                                    aria-label='Call Segun'
+                                    variant='outline'
+                                    aria-label='Edit about'
                                     size='xs'
                                     icon={<FaPencilAlt />}
                                     onClick={ onEditAboutOpen }

@@ -24,7 +24,7 @@ const BnbBoxSm: FC<BnbBoxSmProps> = ({ price, currency }) => {
                 fontWeight={ 600 }
                 color="ruby.600"
             >
-                { currency?.currency }
+                { currency?.currencyCode }
             </Center>
         </VStack>
     )

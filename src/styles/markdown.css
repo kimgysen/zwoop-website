@@ -1,0 +1,6 @@
+
+/** Additional markdown styles */
+
+.markdown-body pre {
+    max-height: 300px;
+}

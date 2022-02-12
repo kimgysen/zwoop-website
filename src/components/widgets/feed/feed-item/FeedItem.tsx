@@ -19,9 +19,8 @@ export interface FeedItemProps {
 const FeedItem: FC<FeedItemProps> = ({ post }) => {
     return (
         <Card>
-            <HStack
+            <Flex
                 minH={{ base: '50px' }}
-                align={'top'}
             >
                 <BnbBox price={ post.bidPrice } />
                 <Box
@@ -59,7 +58,7 @@ const FeedItem: FC<FeedItemProps> = ({ post }) => {
                         <div
                             style={{
                                 maxHeight: '75px',
-                                maxWidth: '370px',
+                                maxWidth: '500px',
                                 WebkitMaskImage: "linear-gradient(180deg, #000 60%, transparent)",
                                 maskImage: "linear-gradient(180deg, #000 60%, transparent)"
                             }}
@@ -94,7 +93,7 @@ const FeedItem: FC<FeedItemProps> = ({ post }) => {
                         </NextLink>
                     </Flex>
                 </Box>
-            </HStack>
+            </Flex>
         </Card>
     )
 }

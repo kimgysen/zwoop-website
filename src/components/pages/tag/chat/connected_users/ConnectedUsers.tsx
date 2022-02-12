@@ -1,4 +1,4 @@
-import ChatRoomUserReceiveDto from "../../../../../service/stomp/receive/public_chat/ChatRoomUserReceiveDto";
+import ChatRoomUserReceiveDto from "../../../../../service/stomp/dto/receive/public_chat/ChatRoomUserReceiveDto";
 import {FC} from "react";
 import {List} from "@chakra-ui/react";
 import ConnectedUser from "@components/pages/tag/chat/connected_users/ConnectedUser";

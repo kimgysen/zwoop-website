@@ -1,5 +1,5 @@
-import {sendPublicMessage} from "../../../../../service/stomp/StompService";
-import PublicMessageReceiveDto from "../../../../../service/stomp/receive/public_chat/PublicMessageReceiveDto";
+import PublicMessageReceiveDto from "../../../../../service/stomp/dto/receive/public_chat/PublicMessageReceiveDto";
+import {sendPublicMessage} from "../../../../../service/stomp/publishers/PublicChatPublisher";
 
 export const handleSendPublicMessage = (tagName: string, message: string) => {
     const SESS_CHATROOM_ID = `room-tag-${ tagName }`;

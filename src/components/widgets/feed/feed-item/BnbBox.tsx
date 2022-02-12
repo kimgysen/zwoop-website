@@ -19,7 +19,7 @@ export const BnbBox: FC<BnbBoxProps> = ({ price }) => {
     return (
         <VStack
             h={ '100px' }
-            w={ '85px' }
+            w={ '60px' }
             align="stretch"
         >
             <Center

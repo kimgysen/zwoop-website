@@ -6,7 +6,7 @@ const PrivateMessageListLoading: FC = () => {
     return (
         <DelayedSpinner
             timeOutMs={500}
-            height={'500px'}
+            height={'50px'}
         />
     )
 }

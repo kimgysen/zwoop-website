@@ -13,9 +13,9 @@ import {
 } from "@chakra-ui/react";
 import User from "@models/user/User";
 import MarkdownEditor from "@components/widgets/markdown/MarkdownEditor";
-import ApiResult from "../../../../api_clients/type/ApiResult";
+import ApiResult from "@api_clients/type/ApiResult";
+import {updateAbout} from "@api_clients/feature/user/UserService";
 import {getRawJwt} from "../../../../service/jwt/JwtService";
-import {updateAbout} from "../../../../api_clients/feature/user/UserService";
 
 interface EditAboutModalProps {
     userId: string,

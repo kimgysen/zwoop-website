@@ -1,9 +1,10 @@
-import PrivateMessageReceiveDto from "../../../../../service/stomp/receive/private_chat/PrivateMessageReceiveDto";
+import PrivateMessageReceiveDto
+    from "../../../../../service/stomp/dto/receive/private_chat/feature/PrivateMessageReceiveDto";
 import {NextRouter} from "next/router";
 import {sendPrivateMessage} from "../../../../../service/stomp/StompService";
 import ChatPartner from "@models/chat/ChatPartner";
-import PartnerReadDto from "../../../../../service/stomp/receive/private_chat/PartnerReadDto";
-import InboxItemReceiveDto from "../../../../../service/stomp/receive/inbox/InboxItemReceiveDto";
+import PartnerReadDto from "../../../../../service/stomp/dto/receive/private_chat/feature/PartnerReadDto";
+import InboxItemReceiveDto from "../../../../../service/stomp/dto/receive/inbox/InboxItemReceiveDto";
 
 
 export const redirectToLogin = (router: NextRouter) => {

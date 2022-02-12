@@ -1,14 +1,14 @@
 import React from 'react';
 
-import '../styles/globals.css'
-import type {AppProps} from 'next/app'
+import type {AppProps} from 'next/app';
 import "@styles/global.css";
+import '@styles/markdown.css';
 
 import {ColorModeScript} from "@chakra-ui/react";
 import theme from "../src/theme/theme";
 import CSSReset from "@chakra-ui/css-reset/src/css-reset";
 import {ChakraProvider} from "@chakra-ui/provider";
-import { SessionProvider } from 'next-auth/react'
+import {SessionProvider} from 'next-auth/react'
 
 function MyApp({ Component, pageProps }: AppProps) {
 
