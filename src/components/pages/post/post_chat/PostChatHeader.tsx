@@ -55,7 +55,7 @@ const PostChatHeader: FC<PostChatHeaderProps> =
                 }
                 {
                     viewState === PostPageViewState.VISITOR_PRIVATE_CHAT
-                    && <Text>{ partnerNickName }</Text>
+                    && <Text>To: { partnerNickName }</Text>
                 }
             </Heading>
             <Divider />

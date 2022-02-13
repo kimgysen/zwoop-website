@@ -129,7 +129,6 @@ const Navbar: React.FC = () => {
                                     fontWeight={600}
                                     color={'white'}
                                     bg={'pink.400'}
-                                    href={'/login'}
                                     _hover={{
                                         bg: 'pink.300',
                                     }}>

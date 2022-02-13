@@ -36,32 +36,34 @@ const AppInboxButton: FC<AppInboxButtonProps> = ({ authState, url }) => {
 
     const [inboxLoading, setInboxLoading] = useState<boolean>(true);
     const [inboxItems, setInboxItems] = useState<InboxItemReceiveDto[]>([]);
-    const [lastReceived, setLastReceived] = useState<InboxItemReceiveDto>();
     const [nrUnread, setNrUnread] = useState<number>(0);
 
     const stompDispatcher = getStompDispatcher();
     const appDispatcher = getAppDispatcher();
 
     useEffect(() => {
-        if (authState.isLoggedIn) {
+        if (authState.principalId) {
+            const principalId = authState.principalId as string;
+
             stompDispatcher.on(APP_INBOX__ON_INIT_ITEMS_LOADING, (isLoading: boolean) =>
                 setInboxLoading(isLoading));
 
             stompDispatcher.on(APP_INBOX__ON_INIT_ITEMS_RECEIVED, (inboxItems: InboxItemReceiveDto[]) => {
                 setInboxLoading(false);
                 setInboxItems(sortInboxItems(inboxItems));
-                setNrUnread(countUnreadMessages(inboxItems));
+                setNrUnread(countUnreadMessages(principalId, inboxItems));
             });
 
             stompDispatcher.on(APP_INBOX__ON_INBOX_UPDATE_RECEIVED, (inboxItem: InboxItemReceiveDto) => {
-                setLastReceived(inboxItem);
-                setNrUnread(countUnreadMessages(inboxItems));
+                let updatedInboxItems = rebuildInbox(inboxItem, inboxItems);
+                setInboxItems(updatedInboxItems);
+                setNrUnread(countUnreadMessages(principalId, updatedInboxItems));
             });
 
             appDispatcher.on(APP_INBOX__ITEM_READ, (partnerId: string) => {
                 const updatedItems = resetCounterForPartner(inboxItems, partnerId);
                 setInboxItems(updatedItems);
-                setNrUnread(countUnreadMessages(inboxItems));
+                setNrUnread(countUnreadMessages(principalId, inboxItems));
             });
         }
 
@@ -71,13 +73,8 @@ const AppInboxButton: FC<AppInboxButtonProps> = ({ authState, url }) => {
             stompDispatcher.remove(APP_INBOX__ON_INBOX_UPDATE_RECEIVED);
             appDispatcher.remove(APP_INBOX__ITEM_READ);
         }
-    }, [authState.isLoggedIn, inboxItems, nrUnread]);
+    }, [authState?.principalId, inboxItems, nrUnread]);
 
-    useEffect(() => {
-        if (lastReceived) {
-            setInboxItems(rebuildInbox(lastReceived, inboxItems));
-        }
-    }, [lastReceived]);
 
     return (
         <Popover
@@ -119,7 +116,7 @@ const AppInboxButton: FC<AppInboxButtonProps> = ({ authState, url }) => {
                 width='350px'
             >
                 <PopoverArrow />
-                <PopoverHeader>Show fullscreen</PopoverHeader>
+                <PopoverHeader>Show all</PopoverHeader>
                 <PopoverBody>
                     {
                         authState.isLoggedIn &&

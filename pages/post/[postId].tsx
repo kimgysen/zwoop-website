@@ -86,6 +86,7 @@ const PostByIdPage: NextPage = (props: any) => {
                     authState={ authState }
                     viewState={ viewState }
                     post={ post }
+                    queryPartnerId={ queryPartnerId as string }
                 >
                     <ThreeColumnLayout
                         leftComponent={

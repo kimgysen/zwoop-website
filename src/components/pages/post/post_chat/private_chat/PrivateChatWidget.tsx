@@ -57,6 +57,7 @@ const PrivateChatWidget: FC<PostChatWidgetProps> = ({ postId, principalId, partn
         setPageVisible(true);
         if (markAsReadPending) {
             sendMarkInboxItemAsRead(partner?.partnerId);
+            appDispatcher.dispatch(APP_INBOX__ITEM_READ, partner?.partnerId);
         }
     }
 
@@ -85,6 +86,7 @@ const PrivateChatWidget: FC<PostChatWidgetProps> = ({ postId, principalId, partn
                     sendMarkInboxItemAsRead(partner?.partnerId);
                     setMarkAsReadPending(false);
                     appDispatcher.dispatch(APP_INBOX__ITEM_READ, partner?.partnerId);
+
                 } else {
                     setMarkAsReadPending(true);
                 }

@@ -37,10 +37,13 @@ export const getPartnerFromInboxItem = (inboxItem: InboxItemReceiveDto): ChatPar
 
 export const hasUnreadMessages = (inboxItem: InboxItemReceiveDto) => inboxItem.unread > 0;
 
-export const countUnreadMessages = (inboxItems: InboxItemReceiveDto[]) =>
-    inboxItems.filter(item => item.unread > 0).length;
-
-// Private api
+export const countUnreadMessages = (principalId: string, inboxItems: InboxItemReceiveDto[]) =>
+    inboxItems && inboxItems.length > 0 ?
+        inboxItems.filter(item =>
+            item.fromUserId !== principalId
+            && item.unread > 0
+        ).length
+        : 0;
 
 export const sortInboxItems = (inboxItems: InboxItemReceiveDto[]) =>
     inboxItems.sort((a, b) => a.lastMessageDate < b.lastMessageDate ? 1 : -1);
@@ -50,7 +53,7 @@ const inboxIsEmpty = (inboxItems: InboxItemReceiveDto[]) =>
     inboxItems.length === 0;
 
 const findInboxItemIdx = (lastReceived: InboxItemReceiveDto, inboxItems: InboxItemReceiveDto[]) =>
-    inboxItems.findIndex(inboxItem => inboxItem.partnerId === lastReceived.fromUserId);
+    inboxItems.findIndex(inboxItem => inboxItem.partnerId === lastReceived.partnerId);
 
 const inboxItemExists = (lastReceived: InboxItemReceiveDto, inboxItems: InboxItemReceiveDto[]) =>
     findInboxItemIdx(lastReceived, inboxItems) !== -1;
