@@ -2,8 +2,8 @@ import User from "../user/User";
 import AnswerStatus from "./AnswerStatus";
 
 export enum AnswerStatusEnum {
-    PENDING,
-    ACECEPTED
+    PENDING = 'PENDING',
+    ACCEPTED = 'ACCEPTED'
 }
 
 export default interface Answer {

@@ -47,7 +47,6 @@ const UserCard: React.FC<UserCardProps> = ({ profileUser, principalId }) => {
                             profileUser.userId === principalId && (
                                 <IconButton
                                     float='right'
-                                    align='top'
                                     variant='outline'
                                     colorScheme='teal'
                                     aria-label='Edit nickname'
@@ -68,7 +67,7 @@ const UserCard: React.FC<UserCardProps> = ({ profileUser, principalId }) => {
                     {
                         profileUser.tags.length > 0 &&
                         <Box
-                            pbt={ '10px' }
+                            py={ '10px' }
                         >
                             <TagsList tags={ profileUser.tags } />
                         </Box>
@@ -79,7 +78,6 @@ const UserCard: React.FC<UserCardProps> = ({ profileUser, principalId }) => {
                             profileUser.userId === principalId && (
                                 <IconButton
                                     float='right'
-                                    align='top'
                                     colorScheme='teal'
                                     variant='outline'
                                     aria-label='Edit about'
@@ -91,13 +89,13 @@ const UserCard: React.FC<UserCardProps> = ({ profileUser, principalId }) => {
                         }
                         {
                             editUser.aboutText &&
-                                <Box className='markdown-body'>
-                                    <ReactMarkdown remarkPlugins={ [remarkGfm] }>{ editUser.aboutText }</ReactMarkdown>
-                                </Box>
+                            <Box className='markdown-body'>
+                                <ReactMarkdown remarkPlugins={ [remarkGfm] }>{ editUser.aboutText }</ReactMarkdown>
+                            </Box>
                         }
                         {
                             !editUser.aboutText &&
-                                <i>Write something about yourself</i>
+                            <i>Write something about yourself</i>
                         }
                     </Box>
                 </VStack>

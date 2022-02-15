@@ -4,6 +4,7 @@ import {handleAxiosError, handleAxiosResponse} from "@api_clients/util/ResponseU
 import Bidding from "@models/post/bidding/Bidding";
 import CreateBidding from "@models/post/bidding/CreateBidding";
 import DeleteBidding from "@models/post/bidding/DeleteBidding";
+import AcceptBidding from "@models/post/bidding/AcceptBidding";
 
 
 const backendBaseUri = process.env.NEXT_PUBLIC_API_BACKEND_BASE_URI;
@@ -19,11 +20,11 @@ export const getBiddingsForPost: (url: string) => Promise<Bidding[]> = (url) => 
 
 export const saveBiddingApi: (bidding: CreateBidding, jwt: string)
     => Promise<ApiResult<boolean>> = (bidding, jwt) => {
-    const url = `${ backendBaseUri! }${ postApiPrivateEndpoint! }/${ bidding.postId }/bidding/respondent`;
+    const url = `${ backendBaseUri! }${ postApiPrivateEndpoint! }/${ bidding?.postId }/bidding/respondent`;
 
-    return axios.put(`${ url }/${ bidding.userId }`, {
-            askPrice: bidding.askPrice,
-            currencyCode: bidding.currencyCode
+    return axios.put(`${ url }/${ bidding?.userId }`, {
+            askPrice: bidding?.askPrice,
+            currencyCode: bidding?.currencyCode
         },
         {
             headers: {
@@ -53,4 +54,23 @@ export const deleteBiddingApi: (bidding: DeleteBidding, jwt: string)
             successProp: true
         }))
         .catch((reason: AxiosError) => handleAxiosError(reason));
+}
+
+export const acceptBiddingApi: (acceptBidding: AcceptBidding, jwt: string)
+    => Promise<ApiResult<boolean>> = (acceptBidding, jwt) => {
+    const url = `${ backendBaseUri! }${ postApiPrivateEndpoint! }/${ acceptBidding?.postId }/bidding`;
+
+    return axios
+        .put(`${ url }/${acceptBidding?.biddingId}/accepted`, {}, {
+            headers: {
+                Authorization: `Bearer ${ jwt }`
+            }
+        })
+        .then(res => handleAxiosResponse({
+            res,
+            successStatus: 204,
+            successProp: true
+        }))
+        .catch((reason: AxiosError) => handleAxiosError(reason));
+
 }

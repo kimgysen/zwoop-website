@@ -1,23 +1,26 @@
 import React, {FC} from "react";
-import Post from "@models/post/Post";
+import Post, {PostStatusEnum} from "@models/post/Post";
 import AuthState from "@models/user/AuthState";
-import {isPostOwner, principalHasBid} from "@components/pages/post/post-bidding/BiddingViewHelper";
+import {biddingListIsEmpty, isPostOwner, principalHasBid} from "@components/pages/post/post-bidding/BiddingViewHelper";
 import AddBiddingViewHoc from "@components/pages/post/post-bidding/add-bidding/AddBiddingViewHoc";
 import Bidding from "@models/post/bidding/Bidding";
 import BiddingList from "@components/pages/post/post-bidding/bidding-list/BiddingList";
 import {KeyedMutator} from "swr";
 import Card from "@components/layout/components/card/Card";
+import BiddingAcceptedDto from "../../../../service/stomp/dto/receive/post/feature/BiddingAcceptedDto";
 
 
 interface BiddingViewProps {
     authState: AuthState,
     post: Post,
+    postStatus: PostStatusEnum,
     biddingList: Bidding[],
+    acceptedBidding: BiddingAcceptedDto,
     mutate: KeyedMutator<Bidding[]>
 }
 
 const BiddingView: FC<BiddingViewProps> = (
-    { authState, post, biddingList, mutate }) => {
+    { authState, post, postStatus, biddingList, acceptedBidding, mutate }) => {
 
     return (
         <>
@@ -36,13 +39,15 @@ const BiddingView: FC<BiddingViewProps> = (
                 )
             }
             {
-                biddingList.length > 0
+                !biddingListIsEmpty(biddingList)
                 && (
                     <Card>
                         <BiddingList
                             post={ post }
+                            postStatus={ postStatus }
                             principalId={ authState?.principalId as string }
                             biddingList={ biddingList }
+                            acceptedBidding={ acceptedBidding }
                             mutate={ mutate }
                         />
                     </Card>

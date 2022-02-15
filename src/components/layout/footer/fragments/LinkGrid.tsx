@@ -1,6 +1,6 @@
-import { Container, Box, Link, SimpleGrid, Stack, useColorModeValue, Text } from '@chakra-ui/react';
+import {Box, Link, SimpleGrid, Stack, Text, useColorModeValue} from '@chakra-ui/react';
 import * as React from 'react';
-import {FaGithub, FaInstagram, FaLinkedin, FaTwitter, FaYoutube} from 'react-icons/fa';
+import {FaGithub, FaLinkedin, FaYoutube} from 'react-icons/fa';
 import {ListHeader} from "@components/layout/footer/fragments/ListHeader";
 import {SocialButton} from "@components/layout/footer/fragments/SocialButton";
 import {FooterLogo} from "@components/layout/footer/fragments/FooterLogo";

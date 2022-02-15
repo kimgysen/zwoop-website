@@ -4,9 +4,12 @@ import PostStatus from "./PostStatus";
 import Currency from "@models/post/Currency";
 
 export enum PostStatusEnum {
-    OPEN,
-    IN_PROCESS
+    OPEN = "OPEN",
+    IN_PROGRESS= "IN_PROGRESS"
 }
+
+export const stringFromPostStatusEnum = (postStatusEnum: PostStatusEnum): string =>
+    PostStatusEnum[postStatusEnum];
 
 export default interface Post {
     postId: string,

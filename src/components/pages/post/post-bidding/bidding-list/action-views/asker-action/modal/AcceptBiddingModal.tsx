@@ -12,24 +12,31 @@ import {
     VStack
 } from "@chakra-ui/react";
 import ApiResult from "@api_clients/type/ApiResult";
+import Bidding from "@models/post/bidding/Bidding";
+import Post from "@models/post/Post";
 
 
 interface AcceptBiddingModalProps {
     isOpen: boolean,
     onClose: () => void,
-    acceptBidding: () => void,
+    post: Post,
+    biddingItem: Bidding,
+    acceptBidding: (postId: string, biddingId: string) => void,
     acceptResult: ApiResult<boolean>
 }
 
-const AcceptBiddingModal: FC<AcceptBiddingModalProps> = ({ isOpen, onClose, acceptBidding, acceptResult }) => {
+const AcceptBiddingModal: FC<AcceptBiddingModalProps> =
+    ({ isOpen, onClose, post, biddingItem, acceptBidding, acceptResult }) => {
+
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent>
-                <ModalHeader>Cancel bidding</ModalHeader>
+                <ModalHeader>Accept bidding</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
-                    Are you sure you want to cancel your bidding?
+                    Are you sure you want to accept the ask
+                    from { biddingItem?.respondent?.nickName } @{ biddingItem?.askPrice }?
                 </ModalBody>
 
                 <ModalFooter>
@@ -48,7 +55,7 @@ const AcceptBiddingModal: FC<AcceptBiddingModalProps> = ({ isOpen, onClose, acce
                             !acceptResult.loading &&
                             <Button
                                 colorScheme='blue'
-                                onClick={ acceptBidding }
+                                onClick={ () => acceptBidding(post?.postId, biddingItem?.biddingId) }
                                 w='80px'
                             >
                                 Yes
