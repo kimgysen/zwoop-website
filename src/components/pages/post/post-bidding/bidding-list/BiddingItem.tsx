@@ -17,7 +17,7 @@ interface BiddingItemProps {
     post: Post,
     postStatus: PostStatusEnum,
     biddingItem: Bidding,
-    acceptedBidding: BiddingAcceptedDto,
+    acceptedBidding: BiddingAcceptedDto|null,
     mutate: KeyedMutator<Bidding[]>
 }
 
@@ -26,7 +26,7 @@ const BiddingItem: FC<BiddingItemProps> = ({ principalId, post, postStatus, bidd
     const isSelectedUser = acceptedBidding?.userId === biddingItem?.respondent?.userId;
 
     return (
-        <Tr color={ isSelectedUser ? 'black' : 'gray.400' }>
+        <Tr>
             <Td bg={ isSelectedUser ? 'yellow.100' : 'white' }
             >
                 { biddingItem.askPrice }

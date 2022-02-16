@@ -1,6 +1,6 @@
 import 'react-toastify/dist/ReactToastify.css';
 
-import Post from "@models/post/Post";
+import Post, {PostStatusEnum} from "@models/post/Post";
 import Card from "@components/layout/components/card/Card";
 import {Box, Divider, Flex} from "@chakra-ui/react";
 import remarkGfm from "remark-gfm";
@@ -11,13 +11,19 @@ import BnbBoxSm from "./subviews/BnbBoxSm";
 import PostTitleView from "@components/pages/post/post_view/subviews/PostTitleView";
 import PostUserBox from "@components/pages/post/post_view/subviews/PostUserBox";
 import AuthState from "@models/user/AuthState";
-import {isPostOwner} from "@components/pages/post/PostPageHelper";
+import {getPostStatusFromPost, isPostOwner} from "@components/pages/post/PostPageHelper";
 import PostViewOwnerMenu from "@components/pages/post/post_view/subviews/PostViewOwnerMenu";
 import {getStompDispatcher} from "../../../../event_dispatchers/StompDispatcher";
-import {POST_UPDATE__POST_CHANGED, POST_UPDATE__POST_REMOVED} from "../../../../event_dispatchers/config/StompEvents";
+import {
+    POST_UPDATE__BIDDING_ACCEPTED,
+    POST_UPDATE__BIDDING_REMOVE_ACCEPTED,
+    POST_UPDATE__POST_CHANGED,
+    POST_UPDATE__POST_REMOVED
+} from "../../../../event_dispatchers/config/StompEvents";
 import PostChangedDto from "../../../../service/stomp/dto/receive/post/feature/PostChangedDto";
 import Tag from "@models/tag/Tag";
 import {infoToast} from "@components/widgets/toast/AppToast";
+import BiddingAcceptedDto from "../../../../service/stomp/dto/receive/post/feature/BiddingAcceptedDto";
 
 
 interface PostViewProps {
@@ -33,6 +39,7 @@ const PostView: React.FC<PostViewProps> = ({ authState, post }) => {
     const [description, setDescription] = useState<string>(post?.postText);
     const [bidPrice, setBidPrice] = useState<string>(post?.bidPrice);
     const [tags, setTags] = useState<Tag[]>(post?.tags);
+    const [postStatus, setPostStatus] = useState<PostStatusEnum>(getPostStatusFromPost(post))
 
 
     useEffect(() => {
@@ -51,12 +58,21 @@ const PostView: React.FC<PostViewProps> = ({ authState, post }) => {
             stompDispatcher.on(POST_UPDATE__POST_REMOVED, () => {
                 console.log('post got removed');
             });
+
+            stompDispatcher.on(POST_UPDATE__BIDDING_ACCEPTED, (acceptBidding: BiddingAcceptedDto) => {
+                setPostStatus(PostStatusEnum.IN_PROGRESS);
+            });
+
+            stompDispatcher.on(POST_UPDATE__BIDDING_REMOVE_ACCEPTED, (acceptBidding: BiddingAcceptedDto) => {
+                setPostStatus(PostStatusEnum.OPEN);
+            });
         }
 
         return function cleanUp() {
             stompDispatcher.remove(POST_UPDATE__POST_CHANGED);
             stompDispatcher.remove(POST_UPDATE__POST_REMOVED);
-            stompDispatcher.remove(POST_UPDATE__POST_REMOVED);
+            stompDispatcher.remove(POST_UPDATE__BIDDING_ACCEPTED);
+            stompDispatcher.remove(POST_UPDATE__BIDDING_REMOVE_ACCEPTED);
         }
 
     }, [post?.postId]);
@@ -90,13 +106,21 @@ const PostView: React.FC<PostViewProps> = ({ authState, post }) => {
             </Box>
             <Divider />
             <Flex flex={1}
-                  justifyContent={ isPostOwner(authState, post) ? 'space-between': 'flex-end' }
+                  justifyContent={
+                      isPostOwner(authState, post)
+                          ? 'space-between'
+                          : 'flex-end' }
                   pt='10px' pb='10px'
                   fontSize='sm'
             >
                 {
                     isPostOwner(authState, post)
-                    && <PostViewOwnerMenu postId={ post?.postId} />
+                    && (
+                        <PostViewOwnerMenu
+                            postId={ post?.postId}
+                            postStatus={ postStatus }
+                        />
+                    )
                 }
                 <PostUserBox
                     userId={ post.asker.userId }

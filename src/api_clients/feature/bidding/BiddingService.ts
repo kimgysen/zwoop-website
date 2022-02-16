@@ -5,6 +5,7 @@ import Bidding from "@models/post/bidding/Bidding";
 import CreateBidding from "@models/post/bidding/CreateBidding";
 import DeleteBidding from "@models/post/bidding/DeleteBidding";
 import AcceptBidding from "@models/post/bidding/AcceptBidding";
+import UnAcceptBidding from "@models/post/bidding/UnAcceptBidding";
 
 
 const backendBaseUri = process.env.NEXT_PUBLIC_API_BACKEND_BASE_URI;
@@ -62,6 +63,25 @@ export const acceptBiddingApi: (acceptBidding: AcceptBidding, jwt: string)
 
     return axios
         .put(`${ url }/${acceptBidding?.biddingId}/accepted`, {}, {
+            headers: {
+                Authorization: `Bearer ${ jwt }`
+            }
+        })
+        .then(res => handleAxiosResponse({
+            res,
+            successStatus: 204,
+            successProp: true
+        }))
+        .catch((reason: AxiosError) => handleAxiosError(reason));
+
+}
+
+export const unAcceptBiddingApi: (unAcceptBidding: UnAcceptBidding, jwt: string)
+    => Promise<ApiResult<boolean>> = (acceptBidding, jwt) => {
+    const url = `${ backendBaseUri! }${ postApiPrivateEndpoint! }/${ acceptBidding?.postId }/bidding`;
+
+    return axios
+        .delete(`${ url }/${acceptBidding?.biddingId}/accepted`, {
             headers: {
                 Authorization: `Bearer ${ jwt }`
             }

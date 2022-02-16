@@ -1,4 +1,4 @@
-import Post, {PostStatusEnum, stringFromPostStatusEnum} from "@models/post/Post";
+import Post from "@models/post/Post";
 import Bidding, {BiddingStatusEnum} from "@models/post/bidding/Bidding";
 import AuthState from "@models/user/AuthState";
 import BiddingUpdateDto from "../../../../service/stomp/dto/receive/post/feature/BiddingUpdateDto";
@@ -24,18 +24,14 @@ export const isSentByPrincipal = (authState: AuthState, biddingUpdate: BiddingUp
 export const findAcceptedBidding = (biddingList: Bidding[]): BiddingAcceptedDto|null => {
     if (biddingList) {
         const acceptedBidding = biddingList.find(bidding => bidding.biddingStatus.biddingStatus === BiddingStatusEnum.ACCEPTED);
-        return {
-            biddingId: acceptedBidding?.biddingId as string,
-            userId: acceptedBidding?.respondent?.userId as string,
-            nickName: acceptedBidding?.respondent?.nickName as string
+        if (acceptedBidding) {
+            return {
+                biddingId: acceptedBidding?.biddingId as string,
+                userId: acceptedBidding?.respondent?.userId as string,
+                nickName: acceptedBidding?.respondent?.nickName as string
+            }
         }
     }
     return null;
 }
-
-export const getPostStatusFromPost = (post: Post): PostStatusEnum =>
-    post?.postStatus.postStatus as unknown as PostStatusEnum;
-
-export const postStatusIsInProcess = (post: Post) =>
-    post?.postStatus?.postStatus === stringFromPostStatusEnum(PostStatusEnum.IN_PROGRESS);
 

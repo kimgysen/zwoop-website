@@ -12,21 +12,19 @@ import {
     VStack
 } from "@chakra-ui/react";
 import ApiResult from "@api_clients/type/ApiResult";
-import Bidding from "@models/post/bidding/Bidding";
-import Post from "@models/post/Post";
 
 
-interface AcceptBiddingModalProps {
+interface UnAcceptBiddingModalProps {
     isOpen: boolean,
     onClose: () => void,
-    post: Post,
-    biddingItem: Bidding,
-    acceptBidding: (postId: string, biddingId: string) => void,
-    acceptResult: ApiResult<boolean>
+    postId: string,
+    biddingId: string,
+    unAcceptBidding: (postId: string, biddingId: string) => void,
+    unAcceptResult: ApiResult<boolean>
 }
 
-const AcceptBiddingModal: FC<AcceptBiddingModalProps> =
-    ({ isOpen, onClose, post, biddingItem, acceptBidding, acceptResult }) => {
+const UnAcceptBiddingModal: FC<UnAcceptBiddingModalProps> =
+    ({ isOpen, onClose, postId, biddingId, unAcceptBidding, unAcceptResult }) => {
 
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
@@ -35,14 +33,12 @@ const AcceptBiddingModal: FC<AcceptBiddingModalProps> =
                 <ModalHeader>Accept bidding</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
-                    Are you sure you want to assign the your request to
-                    { biddingItem?.respondent?.nickName } @{ biddingItem?.askPrice }?
+                    Are you sure you want to un-assign your request and re-open the bidding?
                 </ModalBody>
-
                 <ModalFooter>
                     <VStack align='right'>
                         {
-                            acceptResult.loading &&
+                            unAcceptResult.loading &&
                             <Button
                                 disabled
                                 isLoading
@@ -52,22 +48,22 @@ const AcceptBiddingModal: FC<AcceptBiddingModalProps> =
                             />
                         }
                         {
-                            !acceptResult.loading &&
+                            !unAcceptResult.loading &&
                             <Button
                                 colorScheme='blue'
-                                onClick={ () => acceptBidding(post?.postId, biddingItem?.biddingId) }
+                                onClick={ () => unAcceptBidding(postId, biddingId) }
                                 w='80px'
                             >
                                 Yes
                             </Button>
                         }
                         {
-                            acceptResult.success &&
+                            unAcceptResult.success &&
                             <Box color='green'>Success</Box>
                         }
                         {
-                            acceptResult.error &&
-                            <Box color='red'>{ acceptResult.error }</Box>
+                            unAcceptResult.error &&
+                            <Box color='red'>{ unAcceptResult.error }</Box>
                         }
                     </VStack>
                 </ModalFooter>
@@ -76,4 +72,4 @@ const AcceptBiddingModal: FC<AcceptBiddingModalProps> =
     )
 }
 
-export default AcceptBiddingModal;
+export default UnAcceptBiddingModal;

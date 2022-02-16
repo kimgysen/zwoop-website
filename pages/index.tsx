@@ -22,7 +22,7 @@ const HomePage: React.FC = () => {
         if (session && session.userId) {
             setAuthState({ isLoggedIn: true, principalId: session.userId as string });
         } else {
-            setAuthState({ isLoggedIn: false, principalId: null });
+            setAuthState({ isLoggedIn: false, principalId: undefined });
         }
     }, [session]);
 

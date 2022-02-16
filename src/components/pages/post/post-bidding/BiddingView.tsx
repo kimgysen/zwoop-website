@@ -15,7 +15,7 @@ interface BiddingViewProps {
     post: Post,
     postStatus: PostStatusEnum,
     biddingList: Bidding[],
-    acceptedBidding: BiddingAcceptedDto,
+    acceptedBidding: BiddingAcceptedDto|null,
     mutate: KeyedMutator<Bidding[]>
 }
 

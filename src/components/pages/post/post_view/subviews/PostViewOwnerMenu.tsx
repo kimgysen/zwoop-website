@@ -3,17 +3,20 @@ import {Flex, Link, useDisclosure} from "@chakra-ui/react";
 import NextLink from "next/link";
 import DeletePostModal from "@components/pages/post/post_view/modal/DeletePostModal";
 import ApiResult from "@api_clients/type/ApiResult";
+import {PostStatusEnum} from "@models/post/Post";
 
 
 interface PostViewOwnerMenuProps {
-    postId: string
+    postId: string,
+    postStatus: PostStatusEnum
 }
 
-const PostViewOwnerMenu: FC<PostViewOwnerMenuProps> = ({ postId }) => {
+const PostViewOwnerMenu: FC<PostViewOwnerMenuProps> = ({ postId, postStatus }) => {
 
     const defaultResult = { loading: false, success: null, error: null };
     const [deleteResult, setDeleteResult] = useState<ApiResult<boolean>>(defaultResult);
     const { isOpen: isDeleteModalopen, onOpen: onDeleteModalOpen, onClose: onDeleteModalClose} = useDisclosure();
+
 
     const handleDeletePost = () => {
         console.log('delete post');
@@ -26,23 +29,30 @@ const PostViewOwnerMenu: FC<PostViewOwnerMenuProps> = ({ postId }) => {
                 fontWeight={500}
                 color={ 'gray.400' }
             >
-                <NextLink href={`/post/${ postId }/edit`} passHref>
-                    <Link
-                        p={2}
-                        _hover={{
-                            textDecoration: 'underline'
-                        }}>
-                        Edit
-                    </Link>
-                </NextLink>
-                <Link
-                    p={2}
-                    onClick={ onDeleteModalOpen }
-                    _hover={{
-                        textDecoration: 'underline'
-                    }}>
-                    Delete
-                </Link>
+                {
+                    postStatus === PostStatusEnum.OPEN
+                    && (
+                        <>
+                            <NextLink href={`/post/${ postId }/edit`} passHref>
+                                <Link
+                                    p={2}
+                                    _hover={{
+                                        textDecoration: 'underline'
+                                    }}>
+                                    Edit
+                                </Link>
+                            </NextLink>
+                            <Link
+                                p={2}
+                                onClick={ onDeleteModalOpen }
+                                _hover={{
+                                    textDecoration: 'underline'
+                                }}>
+                                Delete
+                            </Link>
+                        </>
+                    )
+                }
             </Flex>
             <DeletePostModal
                 isOpen={ isDeleteModalopen }

@@ -107,8 +107,8 @@ const PostByIdPage: NextPage = (props: any) => {
                                                 post={ post }
                                             />
                                             <BiddingViewHoc
-                                            authState={ authState }
-                                            post={ post }
+                                                authState={ authState }
+                                                post={ post }
                                             />
                                         </>
                                     )

@@ -1,18 +1,20 @@
 import React, {FC} from "react";
-import {Divider, Heading, HStack, IconButton, Text} from "@chakra-ui/react";
+import {Divider, Heading, HStack, IconButton, Link, Text} from "@chakra-ui/react";
 import {FaChevronLeft} from 'react-icons/fa';
 import {useRouter} from "next/router";
 import {PostPageViewState} from "@components/pages/post/PostPageHelper";
+import NextLink from "next/link";
 
 
 interface PostChatHeaderProps {
     postId: string,
     viewState: PostPageViewState,
+    partnerId: string,
     partnerNickName: string
 }
 
 const PostChatHeader: FC<PostChatHeaderProps> =
-    ({ postId, viewState, partnerNickName }) => {
+    ({ postId, viewState, partnerId, partnerNickName }) => {
 
     const router = useRouter();
 
@@ -47,15 +49,28 @@ const PostChatHeader: FC<PostChatHeaderProps> =
                                 w='95%'
                                 maxW='220px'
                                 isTruncated
-                            >
-                                { partnerNickName }
+                            >To:&nbsp;
+                                <NextLink href={`/user/${ partnerId }`} passHref>
+                                    <Link>{ partnerNickName }</Link>
+                                </NextLink>
                             </Text>
                         </HStack>
                     )
                 }
                 {
                     viewState === PostPageViewState.VISITOR_PRIVATE_CHAT
-                    && <Text>To: { partnerNickName }</Text>
+                    && (
+                        <Text
+                            w='95%'
+                            maxW='220px'
+                            isTruncated
+                        >
+                            To:&nbsp;
+                            <NextLink href={`/user/${ partnerId }`} passHref>
+                                <Link>{ partnerNickName }</Link>
+                            </NextLink>
+                        </Text>
+                    )
                 }
             </Heading>
             <Divider />

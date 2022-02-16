@@ -1,4 +1,4 @@
-import Post from "@models/post/Post";
+import Post, {PostStatusEnum, stringFromPostStatusEnum} from "@models/post/Post";
 import AuthState from "@models/user/AuthState";
 
 export enum PostPageViewState {
@@ -34,3 +34,13 @@ export const getViewState =
 
     return PostPageViewState.LOGGED_OFF;
 }
+
+export const getPostStatusFromPost = (post: Post): PostStatusEnum =>
+    post?.postStatus.postStatus as unknown as PostStatusEnum;
+
+export const postStatusIsOpen = (post: Post) =>
+    post?.postStatus?.postStatus === stringFromPostStatusEnum(PostStatusEnum.OPEN);
+
+export const postStatusIsInProgress = (post: Post) =>
+    post?.postStatus?.postStatus === stringFromPostStatusEnum(PostStatusEnum.IN_PROGRESS);
+

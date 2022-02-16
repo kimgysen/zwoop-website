@@ -42,7 +42,7 @@ const BidderActionViewHoc: FC<BidderActionViewHocProps> = ({ principalId, post, 
         });
         setUpdateResult(res);
         await mutate();
-        onDeleteModalClose();
+        onEditAskClose();
     }
 
     const handleDeleteBidding = async () => {
@@ -53,6 +53,7 @@ const BidderActionViewHoc: FC<BidderActionViewHocProps> = ({ principalId, post, 
         });
         setDeleteResult(res);
         await mutate();
+        onDeleteModalClose();
     }
 
     return (

@@ -24,6 +24,11 @@ const PostChatWidget: FC<PostSubViewManagerProps> = ({ authState, post, viewStat
                 <PostChatHeader
                     postId={ post.postId }
                     viewState={ viewState }
+                    partnerId={
+                        isPostOwner(authState, post)
+                            ? partnerRes?.success?.userId as string
+                            : post?.asker?.userId
+                    }
                     partnerNickName={
                         isPostOwner(authState, post)
                         ? partnerRes?.success?.nickName as string

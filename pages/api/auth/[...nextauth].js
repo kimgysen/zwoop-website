@@ -122,7 +122,6 @@ export default NextAuth({
               email: profile['email'],
               profilePic: profile['picture']
             });
-            console.log({ result: accessToken, userId, firstName, profilePic });
             token = { accessToken, userId, firstName, profilePic };
 
           } else {

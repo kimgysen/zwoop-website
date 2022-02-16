@@ -22,6 +22,7 @@ import NotificationButton from "@components/layout/navbar/notification/notificat
 import UserWidget from "@components/layout/navbar/user/UserWidget";
 import {useRouter} from "next/router";
 import AuthState from "@models/user/AuthState";
+import DealButton from "@components/layout/navbar/notification/deal/DealButton";
 
 
 const Navbar: React.FC = () => {
@@ -94,6 +95,7 @@ const Navbar: React.FC = () => {
                         session && (
                             <Flex flex={{ base: 1, md: 2 }} justify={{ base: 'center', md: 'end' }}>
                                 <HStack mr='15px'>
+                                    <DealButton />
                                     <AppInboxButton url='/chat'
                                                     authState={ authState }
                                     />

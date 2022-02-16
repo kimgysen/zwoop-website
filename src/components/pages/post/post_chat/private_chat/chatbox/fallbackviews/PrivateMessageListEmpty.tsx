@@ -5,7 +5,7 @@ import {Box} from "@chakra-ui/react";
 const PrivateMessageListEmpty: FC = () => {
     return (
         <Box p={ '20px' }>
-            <i>Send the OP a message!</i>
+            <i>Send a message!</i>
         </Box>
     )
 }
