@@ -3,6 +3,7 @@ import ApiResult from "../../type/ApiResult";
 import SavePost from "@models/post/SavePost";
 import Post, {PostStatusEnum} from "@models/post/Post";
 import {handleAxiosError, handleAxiosResponse} from "../../util/ResponseUtil";
+import urlJoin from "url-join";
 
 const backendBaseUri = process.env.NEXT_PUBLIC_API_BACKEND_BASE_URI;
 const postApiPrivateEndpoint = process.env.NEXT_PUBLIC_API_V1_PRIVATE_POST_PREFIX;
@@ -14,7 +15,7 @@ export enum FeedTypeEnum {
 }
 
 export const createPost: (post: SavePost, jwt: string) => Promise<ApiResult<string>> = (post, jwt) => {
-    const url = backendBaseUri! + postApiPrivateEndpoint!;
+    const url = urlJoin(backendBaseUri!, postApiPrivateEndpoint!);
 
     return axios.post(url, post, {
         headers: {
@@ -30,7 +31,7 @@ export const createPost: (post: SavePost, jwt: string) => Promise<ApiResult<stri
 }
 
 export const updatePost: (postId: string, post: SavePost, jwt: string) => Promise<ApiResult<string>> = (postId, post, jwt) => {
-    const url = backendBaseUri! + postApiPrivateEndpoint! + `/${ postId }`;
+    const url = urlJoin(backendBaseUri!, postApiPrivateEndpoint!, postId);
 
     return axios.put(url, post, {
         headers: {
@@ -46,13 +47,13 @@ export const updatePost: (postId: string, post: SavePost, jwt: string) => Promis
 }
 
 export const getPostById: (postId: string) => Promise<AxiosResponse<Post>> = (postId) => {
-    const url = backendBaseUri! + postApiPublicEndpoint!;
-    return axios.get(`${ url }/${ postId }`);
+    const url = urlJoin(backendBaseUri!, postApiPublicEndpoint!, postId);
+    return axios.get(url);
 }
 
 export const getFeed: (feedType: FeedTypeEnum, postStatus: PostStatusEnum, page: number, size: number, tagName?: string) => Promise<ApiResult<Post[]>> =
     (feedType, postStatus, page, size, tagName) => {
-    const url = backendBaseUri! + postApiPublicEndpoint!;
+    const url = urlJoin(backendBaseUri!, postApiPublicEndpoint!);
 
     let params: any = {
         feedType: FeedTypeEnum[feedType],

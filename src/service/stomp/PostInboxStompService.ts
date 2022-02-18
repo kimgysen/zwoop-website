@@ -2,7 +2,7 @@ import {connectStomp, disconnectStomp} from "./StompService";
 import {NextRouter} from "next/router";
 import {HEADER_CONNECT_TYPE, HEADER_POST_ID} from "./types/StompHeader";
 import {StreamTypeEnum, stringFromConnectTypeEnum} from "./types/StreamType";
-import {initAppInbox} from "./subscriptions/NotificationSubscriptions";
+import {initAppInbox, subscribeToNotifications} from "./subscriptions/NotificationSubscriptions";
 import {subscribeToPostUpdates} from "./subscriptions/PostUpdateSubscriptions";
 import {initPostInbox, subscribeToInboxUpdates} from "./subscriptions/PostInboxSubscriptions";
 import {subscribeToPrivateChatUpdates} from "./subscriptions/PrivateChatSubscriptions";
@@ -30,6 +30,7 @@ export const connectPostInbox = ({ postId, jwt, router }: ConnectPostInboxProps)
 
         subscribeToInboxUpdates();
         subscribeToPrivateChatUpdates();
+        subscribeToNotifications();
     },
     (frame) => {
         if (frame.headers.message.includes('ExpiredJwtException')) {

@@ -1,4 +1,4 @@
-import BiddingAcceptedDto from "../../../../../service/stomp/dto/receive/post/feature/BiddingAcceptedDto";
+import BiddingAcceptedDto from "../../../../../service/stomp/dto/receive/post/feature/bidding/BiddingAcceptedDto";
 import React, {FC, useState} from "react";
 import Card from "@components/layout/components/card/Card";
 import NextLink from "next/link";

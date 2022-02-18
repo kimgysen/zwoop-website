@@ -1,11 +1,11 @@
-import InboxItemReceiveDto from "../../../../../service/stomp/dto/receive/inbox/InboxItemReceiveDto";
+import InboxItemReceiveDto from "../../../../../../service/stomp/dto/receive/inbox/InboxItemReceiveDto";
 import React, {FC} from "react";
 import {Avatar, Box, HStack, Tag, Text, VStack} from "@chakra-ui/react";
 import TimeAgo from "react-timeago";
 import ChatPartner from "@models/chat/ChatPartner";
 import AuthState from "@models/user/AuthState";
 import {useRouter} from "next/router";
-import {getPartnerFromInboxItem, hasUnreadMessages} from "../../../../../util/InboxUtil";
+import {getPartnerFromInboxItem, hasUnreadMessages} from "../../../../../../util/InboxUtil";
 
 
 interface AppInboxItemProps {
@@ -20,7 +20,7 @@ const AppInboxItem: FC<AppInboxItemProps> = ({ authState, inboxItem }) => {
     const partner: ChatPartner = getPartnerFromInboxItem(inboxItem);
 
     const handleClickInboxDetail = async () => {
-        await router.push(`/post/${ inboxItem.postId }?partnerId=${ partner.partnerId }`);
+        await router.push(`/post/${ inboxItem?.postId }?partnerId=${ partner?.partnerId }`);
     }
 
     return (

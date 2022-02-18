@@ -18,7 +18,7 @@ export const rebuildInbox = (lastReceived: InboxItemReceiveDto, inboxItems: Inbo
 }
 
 export const isInboxEmpty = (items: InboxItemReceiveDto[]): boolean =>
-    items.length === 0;
+    !items || items.length === 0;
 
 export const isLastInboxItem = (items: InboxItemReceiveDto[], idx: number): boolean =>
     items.length - 1 === idx;

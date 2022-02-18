@@ -14,14 +14,15 @@ import {
     BIDDING_UPDATE__BIDDING_REMOVE_ACCEPTED,
     BIDDING_UPDATE__BIDDING_REMOVED
 } from "../../../../event_dispatchers/config/StompEvents";
-import BiddingAddedDto from "../../../../service/stomp/dto/receive/post/feature/BiddingAddedDto";
-import BiddingChangedDto from "../../../../service/stomp/dto/receive/post/feature/BiddingChangedDto";
-import BiddingRemovedDto from "../../../../service/stomp/dto/receive/post/feature/BiddingRemovedDto";
+import BiddingAddedDto from "../../../../service/stomp/dto/receive/post/feature/bidding/BiddingAddedDto";
+import BiddingChangedDto from "../../../../service/stomp/dto/receive/post/feature/bidding/BiddingChangedDto";
+import BiddingRemovedDto from "../../../../service/stomp/dto/receive/post/feature/bidding/BiddingRemovedDto";
 import {infoToast} from "@components/widgets/toast/AppToast";
 import {findAcceptedBidding, isSentByPrincipal} from "@components/pages/post/post-bidding/BiddingViewHelper";
-import BiddingAcceptedDto from "../../../../service/stomp/dto/receive/post/feature/BiddingAcceptedDto";
+import BiddingAcceptedDto from "../../../../service/stomp/dto/receive/post/feature/bidding/BiddingAcceptedDto";
 import AcceptedBiddingViewHoc from "@components/pages/post/post-bidding/accepted-bidding/AcceptedBiddingViewHoc";
-import BiddingRemoveAcceptedDto from "../../../../service/stomp/dto/receive/post/feature/BiddingRemoveAcceptedDto";
+import BiddingRemoveAcceptedDto
+    from "../../../../service/stomp/dto/receive/post/feature/bidding/BiddingRemoveAcceptedDto";
 import {getPostStatusFromPost} from "@components/pages/post/PostPageHelper";
 
 

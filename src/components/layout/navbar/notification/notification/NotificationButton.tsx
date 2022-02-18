@@ -18,17 +18,22 @@ const NotificationButton: FC<NotificationWidgetProps> = ({ url, count }) => {
             background='white'
             icon={<>
                 <FaBell color={'gray.750'} />
-                <Circle as={'span'}
-                        size='20px'
-                        color={'white'}
-                        position={'absolute'}
-                        bottom={'4px'}
-                        right={'4px'}
-                        fontSize={'0.8rem'}
-                        bgColor={'red'}
-                        zIndex={9999} p={'1px'}>
-                    {count}
-                </Circle>
+                {
+                    count > 0
+                    && (
+                        <Circle as={'span'}
+                                size='20px'
+                                color={'white'}
+                                position={'absolute'}
+                                bottom={'4px'}
+                                right={'4px'}
+                                fontSize={'0.8rem'}
+                                bgColor={'red'}
+                                zIndex={9999} p={'1px'}>
+                            {count}
+                        </Circle>
+                    )
+                }
             </>}
         />
     );

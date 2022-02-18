@@ -7,7 +7,7 @@ import {
     initPrivateChat,
     subscribeToPrivateChatUpdates
 } from "./subscriptions/PrivateChatSubscriptions";
-import {initAppInbox} from "./subscriptions/NotificationSubscriptions";
+import {initAppInbox, subscribeToNotifications} from "./subscriptions/NotificationSubscriptions";
 import {subscribeToInboxUpdates} from "./subscriptions/PostInboxSubscriptions";
 import {subscribeToPostUpdates} from "./subscriptions/PostUpdateSubscriptions";
 
@@ -41,6 +41,7 @@ export const connectPostPrivateChat = ({
             initAppInbox();
             subscribeToInboxUpdates();
             subscribeToPrivateChatUpdates();
+            subscribeToNotifications();
 
         },
         (frame) => {

@@ -1,5 +1,6 @@
 import axios, {AxiosError, AxiosResponse} from "axios";
 import ApiResult from "../../type/ApiResult";
+import urlJoin from "url-join";
 import {handleAxiosError, handleAxiosResponse} from "../../util/ResponseUtil";
 import {getRawJwt} from "../../../service/jwt/JwtService";
 import {IsWatchingTag} from "@models/user/IsWatchingTag";
@@ -10,14 +11,14 @@ const publicTagApiPrefix = process.env.NEXT_PUBLIC_API_V1_PUBLIC_TAG_PREFIX;
 const privateTagApiPrefix = process.env.NEXT_PUBLIC_API_V1_PRIVATE_TAG_PREFIX;
 
 export const findTagsStartingWith: (tagName: string) => Promise<AxiosResponse> = (tagName) => {
-    const url = backendApiEndpoint! + publicTagApiPrefix!;
+    const url = urlJoin(backendApiEndpoint!, publicTagApiPrefix!);
 
     return axios
         .get(url, { params: { tagName } });
 }
 
 export const isWatching: (tag: string) => Promise<ApiResult<IsWatchingTag>> = async (tagName) => {
-    const url = backendApiEndpoint! + privateTagApiPrefix!;
+    const url = urlJoin(backendApiEndpoint!, privateTagApiPrefix!);
     const jwt = await getRawJwt();
 
     return axios.get(`${ url }/${tagName}/watching`, {
@@ -34,7 +35,7 @@ export const isWatching: (tag: string) => Promise<ApiResult<IsWatchingTag>> = as
 }
 
 export const watchTag:(tag: string) => Promise<ApiResult<IsWatchingTag>> = async (tagName) => {
-    const url = backendApiEndpoint! + privateTagApiPrefix!;
+    const url = urlJoin(backendApiEndpoint!, privateTagApiPrefix!);
     const jwt = await getRawJwt();
 
     return axios.put(`${ url }/${tagName}/watch`, {}, {
@@ -52,7 +53,7 @@ export const watchTag:(tag: string) => Promise<ApiResult<IsWatchingTag>> = async
 
 
 export const unwatchTag:(tag: string) => Promise<ApiResult<IsWatchingTag>> = async (tagName) => {
-    const url = backendApiEndpoint! + privateTagApiPrefix!;
+    const url = urlJoin(backendApiEndpoint!, privateTagApiPrefix!);
     const jwt = await getRawJwt();
 
     return axios.put(`${ url }/${ tagName }/unwatch`, {}, {

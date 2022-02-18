@@ -4,7 +4,7 @@ import BiddingItem from "@components/pages/post/post-bidding/bidding-list/Biddin
 import {Table, Tbody, Th, Thead, Tr} from "@chakra-ui/react";
 import Post, {PostStatusEnum} from "@models/post/Post";
 import {KeyedMutator} from "swr";
-import BiddingAcceptedDto from "../../../../../service/stomp/dto/receive/post/feature/BiddingAcceptedDto";
+import BiddingAcceptedDto from "../../../../../service/stomp/dto/receive/post/feature/bidding/BiddingAcceptedDto";
 
 interface BiddingListProps {
     principalId: string,

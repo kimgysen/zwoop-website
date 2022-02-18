@@ -9,7 +9,7 @@ import BidderActionViewHoc
     from "@components/pages/post/post-bidding/bidding-list/action-views/bidder-action/BidderActionViewHoc";
 import {KeyedMutator} from "swr";
 import {isPostOwner, principalIsBidder} from "@components/pages/post/post-bidding/BiddingViewHelper";
-import BiddingAcceptedDto from "../../../../../service/stomp/dto/receive/post/feature/BiddingAcceptedDto";
+import BiddingAcceptedDto from "../../../../../service/stomp/dto/receive/post/feature/bidding/BiddingAcceptedDto";
 
 
 interface BiddingItemProps {

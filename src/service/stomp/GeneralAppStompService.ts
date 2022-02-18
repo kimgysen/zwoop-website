@@ -1,7 +1,7 @@
 import {connectStomp, disconnectStomp} from "./StompService";
 import {HEADER_CONNECT_TYPE} from "./types/StompHeader";
 import {StreamTypeEnum, stringFromConnectTypeEnum} from "./types/StreamType";
-import {initAppInbox} from "./subscriptions/NotificationSubscriptions";
+import {initAppInbox, subscribeToNotifications} from "./subscriptions/NotificationSubscriptions";
 import {subscribeToInboxUpdates} from "./subscriptions/PostInboxSubscriptions";
 
 
@@ -18,6 +18,7 @@ export const connectGeneralApp = ({ jwt, redirectToLogin }: ConnectGeneralInboxP
 
         initAppInbox();
         subscribeToInboxUpdates();
+        subscribeToNotifications();
 
     },
     (frame) => {

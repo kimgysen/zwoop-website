@@ -20,10 +20,10 @@ import {
     POST_UPDATE__POST_CHANGED,
     POST_UPDATE__POST_REMOVED
 } from "../../../../event_dispatchers/config/StompEvents";
-import PostChangedDto from "../../../../service/stomp/dto/receive/post/feature/PostChangedDto";
+import PostChangedDto from "../../../../service/stomp/dto/receive/post/feature/post/PostChangedDto";
 import Tag from "@models/tag/Tag";
 import {infoToast} from "@components/widgets/toast/AppToast";
-import BiddingAcceptedDto from "../../../../service/stomp/dto/receive/post/feature/BiddingAcceptedDto";
+import BiddingAcceptedDto from "../../../../service/stomp/dto/receive/post/feature/bidding/BiddingAcceptedDto";
 
 
 interface PostViewProps {

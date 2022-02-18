@@ -1,4 +1,5 @@
 import axios, {AxiosError} from "axios";
+import urlJoin from "url-join";
 import ApiResult from "../../type/ApiResult";
 import {handleAxiosError, handleAxiosResponse} from "../../util/ResponseUtil";
 import User from "@models/user/User";
@@ -10,10 +11,10 @@ const userApiPrivateEndpoint = process.env.NEXT_PUBLIC_API_V1_PRIVATE_USER_PREFI
 
 
 export const getUserById: (userId: string) => Promise<ApiResult<User>> = (userId) => {
-    const url = userApiBaseUri! + userApiPublicEndpoint!;
+    const url = urlJoin(userApiBaseUri!, userApiPublicEndpoint!, userId);
 
     return axios
-        .get(`${ url }/${ userId }`)
+        .get(url)
         .then(res => handleAxiosResponse({
             res,
             successStatus: 200,
@@ -23,10 +24,10 @@ export const getUserById: (userId: string) => Promise<ApiResult<User>> = (userId
 }
 
 export const getFollowedTags: (userId: string) => Promise<ApiResult<Tag[]>> = (userId) => {
-    const url = userApiBaseUri! + userApiPublicEndpoint!;
+    const url = urlJoin(userApiBaseUri!, userApiPublicEndpoint!, userId, 'tags');
 
     return axios
-        .get(`${ url }/${ userId }/tags`)
+        .get(url)
         .then(res => handleAxiosResponse({
             res,
             successStatus: 200,
@@ -36,9 +37,9 @@ export const getFollowedTags: (userId: string) => Promise<ApiResult<Tag[]>> = (u
 }
 
 export const updateNickName: (userId: string, nickName: string, jwt: string) => Promise<ApiResult<User>> = (userId, nickName, jwt) => {
-    const url = userApiBaseUri! + userApiPrivateEndpoint!;
+    const url = urlJoin(userApiBaseUri!, userApiPrivateEndpoint!, userId, 'nickname');
 
-    return axios.put(`${ url }/${userId}/nickname`, { nickName }, {
+    return axios.put(url, { nickName }, {
             headers: {
                 Authorization: `Bearer ${ jwt }`
             }
@@ -57,9 +58,9 @@ export const updateNickName: (userId: string, nickName: string, jwt: string) => 
 }
 
 export const updateAbout: (userId: string, aboutText: string, jwt: string) => Promise<ApiResult<User>> = (userId, aboutText, jwt) => {
-    const url = userApiBaseUri! + userApiPrivateEndpoint!;
-    console.log(jwt);
-    return axios.put(`${ url }/${userId}/about`, { aboutText }, {
+    const url = urlJoin(userApiBaseUri!, userApiPrivateEndpoint!, userId, 'about');
+
+    return axios.put(url, { aboutText }, {
         headers: {
             Authorization: `Bearer ${ jwt }`
         }

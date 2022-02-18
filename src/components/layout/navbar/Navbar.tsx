@@ -17,12 +17,12 @@ import Searchbox from "@components/widgets/searchbox/Searchbox";
 import LoginModal from "@components/layout/navbar/modal/LoginModal";
 import {useSession} from "next-auth/react";
 import {FaPen} from "react-icons/fa";
-import AppInboxButton from "@components/layout/navbar/notification/inbox/AppInboxButton";
+import AppInboxButtonHoc from "@components/layout/navbar/notification/inbox/AppInboxButtonHoc";
 import NotificationButton from "@components/layout/navbar/notification/notification/NotificationButton";
 import UserWidget from "@components/layout/navbar/user/UserWidget";
 import {useRouter} from "next/router";
 import AuthState from "@models/user/AuthState";
-import DealButton from "@components/layout/navbar/notification/deal/DealButton";
+import DealButtonHoc from "@components/layout/navbar/notification/deal/DealButtonHoc";
 
 
 const Navbar: React.FC = () => {
@@ -95,12 +95,14 @@ const Navbar: React.FC = () => {
                         session && (
                             <Flex flex={{ base: 1, md: 2 }} justify={{ base: 'center', md: 'end' }}>
                                 <HStack mr='15px'>
-                                    <DealButton />
-                                    <AppInboxButton url='/chat'
+                                    <DealButtonHoc
+                                        authState={ authState }
+                                    />
+                                    <AppInboxButtonHoc url='/chat'
                                                     authState={ authState }
                                     />
                                     <NotificationButton
-                                        count={1}
+                                        count={0}
                                         url='/notifications'
                                     />
                                 </HStack>

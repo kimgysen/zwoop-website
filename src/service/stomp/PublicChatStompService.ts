@@ -7,7 +7,7 @@ import {
     subscribeToConnectedUsers,
     subscribeToPublicChat
 } from "./subscriptions/PublicChatSubscriptions";
-import {initAppInbox} from "./subscriptions/NotificationSubscriptions";
+import {initAppInbox, subscribeToNotifications} from "./subscriptions/NotificationSubscriptions";
 import {subscribeToInboxUpdates} from "./subscriptions/PostInboxSubscriptions";
 
 interface connectPublicChatRoomProps {
@@ -38,7 +38,7 @@ export const connectPublicChatRoom = ({
             initConnectedUsers();
 
             subscribeToInboxUpdates();
-
+            subscribeToNotifications();
         },
         (frame) => {
             console.log('error frame', frame);

@@ -1,8 +1,8 @@
 import Post from "@models/post/Post";
 import Bidding, {BiddingStatusEnum} from "@models/post/bidding/Bidding";
 import AuthState from "@models/user/AuthState";
-import BiddingUpdateDto from "../../../../service/stomp/dto/receive/post/feature/BiddingUpdateDto";
-import BiddingAcceptedDto from "../../../../service/stomp/dto/receive/post/feature/BiddingAcceptedDto";
+import BiddingUpdateDto from "../../../../service/stomp/dto/receive/post/feature/bidding/BiddingUpdateDto";
+import BiddingAcceptedDto from "../../../../service/stomp/dto/receive/post/feature/bidding/BiddingAcceptedDto";
 
 
 export const biddingListIsEmpty = (biddingList: Bidding[]) =>

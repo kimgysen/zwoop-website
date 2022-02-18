@@ -12,14 +12,14 @@ import {
     POST_UPDATE__POST_CHANGED,
     POST_UPDATE__POST_REMOVED
 } from "../../../event_dispatchers/config/StompEvents";
-import PostChangedDto from "../dto/receive/post/feature/PostChangedDto";
-import PostRemovedDto from "../dto/receive/post/feature/PostRemovedDto";
-import BiddingAddedDto from "../dto/receive/post/feature/BiddingAddedDto";
-import BiddingChangedDto from "../dto/receive/post/feature/BiddingChangedDto";
-import BiddingRemovedDto from "../dto/receive/post/feature/BiddingRemovedDto";
-import BiddingAcceptedDto from "../dto/receive/post/feature/BiddingAcceptedDto";
+import PostChangedDto from "../dto/receive/post/feature/post/PostChangedDto";
+import PostRemovedDto from "../dto/receive/post/feature/post/PostRemovedDto";
+import BiddingAddedDto from "../dto/receive/post/feature/bidding/BiddingAddedDto";
+import BiddingChangedDto from "../dto/receive/post/feature/bidding/BiddingChangedDto";
+import BiddingRemovedDto from "../dto/receive/post/feature/bidding/BiddingRemovedDto";
+import BiddingAcceptedDto from "../dto/receive/post/feature/bidding/BiddingAcceptedDto";
 import {dispatchCustomMessage} from "./SubscriptionUtil";
-import BiddingRemoveAcceptedDto from "../dto/receive/post/feature/BiddingRemoveAcceptedDto";
+import BiddingRemoveAcceptedDto from "../dto/receive/post/feature/bidding/BiddingRemoveAcceptedDto";
 
 
 export const subscribeToPostUpdates = (postId: string) => {
@@ -54,10 +54,10 @@ export const subscribeToPostUpdates = (postId: string) => {
                     break;
 
                 case PostUpdateFeatureType.BIDDING_REMOVE_ACCEPTED:
-                    console.log('dispatch bidding removed accepted');
                     dispatchCustomMessage(BIDDING_UPDATE__BIDDING_REMOVE_ACCEPTED, postUpdateFeatureDto.postUpdateDto as BiddingRemoveAcceptedDto);
                     dispatchCustomMessage(POST_UPDATE__BIDDING_REMOVE_ACCEPTED, postUpdateFeatureDto.postUpdateDto as BiddingRemoveAcceptedDto);
                     break;
+
             }
         });
 }

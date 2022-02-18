@@ -7,7 +7,7 @@ import Bidding from "@models/post/bidding/Bidding";
 import BiddingList from "@components/pages/post/post-bidding/bidding-list/BiddingList";
 import {KeyedMutator} from "swr";
 import Card from "@components/layout/components/card/Card";
-import BiddingAcceptedDto from "../../../../service/stomp/dto/receive/post/feature/BiddingAcceptedDto";
+import BiddingAcceptedDto from "../../../../service/stomp/dto/receive/post/feature/bidding/BiddingAcceptedDto";
 
 
 interface BiddingViewProps {

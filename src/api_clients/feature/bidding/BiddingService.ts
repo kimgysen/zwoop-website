@@ -1,5 +1,6 @@
 import ApiResult from "@api_clients/type/ApiResult";
 import axios, {AxiosError} from "axios";
+import urlJoin from "url-join";
 import {handleAxiosError, handleAxiosResponse} from "@api_clients/util/ResponseUtil";
 import Bidding from "@models/post/bidding/Bidding";
 import CreateBidding from "@models/post/bidding/CreateBidding";
@@ -21,9 +22,9 @@ export const getBiddingsForPost: (url: string) => Promise<Bidding[]> = (url) => 
 
 export const saveBiddingApi: (bidding: CreateBidding, jwt: string)
     => Promise<ApiResult<boolean>> = (bidding, jwt) => {
-    const url = `${ backendBaseUri! }${ postApiPrivateEndpoint! }/${ bidding?.postId }/bidding/respondent`;
+    const url = urlJoin(backendBaseUri!, postApiPrivateEndpoint!, bidding?.postId, 'bidding', 'respondent', bidding?.userId);
 
-    return axios.put(`${ url }/${ bidding?.userId }`, {
+    return axios.put(url, {
             askPrice: bidding?.askPrice,
             currencyCode: bidding?.currencyCode
         },
@@ -42,9 +43,9 @@ export const saveBiddingApi: (bidding: CreateBidding, jwt: string)
 
 export const deleteBiddingApi: (bidding: DeleteBidding, jwt: string)
     => Promise<ApiResult<boolean>> = (bidding, jwt) => {
-    const url = `${ backendBaseUri! }${ postApiPrivateEndpoint! }/${ bidding.postId }/bidding/respondent`;
+    const url = urlJoin(backendBaseUri!, postApiPrivateEndpoint!, bidding?.postId, 'bidding', 'respondent', bidding?.userId);
 
-    return axios.delete(`${ url }/${ bidding.userId }`, {
+    return axios.delete(url, {
             headers: {
                 Authorization: `Bearer ${ jwt }`
             }
@@ -59,10 +60,10 @@ export const deleteBiddingApi: (bidding: DeleteBidding, jwt: string)
 
 export const acceptBiddingApi: (acceptBidding: AcceptBidding, jwt: string)
     => Promise<ApiResult<boolean>> = (acceptBidding, jwt) => {
-    const url = `${ backendBaseUri! }${ postApiPrivateEndpoint! }/${ acceptBidding?.postId }/bidding`;
+    const url = urlJoin(backendBaseUri!, postApiPrivateEndpoint!, acceptBidding?.postId, 'bidding', acceptBidding?.biddingId, 'accepted');
 
     return axios
-        .put(`${ url }/${acceptBidding?.biddingId}/accepted`, {}, {
+        .put(url, {}, {
             headers: {
                 Authorization: `Bearer ${ jwt }`
             }
@@ -78,7 +79,7 @@ export const acceptBiddingApi: (acceptBidding: AcceptBidding, jwt: string)
 
 export const unAcceptBiddingApi: (unAcceptBidding: UnAcceptBidding, jwt: string)
     => Promise<ApiResult<boolean>> = (acceptBidding, jwt) => {
-    const url = `${ backendBaseUri! }${ postApiPrivateEndpoint! }/${ acceptBidding?.postId }/bidding`;
+    const url = urlJoin(backendBaseUri!, postApiPrivateEndpoint!, acceptBidding?.postId, 'bidding');
 
     return axios
         .delete(`${ url }/${acceptBidding?.biddingId}/accepted`, {
