@@ -26,6 +26,10 @@ interface DealButtonProps {
 
 const DealButton: FC<DealButtonProps> = ({ authState, dealBoxLoading, dealBoxItems }) => {
 
+    const [isOpen, setIsOpen] = React.useState(false)
+    const open = () => setIsOpen(!isOpen)
+    const close = () => setIsOpen(false)
+
     const nrItems = dealBoxItems
         ? dealBoxItems.length
         : 0;
@@ -36,9 +40,12 @@ const DealButton: FC<DealButtonProps> = ({ authState, dealBoxLoading, dealBoxIte
                 <Popover
                     closeOnBlur={true}
                     placement='top-start'
+                    isOpen={isOpen}
+                    onClose={close}
                 >
                     <PopoverTrigger>
                         <IconButton
+                            onClick={ open }
                             css={css`position: relative !important;`}
                             py={'2'}
                             aria-label={'Notifications'}
@@ -83,6 +90,7 @@ const DealButton: FC<DealButtonProps> = ({ authState, dealBoxLoading, dealBoxIte
                                     authState={ authState }
                                     dealBoxLoading={ dealBoxLoading }
                                     dealBoxItems={ dealBoxItems }
+                                    closePopup={ close }
                                 />
                             }
                         </PopoverBody>

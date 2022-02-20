@@ -11,10 +11,11 @@ import DealBoxItem from "@components/layout/navbar/notification/deal/dealbox/Dea
 interface DealBoxProps {
     authState: AuthState
     dealBoxLoading: boolean,
-    dealBoxItems?: DealOpenedDto[] | null
+    dealBoxItems?: DealOpenedDto[] | null,
+    closePopup: () => void
 }
 
-const DealBox: FC<DealBoxProps> = ({ authState, dealBoxLoading, dealBoxItems }) => {
+const DealBox: FC<DealBoxProps> = ({ authState, dealBoxLoading, dealBoxItems, closePopup }) => {
     return (
         <>
             {
@@ -35,6 +36,7 @@ const DealBox: FC<DealBoxProps> = ({ authState, dealBoxLoading, dealBoxItems }) 
                     >
                         <DealBoxItem
                             deal={ dealBoxItem }
+                            closePopup={ closePopup }
                         />
                         {
                             !isLastDealBoxItem(dealBoxItems, idx)

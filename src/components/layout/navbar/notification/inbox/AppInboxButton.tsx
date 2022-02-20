@@ -28,15 +28,22 @@ interface AppInboxButtonProps {
 
 const AppInboxButton: FC<AppInboxButtonProps> = ({ authState, inboxLoading, inboxItems, nrUnread }) => {
 
+    const [isOpen, setIsOpen] = React.useState(false)
+    const open = () => setIsOpen(!isOpen)
+    const close = () => setIsOpen(false)
+
     return (
         <Box>
             <Menu>
                 <Popover
                     closeOnBlur={true}
                     placement='top-start'
+                    isOpen={isOpen}
+                    onClose={close}
                 >
                     <PopoverTrigger>
                         <IconButton
+                            onClick={ open }
                             css={css`position: relative !important;`}
                             py={'2'}
                             aria-label={'Notifications'}
@@ -78,6 +85,7 @@ const AppInboxButton: FC<AppInboxButtonProps> = ({ authState, inboxLoading, inbo
                                     authState={ authState }
                                     inboxLoading={ inboxLoading }
                                     inboxItems={ inboxItems }
+                                    closePopup={ close }
                                 />
                             }
                         </PopoverBody>

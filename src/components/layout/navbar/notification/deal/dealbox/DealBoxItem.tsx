@@ -5,15 +5,17 @@ import {Box} from "@chakra-ui/layout/src/box";
 
 
 interface DealBoxItemProps {
-    deal: DealOpenedDto
+    deal: DealOpenedDto,
+    closePopup: () => void
 }
 
-const DealBoxItem: FC<DealBoxItemProps> = ({ deal }) => {
+const DealBoxItem: FC<DealBoxItemProps> = ({ deal, closePopup }) => {
 
     const router = useRouter();
 
     const handleClickDealBoxDetail = async () => {
-        await router.push(`/post/${ deal?.postId }`)
+        await router.push(`/post/${ deal?.postId }`);
+        closePopup();
     }
 
     return (

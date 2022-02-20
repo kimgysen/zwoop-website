@@ -10,10 +10,11 @@ import {getPartnerFromInboxItem, hasUnreadMessages} from "../../../../../../util
 
 interface AppInboxItemProps {
     authState: AuthState,
-    inboxItem: InboxItemReceiveDto
+    inboxItem: InboxItemReceiveDto,
+    closePopup: () => void
 }
 
-const AppInboxItem: FC<AppInboxItemProps> = ({ authState, inboxItem }) => {
+const AppInboxItem: FC<AppInboxItemProps> = ({ authState, inboxItem, closePopup }) => {
 
     const router = useRouter();
 
@@ -21,6 +22,7 @@ const AppInboxItem: FC<AppInboxItemProps> = ({ authState, inboxItem }) => {
 
     const handleClickInboxDetail = async () => {
         await router.push(`/post/${ inboxItem?.postId }?partnerId=${ partner?.partnerId }`);
+        closePopup();
     }
 
     return (

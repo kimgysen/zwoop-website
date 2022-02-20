@@ -11,10 +11,11 @@ import {isInboxEmpty, isLastInboxItem} from "../../../../../../util/InboxUtil";
 interface AppInboxProps {
     authState: AuthState,
     inboxLoading: boolean,
-    inboxItems: InboxItemReceiveDto[]
+    inboxItems: InboxItemReceiveDto[],
+    closePopup: () => void
 }
 
-const AppInbox: FC<AppInboxProps> = ({ authState, inboxLoading, inboxItems }) => {
+const AppInbox: FC<AppInboxProps> = ({ authState, inboxLoading, inboxItems, closePopup }) => {
 
     return <>
         {
@@ -36,6 +37,7 @@ const AppInbox: FC<AppInboxProps> = ({ authState, inboxLoading, inboxItems }) =>
                     <AppInboxItem
                         authState={ authState }
                         inboxItem={ inboxItem }
+                        closePopup={ closePopup }
                     />
                     {
                         !isLastInboxItem(inboxItems, idx)
