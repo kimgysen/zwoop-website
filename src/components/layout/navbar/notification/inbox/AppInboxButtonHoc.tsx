@@ -12,6 +12,7 @@ import {getAppDispatcher} from "../../../../../event_dispatchers/AppDispatcher";
 import {APP_INBOX__ITEM_READ} from "../../../../../event_dispatchers/config/AppEvents";
 import {resetCounterForPartner} from "@components/pages/post/post_chat/private_chat/PrivateChatWidgetHelper";
 import AppInboxButton from "@components/layout/navbar/notification/inbox/AppInboxButton";
+import {infoToast} from "@components/widgets/toast/AppToast";
 
 
 interface AppInboxButtonHocProps {
@@ -45,6 +46,9 @@ const AppInboxButtonHoc: FC<AppInboxButtonHocProps> = ({ authState, url }) => {
                 let updatedInboxItems = rebuildInbox(inboxItem, inboxItems);
                 setInboxItems(updatedInboxItems);
                 setNrUnread(countUnreadMessages(principalId, updatedInboxItems));
+
+                if (principalId !== inboxItem.fromUserId)
+                    infoToast(`Message received from ${ inboxItem.fromNickName }`);
             });
 
             appDispatcher.on(APP_INBOX__ITEM_READ, (partnerId: string) => {

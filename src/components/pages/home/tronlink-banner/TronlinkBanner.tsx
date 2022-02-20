@@ -14,7 +14,7 @@ interface TronlinkBannerProps {
 const TronlinkBanner: React.FC<TronlinkBannerProps> = ({ isInstalled, isLoggedIn, isLoading }) => {
 
     return (
-        <Box width='auto' align='right'>
+        <Box width='auto'>
             {
                 !isLoading && !isInstalled &&
                     <WalletNotInstalledAlert />

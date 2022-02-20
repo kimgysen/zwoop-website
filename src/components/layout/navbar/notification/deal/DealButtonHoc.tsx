@@ -6,11 +6,12 @@ import ApiResult from "@api_clients/type/ApiResult";
 import {getOpenDeals} from "@api_clients/feature/DealService";
 import {getStompDispatcher} from "../../../../../event_dispatchers/StompDispatcher";
 import {
-    DEAL_UPDATE__DEAL_CANCELLED,
-    DEAL_UPDATE__DEAL_OPENED
+    APP_DEAL_BOX__DEAL_CANCELLED,
+    APP_DEAL_BOX__DEAL_OPENED
 } from "../../../../../event_dispatchers/config/StompEvents";
 import {addDeal, removeDealByPostId} from "@components/layout/navbar/notification/deal/dealbox/DealBoxHelper";
 import {DealCancelledDto} from "../../../../../service/stomp/dto/receive/notification/feature/deal/DealCancelledDto";
+import {infoToast} from "@components/widgets/toast/AppToast";
 
 
 interface DealButtonHocProps {
@@ -29,29 +30,29 @@ const DealButtonHoc: FC<DealButtonHocProps> = ({ authState }) => {
             setDealsRes({...defaultDealsRes, loading: true});
             const res = await getOpenDeals();
             setDealsRes(res);
-
         })();
     }, []);
 
+
     useEffect(() => {
         if (authState.principalId) {
-            stompDispatcher.on(DEAL_UPDATE__DEAL_OPENED, (deal: DealOpenedDto) => {
-                console.log('DEAL_UPDATE__DEAL_OPENED', deal);
+            stompDispatcher.on(APP_DEAL_BOX__DEAL_OPENED, (deal: DealOpenedDto) => {
                 const updatedDeals = addDeal(dealsRes?.success, deal);
-                console.log(updatedDeals);
-                setDealsRes({...defaultDealsRes, success: updatedDeals })
+                setDealsRes({...defaultDealsRes, success: updatedDeals });
+
+                infoToast(`New deal: ${ deal.postTitle }`);
             });
 
-            stompDispatcher.on(DEAL_UPDATE__DEAL_CANCELLED, (deal: DealCancelledDto) => {
-                console.log('DEAL_UPDATE__DEAL_CANCELLED', deal);
+            stompDispatcher.on(APP_DEAL_BOX__DEAL_CANCELLED, (deal: DealCancelledDto) => {
                 const updatedDeals = removeDealByPostId(dealsRes?.success, deal?.postId);
                 setDealsRes({...defaultDealsRes, success: updatedDeals })
+                infoToast(`Deal cancelled: ${ deal.postTitle }`);
             });
         }
 
         return function cleanUp() {
-            stompDispatcher.remove(DEAL_UPDATE__DEAL_OPENED);
-            stompDispatcher.remove(DEAL_UPDATE__DEAL_CANCELLED);
+            stompDispatcher.remove(APP_DEAL_BOX__DEAL_OPENED);
+            stompDispatcher.remove(APP_DEAL_BOX__DEAL_CANCELLED);
         }
 
     }, [authState?.principalId, dealsRes?.success]);

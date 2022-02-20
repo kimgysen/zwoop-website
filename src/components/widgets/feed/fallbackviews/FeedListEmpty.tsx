@@ -1,11 +1,16 @@
 import {FC} from "react";
-import {Box} from "@chakra-ui/react";
+import {Flex} from "@chakra-ui/layout/src/flex";
 
 const FeedListEmpty: FC = () => {
     return (
-        <Box mt='20px' plr='10px'>
-            <i>There are currently no open questions</i>
-        </Box>
+        <Flex
+            w='100%'
+            mt='20px'
+            py='10px'
+            direction='column'
+        >
+            No open question currently
+        </Flex>
     )
 }
 

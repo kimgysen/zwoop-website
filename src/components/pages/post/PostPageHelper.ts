@@ -1,5 +1,9 @@
 import Post, {PostStatusEnum, stringFromPostStatusEnum} from "@models/post/Post";
 import AuthState from "@models/user/AuthState";
+import {
+    DealStatusEnum,
+    dealStatusEnumFromString
+} from "../../../service/stomp/dto/receive/notification/feature/deal/Deal";
 
 export enum PostPageViewState {
     LOGGED_OFF,
@@ -44,3 +48,20 @@ export const postStatusIsOpen = (post: Post) =>
 export const postStatusIsInProgress = (post: Post) =>
     post?.postStatus?.postStatus === stringFromPostStatusEnum(PostStatusEnum.IN_PROGRESS);
 
+export const isChatAllowed = (authState: AuthState, post: Post) => {
+    const deal = post.deal;
+    const principalId = authState?.principalId;
+
+    if (!deal
+        || dealStatusEnumFromString(deal?.dealStatus.dealStatus as string) === DealStatusEnum.CANCELLED) {
+        return true;
+
+    } else if (dealStatusEnumFromString(deal?.dealStatus.dealStatus as string) === DealStatusEnum.OPEN
+        && (
+            deal.asker.userId === principalId
+            || deal.respondent.userId === principalId)) {
+        return true;
+    }
+
+    return false;
+}

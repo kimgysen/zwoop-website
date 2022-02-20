@@ -1,10 +1,9 @@
 import {NextPage} from "next";
-import {getPostById, updatePost} from "@api_clients/feature/post/PostService";
+import {getSsrPostById, updatePost} from "@api_clients/feature/post/PostService";
 import {AxiosError, AxiosResponse} from "axios";
 import {useSession} from "next-auth/react";
 import {useRouter} from "next/router";
-import React, {useEffect, useState} from "react";
-import AuthState from "@models/user/AuthState";
+import React, {useState} from "react";
 import Head from "next/head";
 import AppLayout from "@components/layout/AppLayout";
 import CenterContainer from "@components/layout/center/CenterContainer";
@@ -20,7 +19,7 @@ import CancelButton from "@components/widgets/form/buttons/CancelButton";
 export async function getServerSideProps(ctx: { query: { postId: string } }) {
     const {postId} = ctx.query;
 
-    return getPostById(postId)
+    return getSsrPostById(postId)
         .then((resp: AxiosResponse) =>
             ({props: { post: resp.data, errorCode: null }}))
         .catch((reason: AxiosError) =>
@@ -33,8 +32,6 @@ const PostEditPage: NextPage = (props: any) => {
     const { post } = props;
     const router = useRouter();
 
-    const [authState, setAuthState] = useState<AuthState>({ isLoggedIn: false });
-
     const [title, setTitle] = useState<string>(post?.postTitle);
     const [descriptionMd, setDescriptionMd] = useState<string>(post?.postText);
     const [tags, setTags] = useState<Tag[]>(post?.tags);
@@ -42,13 +39,6 @@ const PostEditPage: NextPage = (props: any) => {
     const [isFormValid, setFormValid] = useState(true);
     const [saveError, setSaveError] = useState<string|null>(null);
 
-    useEffect(() => {
-        if (session && session.userId) {
-            setAuthState({ isLoggedIn: true, principalId: session.userId as string })
-        } else {
-            router.push('/login');
-        }
-    }, [session?.userId]);
 
     const onSave = async (e: any) => {
         const jwt = await getRawJwt();

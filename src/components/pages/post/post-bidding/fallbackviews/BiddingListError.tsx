@@ -7,7 +7,7 @@ interface BiddingListErrorProps {
 
 const BiddingListError: FC<BiddingListErrorProps> = ({ errorMsg }) => {
     return (
-        <Card p={ 5 }>
+        <Card p={ '5' }>
             { errorMsg }
         </Card>
     )

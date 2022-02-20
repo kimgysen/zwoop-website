@@ -46,9 +46,20 @@ export const updatePost: (postId: string, post: SavePost, jwt: string) => Promis
         .catch((reason: AxiosError) => handleAxiosError(reason));
 }
 
-export const getPostById: (postId: string) => Promise<AxiosResponse<Post>> = (postId) => {
+export const getSsrPostById: (postId: string) => Promise<AxiosResponse<Post>> = (postId) => {
     const url = urlJoin(backendBaseUri!, postApiPublicEndpoint!, postId);
-    return axios.get(url);
+    return axios.get(url)
+}
+
+export const getCsrPostById: (postId: string) => Promise<ApiResult<Post>> = (postId) => {
+    const url = urlJoin(backendBaseUri!, postApiPublicEndpoint!, postId);
+    return axios.get(url)
+        .then(res => handleAxiosResponse({
+            res,
+            successStatus: 200,
+            successProp: res.data
+        }))
+        .catch((reason: AxiosError) => handleAxiosError(reason));
 }
 
 export const getFeed: (feedType: FeedTypeEnum, postStatus: PostStatusEnum, page: number, size: number, tagName?: string) => Promise<ApiResult<Post[]>> =

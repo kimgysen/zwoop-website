@@ -41,8 +41,16 @@ const PostView: React.FC<PostViewProps> = ({ authState, post }) => {
     const [tags, setTags] = useState<Tag[]>(post?.tags);
     const [postStatus, setPostStatus] = useState<PostStatusEnum>(getPostStatusFromPost(post))
 
+    const updatePost = (postUpdate: Post) => {
+        setTitle(postUpdate.postTitle);
+        setDescription(postUpdate.postText);
+        setBidPrice(postUpdate.bidPrice);
+        setTags(postUpdate.tags);
+    }
 
     useEffect(() => {
+        updatePost(post);
+
         if (post?.postId) {
             stompDispatcher.on(POST_UPDATE__POST_CHANGED, (postUpdate: PostChangedDto) => {
                 if (postUpdate) {

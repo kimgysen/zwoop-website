@@ -5,7 +5,7 @@ import ThreeColumnLayout from "@components/layout/column-layouts/ThreeColumnLayo
 import {Box} from "@chakra-ui/react";
 import React, {useEffect, useState} from "react";
 import UserCard from "@components/pages/user/UserCard";
-import {getUserById} from "../../src/api_clients/feature/user/UserService";
+import {getUserById} from "@api_clients/feature/user/UserService";
 import UserMenu from "@components/pages/user/UserMenu";
 import {useSession} from "next-auth/react";
 import AuthState from "@models/user/AuthState";
@@ -32,7 +32,7 @@ const UserProfile: NextPage = (props: any) => {
             if (session && session.userId) {
                 setAuthState({ isLoggedIn: true, principalId: session.userId as string })
             } else {
-                setAuthState({ isLoggedIn: false, principalId: null });
+                setAuthState({ isLoggedIn: false, principalId: undefined });
             }
         })();
     }, [session?.userId]);

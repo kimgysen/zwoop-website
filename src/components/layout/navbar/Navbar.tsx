@@ -24,7 +24,6 @@ import {useRouter} from "next/router";
 import AuthState from "@models/user/AuthState";
 import DealButtonHoc from "@components/layout/navbar/notification/deal/DealButtonHoc";
 
-
 const Navbar: React.FC = () => {
     const { data: session, status } = useSession();
     const router = useRouter();
@@ -40,6 +39,8 @@ const Navbar: React.FC = () => {
         (async() => {
             if (session && session.userId) {
                 setAuthState({ isLoggedIn: true, principalId: session.userId as string });
+            } else {
+                setAuthState({ isLoggedIn: false, principalId: undefined });
             }
         })();
     }, [session?.userId]);
@@ -92,7 +93,8 @@ const Navbar: React.FC = () => {
                         loading && <>loading...</>
                     }
                     {
-                        session && (
+                        authState?.isLoggedIn
+                        && (
                             <Flex flex={{ base: 1, md: 2 }} justify={{ base: 'center', md: 'end' }}>
                                 <HStack mr='15px'>
                                     <DealButtonHoc
@@ -107,8 +109,8 @@ const Navbar: React.FC = () => {
                                     />
                                 </HStack>
                                 <UserWidget
-                                    userId={ session.userId as string }
-                                    profilePic={ session.user?.image + '?referrerpolicy="no-referrer"' as string } />
+                                    userId={ authState?.principalId as string }
+                                    profilePic={ session?.user?.image + '?referrerpolicy="no-referrer"' as string } />
                                 <NextLink href={'/ask'}>
                                     <Button
                                         bg={'blue.400'}

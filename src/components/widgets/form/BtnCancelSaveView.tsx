@@ -18,6 +18,7 @@ const BtnCancelSaveView: FC<BtnSaveViewProps> = ({ onCancel, onSave, shouldDisab
             <Spacer />
             <CancelButton onCancel={ onCancel } />
             <SaveButton
+                label='Save'
                 onSave={ onSave }
                 shouldDisableSave={ shouldDisableSave }
             />

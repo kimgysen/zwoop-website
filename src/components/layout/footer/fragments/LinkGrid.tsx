@@ -37,11 +37,10 @@ export const LinkGrid: React.FC = () => (
         </Stack>
         <Stack align={'flex-start'}>
             <ListHeader>Tutorials</ListHeader>
-            <Link href={'#'}>Install Tronlink</Link>
-            <Link href={'#'}>Transfer TRX</Link>
-            <Link href={'#'}>Freeze TRX</Link>
-            <Link href={'#'}>Use MS Teams</Link>
-            <Link href={'#'}>Use Zoom</Link>
+            <Link href={'#'}>Install Metamask</Link>
+            <Link href={'#'}>Transfer BNB</Link>
+            <Link href={'#'}>MS Teams</Link>
+            <Link href={'#'}>Zoom</Link>
         </Stack>
         <Stack align={'flex-start'}>
             <ListHeader>Company</ListHeader>

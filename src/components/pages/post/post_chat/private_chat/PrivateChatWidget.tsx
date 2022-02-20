@@ -133,7 +133,7 @@ const PrivateChatWidget: FC<PostChatWidgetProps> = ({ postId, principalId, partn
             stompDispatcher.remove(PRIVATE_CHAT__ON_STOP_TYPING_RECEIVED + eventPostFix);
 
         }
-    }, [partner?.partnerId, isPageVisible, messages, markAsReadPending, hasPartnerReadDto, partnerIsTyping]);
+    }, [partner?.partnerId, postId, isPageVisible, messages, markAsReadPending, hasPartnerReadDto, partnerIsTyping]);
 
 
     return (

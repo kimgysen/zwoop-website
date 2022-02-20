@@ -1,11 +1,12 @@
 import {FC} from "react";
+import {Box} from "@chakra-ui/layout/src/box";
 
 
 const WatchListEmpty: FC = () => {
     return (
-        <>
-            <i>Search and watch tags</i>
-        </>
+        <Box py='10px'>
+            <i>Watchlist is empty</i>
+        </Box>
     )
 }
 

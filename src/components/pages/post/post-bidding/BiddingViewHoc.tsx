@@ -38,6 +38,9 @@ const BiddingViewHoc: FC<BiddingViewHocProps> = ({ authState, post }) => {
     const [postStatus, setPostStatus] = useState<PostStatusEnum>(getPostStatusFromPost(post));
     const [acceptedBidding, setAcceptedBidding] = useState<BiddingAcceptedDto|null>(null);
 
+    useEffect(() => {
+        setPostStatus(getPostStatusFromPost(post));
+    }, [post?.postStatus])
 
     useEffect(() => {
         if (biddingList) {
@@ -71,17 +74,12 @@ const BiddingViewHoc: FC<BiddingViewHocProps> = ({ authState, post }) => {
                 mutate();
                 setAcceptedBidding(acceptedBiddingDto);
                 setPostStatus(PostStatusEnum.IN_PROGRESS);
-                if (!isSentByPrincipal(authState, acceptedBiddingDto))
-                    infoToast(`${ acceptedBiddingDto.nickName } closed the bidding.`);
             });
 
             stompDispatcher.on(BIDDING_UPDATE__BIDDING_REMOVE_ACCEPTED, (removeAcceptedBiddingDto: BiddingRemoveAcceptedDto) => {
                 mutate();
                 setAcceptedBidding(null);
                 setPostStatus(PostStatusEnum.OPEN);
-                if (!isSentByPrincipal(authState, removeAcceptedBiddingDto)) {
-                    infoToast(`${ removeAcceptedBiddingDto.nickName } reopened the bidding.`)
-                }
             });
         }
 

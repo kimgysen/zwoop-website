@@ -58,6 +58,7 @@ const FeedItem: FC<FeedItemProps> = ({ post }) => {
                         <div
                             style={{
                                 maxHeight: '75px',
+                                overflow: 'auto',
                                 maxWidth: '500px',
                                 WebkitMaskImage: "linear-gradient(180deg, #000 60%, transparent)",
                                 maskImage: "linear-gradient(180deg, #000 60%, transparent)"

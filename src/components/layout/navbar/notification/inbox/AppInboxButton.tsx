@@ -1,6 +1,8 @@
 import {
+    Box,
     Circle,
     IconButton,
+    Menu,
     Popover,
     PopoverArrow,
     PopoverBody,
@@ -27,58 +29,62 @@ interface AppInboxButtonProps {
 const AppInboxButton: FC<AppInboxButtonProps> = ({ authState, inboxLoading, inboxItems, nrUnread }) => {
 
     return (
-        <Popover
-            closeOnBlur={true}
-            placement='top-start'
-        >
-            <PopoverTrigger>
-                <IconButton
-                    css={css`position: relative !important;`}
-                    py={'2'}
-                    aria-label={'Notifications'}
-                    size={'lg'}
-                    background='white'
-                    icon={<>
-                        <FaComment color={'gray.750'} />
-                        {
-                            nrUnread > 0 &&
-                            <Circle as={'span'}
-                                    size='20px'
-                                    color={'white'}
-                                    position={'absolute'}
-                                    bottom={'4px'}
-                                    right={'4px'}
-                                    fontSize={'0.8rem'}
-                                    bgColor={'red'}
-                                    zIndex={9999} p={'1px'}>
-                                { nrUnread }
-                            </Circle>
-                        }
-                    </>}
-                />
-            </PopoverTrigger>
-            <PopoverContent
-                borderStyle='solid'
-                borderColor={useColorModeValue('gray.200', 'gray.700')}
-                outline={0}
-                _focus={{ boxShadow: "dark-lg" }}
-                fontSize='sm'
-                width='350px'
-            >
-                <PopoverArrow />
-                <PopoverHeader>Show all</PopoverHeader>
-                <PopoverBody>
-                    {
-                        authState.isLoggedIn &&
-                            <AppInbox
-                                authState={ authState }
-                                inboxLoading={ inboxLoading }
-                                inboxItems={ inboxItems }
-                            />
-                    }
-                </PopoverBody>
-            </PopoverContent>
-        </Popover>
+        <Box>
+            <Menu>
+                <Popover
+                    closeOnBlur={true}
+                    placement='top-start'
+                >
+                    <PopoverTrigger>
+                        <IconButton
+                            css={css`position: relative !important;`}
+                            py={'2'}
+                            aria-label={'Notifications'}
+                            size={'lg'}
+                            background='white'
+                            icon={<>
+                                <FaComment color={'gray.750'} />
+                                {
+                                    nrUnread > 0 &&
+                                    <Circle as={'span'}
+                                            size='20px'
+                                            color={'white'}
+                                            position={'absolute'}
+                                            bottom={'4px'}
+                                            right={'4px'}
+                                            fontSize={'0.8rem'}
+                                            bgColor={'red'}
+                                            zIndex={9999} p={'1px'}>
+                                        { nrUnread }
+                                    </Circle>
+                                }
+                            </>}
+                        />
+                    </PopoverTrigger>
+                    <PopoverContent
+                        borderStyle='solid'
+                        borderColor={useColorModeValue('gray.200', 'gray.700')}
+                        outline={0}
+                        _focus={{ boxShadow: "dark-lg" }}
+                        fontSize='sm'
+                        width='350px'
+                    >
+                        <PopoverArrow />
+                        <PopoverHeader>Show all</PopoverHeader>
+                        <PopoverBody>
+                            {
+                                authState.isLoggedIn &&
+                                <AppInbox
+                                    authState={ authState }
+                                    inboxLoading={ inboxLoading }
+                                    inboxItems={ inboxItems }
+                                />
+                            }
+                        </PopoverBody>
+                    </PopoverContent>
+                </Popover>
+            </Menu>
+        </Box>
     );
 }
 

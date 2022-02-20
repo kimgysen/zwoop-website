@@ -1,6 +1,5 @@
 import {Slide, toast} from "react-toastify";
 
-
 export const infoToast = (title: string) => {
     toast.configure();
     toast.info(title, {

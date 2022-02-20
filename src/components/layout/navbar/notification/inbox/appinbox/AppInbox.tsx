@@ -38,8 +38,8 @@ const AppInbox: FC<AppInboxProps> = ({ authState, inboxLoading, inboxItems }) =>
                         inboxItem={ inboxItem }
                     />
                     {
-                        isLastInboxItem(inboxItems, idx) &&
-                            <Divider />
+                        !isLastInboxItem(inboxItems, idx)
+                        && <Divider />
                     }
                 </Box>
             ))

@@ -1,4 +1,4 @@
-import {FC} from "react";
+import React, {FC} from "react";
 import DealOpenedDto from "../../../../../../service/stomp/dto/receive/notification/feature/deal/DealOpenedDto";
 import {useRouter} from "next/router";
 import {Box} from "@chakra-ui/layout/src/box";
@@ -17,8 +17,14 @@ const DealBoxItem: FC<DealBoxItemProps> = ({ deal }) => {
     }
 
     return (
-        <Box onClick={ handleClickDealBoxDetail }>
-            { deal.postTitle }
+        <Box
+            p='5px'
+            py='15px'
+            _hover={{background: 'blue.50' }}
+            onClick={ handleClickDealBoxDetail }
+            cursor='pointer'
+        >
+            { deal?.postTitle }
         </Box>
     )
 

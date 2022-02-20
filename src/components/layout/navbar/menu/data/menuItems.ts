@@ -13,8 +13,8 @@ export const NAV_ITEMS: Array<NavItem> = [
         label: 'Tutorials',
         children: [
             {
-                label: 'Tronlink',
-                subLabel: 'How to install your TRX wallet',
+                label: 'Metamask',
+                subLabel: 'How to install the Metamask wallet',
                 href: '#',
             },
             {

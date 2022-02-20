@@ -1,6 +1,8 @@
 import {
+    Box,
     Circle,
     IconButton,
+    Menu,
     Popover,
     PopoverArrow,
     PopoverBody,
@@ -29,61 +31,65 @@ const DealButton: FC<DealButtonProps> = ({ authState, dealBoxLoading, dealBoxIte
         : 0;
 
     return (
-        <Popover
-            closeOnBlur={true}
-            placement='top-start'
-        >
-            <PopoverTrigger>
-                <IconButton
-                    css={css`position: relative !important;`}
-                    py={'2'}
-                    aria-label={'Notifications'}
-                    size={'lg'}
-                    background='white'
-                    icon={<>
-                        <FaHandshake
-                            color={'gray.750'}
+        <Box>
+            <Menu>
+                <Popover
+                    closeOnBlur={true}
+                    placement='top-start'
+                >
+                    <PopoverTrigger>
+                        <IconButton
+                            css={css`position: relative !important;`}
+                            py={'2'}
+                            aria-label={'Notifications'}
+                            size={'lg'}
+                            background='white'
+                            icon={<>
+                                <FaHandshake
+                                    color={'gray.750'}
+                                />
+                                {
+                                    nrItems > 0
+                                    && (
+                                        <Circle as={'span'}
+                                                size='20px'
+                                                color={'white'}
+                                                position={'absolute'}
+                                                bottom={'4px'}
+                                                right={'4px'}
+                                                fontSize={'0.8rem'}
+                                                bgColor={'red'}
+                                                zIndex={9999} p={'1px'}>
+                                            { nrItems }
+                                        </Circle>
+                                    )
+                                }
+                            </>}
                         />
-                        {
-                            nrItems > 0
-                            && (
-                                <Circle as={'span'}
-                                        size='20px'
-                                        color={'white'}
-                                        position={'absolute'}
-                                        bottom={'4px'}
-                                        right={'4px'}
-                                        fontSize={'0.8rem'}
-                                        bgColor={'red'}
-                                        zIndex={9999} p={'1px'}>
-                                    { nrItems }
-                                </Circle>
-                            )
-                        }
-                    </>}
-                />
-            </PopoverTrigger>
-            <PopoverContent
-                borderStyle='solid'
-                borderColor={useColorModeValue('gray.200', 'gray.700')}
-                outline={0}
-                _focus={{ boxShadow: "dark-lg" }}
-                fontSize='sm'
-                width='350px'
-            >
-                <PopoverArrow />
-                <PopoverBody>
-                    {
-                        authState.isLoggedIn &&
-                        <DealBox
-                            authState={ authState }
-                            dealBoxLoading={ dealBoxLoading }
-                            dealBoxItems={ dealBoxItems }
-                        />
-                    }
-                </PopoverBody>
-            </PopoverContent>
-        </Popover>
+                    </PopoverTrigger>
+                    <PopoverContent
+                        borderStyle='solid'
+                        borderColor={useColorModeValue('gray.200', 'gray.700')}
+                        outline={0}
+                        _focus={{ boxShadow: "dark-lg" }}
+                        fontSize='sm'
+                        width='350px'
+                    >
+                        <PopoverArrow />
+                        <PopoverBody>
+                            {
+                                authState.isLoggedIn &&
+                                <DealBox
+                                    authState={ authState }
+                                    dealBoxLoading={ dealBoxLoading }
+                                    dealBoxItems={ dealBoxItems }
+                                />
+                            }
+                        </PopoverBody>
+                    </PopoverContent>
+                </Popover>
+            </Menu>
+        </Box>
     )
 }
 

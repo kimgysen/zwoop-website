@@ -3,7 +3,7 @@ import Head from "next/head";
 import AppLayout from "@components/layout/AppLayout";
 import ThreeColumnLayout from "@components/layout/column-layouts/ThreeColumnLayout";
 import React, {useEffect, useState} from "react";
-import {getPostById} from "@api_clients/feature/post/PostService";
+import {getCsrPostById, getSsrPostById} from "@api_clients/feature/post/PostService";
 import PostView from "@components/pages/post/post_view/PostView";
 import {useSession} from "next-auth/react";
 import AuthState from "@models/user/AuthState";
@@ -15,16 +15,17 @@ import ApiResult from "@api_clients/type/ApiResult";
 import User from "@models/user/User";
 import {getUserById} from "@api_clients/feature/user/UserService";
 import PostStompConnect from "@components/stomp/post/PostStompConnect";
-import {getViewState, PostPageViewState} from "@components/pages/post/PostPageHelper";
+import {getViewState, isChatAllowed, PostPageViewState} from "@components/pages/post/PostPageHelper";
 import {AxiosError, AxiosResponse} from "axios";
+import Post from "@models/post/Post";
 
 
 export async function getServerSideProps(ctx: { query: { postId: string } }) {
     const {postId} = ctx.query;
 
-    return getPostById(postId)
+    return getSsrPostById(postId)
         .then((resp: AxiosResponse) =>
-            ({props: { post: resp.data, errorCode: null }}))
+            ({props: { ssrPost: resp.data, errorCode: null }}))
 
         .catch((reason: AxiosError) => {
             const statusCode = reason?.response?.status;
@@ -39,17 +40,26 @@ export async function getServerSideProps(ctx: { query: { postId: string } }) {
 }
 
 const PostByIdPage: NextPage = (props: any) => {
-    const { data: session, status } = useSession();
+    const { data: session } = useSession();
     const { query } = useRouter();
-    const { post } = props;
+    const { ssrPost } = props;
 
     const queryPartnerId = query?.partnerId;
 
     const [authState, setAuthState] = useState<AuthState>({ isLoggedIn: false });
-
     const [viewState, setViewState] = useState<PostPageViewState>(PostPageViewState.LOGGED_OFF);
     const [partnerRes, setPartnerRes] = useState<ApiResult<User>>();
+    const [post, setPost] = useState<Post>(ssrPost);
 
+
+    useEffect(() => {
+        (async() => {
+            if (query?.postId) {
+                const csrPostRes = await getCsrPostById(query?.postId as string);
+                setPost({ ...csrPostRes.success as Post });
+            }
+        })();
+    }, [query?.postId]);
 
     useEffect(() => {
         if (session && session.userId) {
@@ -73,13 +83,13 @@ const PostByIdPage: NextPage = (props: any) => {
             const viewState = getViewState(authState, post, queryPartnerId as string);
             setViewState(viewState);
         }
-    }, [authState.isLoggedIn, queryPartnerId]);
+    }, [authState.isLoggedIn, post?.postId, queryPartnerId]);
 
 
     return (
         <>
             <Head>
-                <title>Post by id</title>
+                <title>{ post?.postTitle }</title>
             </Head>
             <AppLayout>
                 <PostStompConnect
@@ -117,6 +127,7 @@ const PostByIdPage: NextPage = (props: any) => {
                         }
                         rightComponent={
                             authState.isLoggedIn
+                            && isChatAllowed(authState, post)
                             && (
                                 <PostChatWidget
                                     authState={ authState }

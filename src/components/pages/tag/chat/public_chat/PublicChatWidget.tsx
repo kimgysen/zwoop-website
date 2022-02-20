@@ -26,7 +26,6 @@ const PublicChatWidget: FC<ChatBoxProps> = ({ tagName, principalId, isLoading, m
     return (
         <Box
             borderColor={useColorModeValue('blue.200', 'blue.900')}
-            align='right'
             fontSize='sm'
         >
             {
