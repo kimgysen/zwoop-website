@@ -12,10 +12,12 @@ import SaveButton from "@components/widgets/form/buttons/SaveButton";
 import {createPost} from "@api_clients/feature/post/PostService";
 import {useRouter} from "next/router";
 import {validateForm} from "@components/pages/ask/validate";
+import {useSession} from "next-auth/react";
+import AuthState from "@models/user/AuthState";
 
 
 const Ask: NextPage = () => {
-
+    const { data: session, status } = useSession();
     const router = useRouter();
 
     const [title, setTitle] = useState<string>('');
@@ -25,6 +27,19 @@ const Ask: NextPage = () => {
     const [isFormValid, setFormValid] = useState(false);
     const [saveError, setSaveError] = useState<string|null>(null);
 
+
+    const defaultAuthState = { isLoading: true, isLoggedIn: false };
+    const [authState, setAuthState] = useState<AuthState>(defaultAuthState);
+
+    useEffect(() => {
+        if (status === 'loading') {
+            setAuthState({ ...defaultAuthState, isLoading: true })
+        } else if (session?.userId) {
+            setAuthState({ isLoading: false, isLoggedIn: true, principalId: session.userId as string, principalAvatar: session?.user?.image as string });
+        } else {
+            setAuthState({ isLoading: false, isLoggedIn: false, principalId: undefined, principalAvatar: undefined });
+        }
+    }, [session, status]);
 
     useEffect(() => {
         const post = localStorage.getItem('createPost');
@@ -44,7 +59,6 @@ const Ask: NextPage = () => {
             setFormValid(formIsValid);
         }
     }, [title, descriptionMd, tags, bidPrice]);
-
 
     const onSave = async (e: any) => {
         const jwt = await getRawJwt();
@@ -75,7 +89,7 @@ const Ask: NextPage = () => {
             <Head>
                 <title>Ask</title>
             </Head>
-            <AppLayout>
+            <AppLayout authState={ authState }>
                 <CenterContainer>
                     <Flex pt={'10px'}>
                         <Box

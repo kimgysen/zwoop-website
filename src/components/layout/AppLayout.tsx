@@ -4,14 +4,21 @@ import Navbar from "@components/layout/navbar/Navbar";
 import Footer from "@components/layout/footer/Footer";
 import 'github-markdown-css';
 import "react-toastify/dist/ReactToastify.css"
+import AuthState from "@models/user/AuthState";
 
 
-const AppLayout: React.FC = (
-    { children}) => {
+interface AppLayoutProps {
+    authState: AuthState
+}
+
+const AppLayout: React.FC<AppLayoutProps> = (
+    { authState, children}) => {
 
     return (
         <Box bg="#ced7e2">
-            <Navbar />
+            <Navbar
+                authState={ authState }
+            />
             <Container
                 margin={ 'auto' }
                 pt={ '60px' }

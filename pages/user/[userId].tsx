@@ -25,17 +25,18 @@ const UserProfile: NextPage = (props: any) => {
     const userRes = props;
     const { data: session, status } = useSession();
 
-    const [authState, setAuthState] = useState<AuthState>({ isLoggedIn: false });
+    const defaultAuthState = { isLoading: true, isLoggedIn: false };
+    const [authState, setAuthState] = useState<AuthState>(defaultAuthState);
 
     useEffect(() => {
-        (async() => {
-            if (session && session.userId) {
-                setAuthState({ isLoggedIn: true, principalId: session.userId as string })
-            } else {
-                setAuthState({ isLoggedIn: false, principalId: undefined });
-            }
-        })();
-    }, [session?.userId]);
+        if (status === 'loading') {
+            setAuthState({ ...defaultAuthState, isLoading: true })
+        } else if (session?.userId) {
+            setAuthState({ isLoading: false, isLoggedIn: true, principalId: session.userId as string, principalAvatar: session?.user?.image as string });
+        } else {
+            setAuthState({ isLoading: false, isLoggedIn: false, principalId: undefined, principalAvatar: undefined });
+        }
+    }, [session, status]);
 
 
     return (
@@ -43,7 +44,7 @@ const UserProfile: NextPage = (props: any) => {
             <Head>
                 <title>User Profile</title>
             </Head>
-            <AppLayout>
+            <AppLayout authState={ authState }>
                 <ThreeColumnLayout
                     leftComponent={
                         <>

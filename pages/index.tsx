@@ -16,15 +16,18 @@ const HomePage: React.FC = () => {
 
     const { data: session, status } = useSession();
 
-    const [authState, setAuthState] = useState<AuthState>({ isLoggedIn: false });
+    const defaultAuthState = { isLoading: true, isLoggedIn: false };
+    const [authState, setAuthState] = useState<AuthState>(defaultAuthState);
 
     useEffect(() => {
-        if (session && session.userId) {
-            setAuthState({ isLoggedIn: true, principalId: session.userId as string });
+        if (status === 'loading') {
+            setAuthState({ ...defaultAuthState, isLoading: true })
+        } else if (session?.userId) {
+            setAuthState({ isLoading: false, isLoggedIn: true, principalId: session.userId as string, principalAvatar: session?.user?.image as string });
         } else {
-            setAuthState({ isLoggedIn: false, principalId: undefined });
+            setAuthState({ isLoading: false, isLoggedIn: false, principalId: undefined, principalAvatar: undefined });
         }
-    }, [session]);
+    }, [session, status]);
 
     return (
         <>
@@ -32,7 +35,7 @@ const HomePage: React.FC = () => {
                 <title>Home</title>
             </Head>
             <AppStompConnect>
-                <AppLayout>
+                <AppLayout authState={ authState }>
                     <ThreeColumnLayout
                         leftComponent={
                             authState.isLoggedIn

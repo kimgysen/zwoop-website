@@ -10,7 +10,7 @@ import {
     PopoverTrigger,
     useColorModeValue
 } from '@chakra-ui/react';
-import React, {FC} from "react";
+import React, {FC, useState} from "react";
 import {css} from '@emotion/react';
 import {FaHandshake} from "react-icons/fa";
 import AuthState from "@models/user/AuthState";
@@ -26,7 +26,7 @@ interface DealButtonProps {
 
 const DealButton: FC<DealButtonProps> = ({ authState, dealBoxLoading, dealBoxItems }) => {
 
-    const [isOpen, setIsOpen] = React.useState(false)
+    const [isOpen, setIsOpen] = useState<boolean>(false)
     const open = () => setIsOpen(!isOpen)
     const close = () => setIsOpen(false)
 

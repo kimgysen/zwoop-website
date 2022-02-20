@@ -11,11 +11,10 @@ import {
     useDisclosure,
 } from '@chakra-ui/react';
 import {CloseIcon, HamburgerIcon,} from '@chakra-ui/icons';
-import React, {useEffect, useState} from "react";
+import React from "react";
 import NextLink from 'next/link'
 import Searchbox from "@components/widgets/searchbox/Searchbox";
 import LoginModal from "@components/layout/navbar/modal/LoginModal";
-import {useSession} from "next-auth/react";
 import {FaPen} from "react-icons/fa";
 import AppInboxButtonHoc from "@components/layout/navbar/notification/inbox/AppInboxButtonHoc";
 import NotificationButton from "@components/layout/navbar/notification/notification/NotificationButton";
@@ -24,26 +23,15 @@ import {useRouter} from "next/router";
 import AuthState from "@models/user/AuthState";
 import DealButtonHoc from "@components/layout/navbar/notification/deal/DealButtonHoc";
 
-const Navbar: React.FC = () => {
-    const { data: session, status } = useSession();
-    const router = useRouter();
+interface NavbarProps {
+    authState: AuthState
+}
 
-    const loading = status === "loading";
+const Navbar: React.FC<NavbarProps> = ({ authState }) => {
+    const router = useRouter();
 
     const { isOpen: rightMenuIsOpen, onToggle: rightMenuOnToggle } = useDisclosure();
     const { isOpen: modalIsOpen, onToggle: modalOnOpen, onClose: modalOnClose } = useDisclosure();
-
-    const [authState, setAuthState] = useState<AuthState>({ isLoggedIn: false });
-
-    useEffect(() => {
-        (async() => {
-            if (session && session.userId) {
-                setAuthState({ isLoggedIn: true, principalId: session.userId as string });
-            } else {
-                setAuthState({ isLoggedIn: false, principalId: undefined });
-            }
-        })();
-    }, [session?.userId]);
 
     return (
         <Box
@@ -90,10 +78,12 @@ const Navbar: React.FC = () => {
                     textAlign={ 'right' }
                     spacing={6}>
                     {
-                        loading && <>loading...</>
+                        authState?.isLoading
+                        && <>...</>
                     }
                     {
-                        authState?.isLoggedIn
+                        !authState?.isLoading
+                        && authState?.isLoggedIn
                         && (
                             <Flex flex={{ base: 1, md: 2 }} justify={{ base: 'center', md: 'end' }}>
                                 <HStack mr='15px'>
@@ -110,7 +100,7 @@ const Navbar: React.FC = () => {
                                 </HStack>
                                 <UserWidget
                                     userId={ authState?.principalId as string }
-                                    profilePic={ session?.user?.image + '?referrerpolicy="no-referrer"' as string } />
+                                    profilePic={ authState?.principalAvatar + '?referrerpolicy="no-referrer"' as string } />
                                 <NextLink href={'/ask'}>
                                     <Button
                                         bg={'blue.400'}
@@ -126,7 +116,9 @@ const Navbar: React.FC = () => {
                         )
                     }
                     {
-                        !session && !loading && (
+                        !authState?.isLoading
+                        && !authState?.isLoggedIn
+                        && (
                             <>
                                 <Button
                                     onClick={ modalOnOpen }

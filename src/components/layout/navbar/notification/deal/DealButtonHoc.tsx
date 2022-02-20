@@ -46,6 +46,7 @@ const DealButtonHoc: FC<DealButtonHocProps> = ({ authState }) => {
             stompDispatcher.on(APP_DEAL_BOX__DEAL_CANCELLED, (deal: DealCancelledDto) => {
                 const updatedDeals = removeDealByPostId(dealsRes?.success, deal?.postId);
                 setDealsRes({...defaultDealsRes, success: updatedDeals })
+
                 infoToast(`Deal cancelled: ${ deal.postTitle }`);
             });
         }

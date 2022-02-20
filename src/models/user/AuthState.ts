@@ -1,5 +1,7 @@
 
 export default interface AuthState {
+    isLoading: boolean,
     isLoggedIn: boolean,
-    principalId?: string
+    principalId?: string,
+    principalAvatar?: string
 }

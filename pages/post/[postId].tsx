@@ -40,17 +40,29 @@ export async function getServerSideProps(ctx: { query: { postId: string } }) {
 }
 
 const PostByIdPage: NextPage = (props: any) => {
-    const { data: session } = useSession();
+    const { data: session, status } = useSession();
     const { query } = useRouter();
     const { ssrPost } = props;
 
     const queryPartnerId = query?.partnerId;
 
-    const [authState, setAuthState] = useState<AuthState>({ isLoggedIn: false });
     const [viewState, setViewState] = useState<PostPageViewState>(PostPageViewState.LOGGED_OFF);
     const [partnerRes, setPartnerRes] = useState<ApiResult<User>>();
     const [post, setPost] = useState<Post>(ssrPost);
 
+
+    const defaultAuthState = { isLoading: true, isLoggedIn: false };
+    const [authState, setAuthState] = useState<AuthState>(defaultAuthState);
+
+    useEffect(() => {
+        if (status === 'loading') {
+            setAuthState({ ...defaultAuthState });
+        } else if (session?.userId) {
+            setAuthState({ isLoading: false, isLoggedIn: true, principalId: session.userId as string, principalAvatar: session?.user?.image as string });
+        } else {
+            setAuthState({ isLoading: false, isLoggedIn: false, principalId: undefined, principalAvatar: undefined });
+        }
+    }, [session, status]);
 
     useEffect(() => {
         (async() => {
@@ -60,14 +72,6 @@ const PostByIdPage: NextPage = (props: any) => {
             }
         })();
     }, [query?.postId]);
-
-    useEffect(() => {
-        if (session && session.userId) {
-            setAuthState({ isLoggedIn: true, principalId: session.userId as string })
-        } else {
-            setAuthState({ isLoggedIn: false, principalId: undefined });
-        }
-    }, [session?.userId]);
 
     useEffect(() => {
         (async () => {
@@ -91,7 +95,7 @@ const PostByIdPage: NextPage = (props: any) => {
             <Head>
                 <title>{ post?.postTitle }</title>
             </Head>
-            <AppLayout>
+            <AppLayout authState={ authState }>
                 <PostStompConnect
                     authState={ authState }
                     viewState={ viewState }

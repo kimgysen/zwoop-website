@@ -14,8 +14,8 @@ const DealBoxItem: FC<DealBoxItemProps> = ({ deal, closePopup }) => {
     const router = useRouter();
 
     const handleClickDealBoxDetail = async () => {
-        await router.push(`/post/${ deal?.postId }`);
         closePopup();
+        await router.push(`/post/${ deal?.postId }`);
     }
 
     return (

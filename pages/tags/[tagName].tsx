@@ -18,31 +18,33 @@ import TagStompConnect from "@components/stomp/tag/TagStompConnect";
 
 const FeedByTag: NextPage = () => {
 
-    const { data: session } = useSession();
+    const { data: session, status } = useSession();
 
     const router = useRouter();
     const query = router.query;
 
-    const [authState, setAuthState] = useState<AuthState>({ isLoggedIn: false });
     const [isWatchListDirty, setWatchListDirty] = useState<boolean>(true);
 
 
+    const defaultAuthState = { isLoading: true, isLoggedIn: false };
+    const [authState, setAuthState] = useState<AuthState>(defaultAuthState);
+
     useEffect(() => {
-        (async() => {
-            if (session && session.userId) {
-                setAuthState({ isLoggedIn: true, principalId: session.userId as string })
-            } else {
-                setAuthState({ isLoggedIn: false, principalId: undefined });
-            }
-        })();
-    }, [session, session?.userId]);
+        if (status === 'loading') {
+            setAuthState({ ...defaultAuthState, isLoading: true })
+        } else if (session?.userId) {
+            setAuthState({ isLoading: false, isLoggedIn: true, principalId: session.userId as string, principalAvatar: session?.user?.image as string });
+        } else {
+            setAuthState({ isLoading: false, isLoggedIn: false, principalId: undefined, principalAvatar: undefined });
+        }
+    }, [session, status]);
 
     return (
         <>
             <Head>
                 <title>Questions per tag</title>
             </Head>
-            <AppLayout>
+            <AppLayout authState={ authState }>
                 <ThreeColumnLayout
                     leftComponent={
                         authState.isLoggedIn
