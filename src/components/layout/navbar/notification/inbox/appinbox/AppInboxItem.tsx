@@ -21,8 +21,8 @@ const AppInboxItem: FC<AppInboxItemProps> = ({ authState, inboxItem, closePopup 
     const partner: ChatPartner = getPartnerFromInboxItem(inboxItem);
 
     const handleClickInboxDetail = async () => {
-        await router.push(`/post/${ inboxItem?.postId }?partnerId=${ partner?.partnerId }`);
         closePopup();
+        await router.push(`/post/${ inboxItem?.postId }?partnerId=${ partner?.partnerId }`);
     }
 
     return (

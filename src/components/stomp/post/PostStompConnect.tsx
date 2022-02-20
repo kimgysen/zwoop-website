@@ -59,7 +59,7 @@ const PostStompConnect: FC<PostStompConnectProps> = (
             })();
         }
 
-    }, [authState.isLoggedIn, viewState, queryPartnerId]);
+    }, [authState.isLoggedIn, viewState, post?.postId, queryPartnerId]);
 
     return (
         <>{ children }</>
