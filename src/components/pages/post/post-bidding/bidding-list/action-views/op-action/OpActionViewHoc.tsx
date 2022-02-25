@@ -5,8 +5,8 @@ import React, {FC, useState} from "react";
 import {KeyedMutator} from "swr";
 import Bidding from "@models/db/entity/Bidding";
 import ApiResult from "@api_clients/type/ApiResult";
-import AcceptBiddingModal
-    from "@components/pages/post/post-bidding/bidding-list/action-views/op-action/modal/AcceptBiddingModal";
+import CreateDealModal
+    from "@components/pages/post/post-bidding/bidding-list/action-views/op-action/modal/CreateDealModal";
 import Post from "@models/db/entity/Post";
 import {useRouter} from "next/router";
 import {createDealApi} from "@api_clients/feature/deal/DealApiClient";
@@ -26,17 +26,17 @@ const OpActionViewHoc: FC<OpActionViewHocProps> = ({ authState, post, biddingIte
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     const defaultResult = { loading: false, success: null, error: null };
-    const [acceptResult, setAcceptResult] = useState<ApiResult<boolean>>(defaultResult);
+    const [createDealResult, setCreateDealResult] = useState<ApiResult<boolean>>(defaultResult);
 
 
     const handleChat = () => {
         router.push(`/post/${post?.postId}?partnerId=${ biddingItem?.consultant?.userId }`);
     }
 
-    const handleAcceptBidding = async (biddingId: string) => {
-        setAcceptResult({ ...defaultResult, loading: true });
+    const createDeal = async (biddingId: string) => {
+        setCreateDealResult({ ...defaultResult, loading: true });
         const res = await createDealApi({ biddingId });
-        setAcceptResult(res);
+        setCreateDealResult(res);
         onClose();
         await mutate();
     }
@@ -63,13 +63,13 @@ const OpActionViewHoc: FC<OpActionViewHocProps> = ({ authState, post, biddingIte
                             icon={<FaGavel />}
                 />
             </Tooltip>
-            <AcceptBiddingModal
+            <CreateDealModal
                 isOpen={ isOpen }
                 onClose={ onClose }
                 post={ post }
                 biddingItem={ biddingItem }
-                acceptBidding={ handleAcceptBidding }
-                acceptResult={ acceptResult } />
+                createDeal={ createDeal }
+                createDealResult={ createDealResult } />
         </Flex>
     )
 }

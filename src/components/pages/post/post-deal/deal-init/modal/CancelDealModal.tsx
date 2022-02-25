@@ -24,7 +24,6 @@ interface CancelDealModalProps {
 
 const CancelDealModal: FC<CancelDealModalProps> =
     ({ isOpen, onClose, dealId, cancelDeal, cancelDealResult }) => {
-
         return (
             <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />

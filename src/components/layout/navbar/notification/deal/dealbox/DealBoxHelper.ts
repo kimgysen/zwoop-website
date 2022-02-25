@@ -1,17 +1,17 @@
-import Deal from "@models/db/entity/Deal";
+import DealInitDto from "@models/dto/stomp/receive/dealbox/DealInitDto";
 
-export const isDealBoxEmpty = (deals?: Deal[] | null) =>
+export const isDealBoxEmpty = (deals?: DealInitDto[] | null) =>
     !deals || deals.length === 0;
 
-export const addDeal = (deals: Deal[] | null, deal: Deal) =>
+export const addDeal = (deals: DealInitDto[] | null, dealInitDto: DealInitDto) =>
      deals
-        ? [deal, ...deals]
-        : [deal];
+        ? [dealInitDto, ...deals]
+        : [dealInitDto];
 
-export const removeDealByPostId = (deals: Deal[] | null, postId: string) =>
+export const removeDealById = (deals: DealInitDto[] | null, dealId: string) =>
     deals
-        ? deals.filter(deal => deal.postId !== postId)
+        ? deals.filter(deal => deal.dealId !== dealId)
         : [];
 
-export const isLastDealBoxItem = (dealBoxItems: Deal[], idx: number) =>
+export const isLastDealBoxItem = (dealBoxItems: DealInitDto[], idx: number) =>
     dealBoxItems.length - 1 === idx;

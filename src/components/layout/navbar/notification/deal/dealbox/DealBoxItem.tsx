@@ -1,5 +1,5 @@
 import React, {FC} from "react";
-import DealInitDto from "@models/dto/stomp/receive/common/deal/DealInitDto";
+import DealInitDto from "@models/dto/stomp/receive/dealbox/DealInitDto";
 import {useRouter} from "next/router";
 import {Box} from "@chakra-ui/layout/src/box";
 

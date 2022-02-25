@@ -1,10 +1,10 @@
 import urlJoin from "url-join";
 import axios, {AxiosError} from "axios";
-import Deal from "@models/db/entity/Deal";
 import ApiResult from "@api_clients/type/ApiResult";
 import {handleAxiosError, handleAxiosResponse} from "@api_clients/util/ResponseUtil";
 import CreateDealDto from "@models/dto/rest/send/deal/CreateDealDto";
 import {getRawJwt} from "../../../service/jwt/JwtService";
+import DealInitDto from "@models/dto/stomp/receive/dealbox/DealInitDto";
 
 
 const backendBaseUri = process.env.NEXT_PUBLIC_API_BACKEND_BASE_URI;
@@ -16,7 +16,7 @@ export const createDealApi:
     (createDealDto: CreateDealDto) => Promise<ApiResult<boolean>> =
     async (createDealDto) => {
         const jwt = await getRawJwt();
-        return axios.put(dealApiPrivateEndpoint, createDealDto, {
+        return axios.post(dealApiPrivateEndpoint, createDealDto, {
             headers: {
                 Authorization: `Bearer ${ jwt }`
             }
@@ -33,8 +33,8 @@ export const cancelDealApi:
     (dealId: string) => Promise<ApiResult<boolean>> =
     async (dealId) => {
         const jwt = await getRawJwt();
-
         const url = urlJoin(dealApiPrivateEndpoint, dealId);
+
         return axios
             .delete(url, {
                 headers: {
@@ -51,7 +51,7 @@ export const cancelDealApi:
 }
 
 export const getDealsForUserApi:
-    () => Promise<ApiResult<Deal[]>> =
+    () => Promise<ApiResult<DealInitDto[]>> =
     async () => {
 
         const jwt = await getRawJwt();

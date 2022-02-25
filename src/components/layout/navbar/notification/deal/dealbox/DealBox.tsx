@@ -1,6 +1,6 @@
 import React, {FC} from "react";
 import AuthState from "@models/auth/AuthState";
-import DealInitDto from "@models/dto/stomp/receive/common/deal/DealInitDto";
+import DealInitDto from "@models/dto/stomp/receive/dealbox/DealInitDto";
 import DealBoxLoading from "@components/layout/navbar/notification/deal/dealbox/fallbackviews/DealBoxLoading";
 import {isDealBoxEmpty, isLastDealBoxItem} from "@components/layout/navbar/notification/deal/dealbox/DealBoxHelper";
 import DealBoxEmpty from "@components/layout/navbar/notification/deal/dealbox/fallbackviews/DealBoxEmpty";

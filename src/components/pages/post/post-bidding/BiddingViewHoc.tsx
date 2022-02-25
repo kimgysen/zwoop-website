@@ -57,13 +57,12 @@ const BiddingViewHoc: FC<BiddingViewHocProps> = ({ authState, post }) => {
                 infoToast(`Bidding deleted by ${ removedBiddingDto?.consultant?.nickName }`);
             });
 
-            stompDispatcher.on(POST_UPDATE__DEAL_INIT, (deal: Deal) => {
-                mutate();
-                setDeal(deal);
+            stompDispatcher.on(POST_UPDATE__DEAL_INIT, (dealDto: Deal) => {
+                setDeal(dealDto);
                 setPostStatus(PostStatusEnum.DEAL_INIT);
             });
 
-            stompDispatcher.on(POST_UPDATE__DEAL_CANCELLED, (deal: Deal) => {
+            stompDispatcher.on(POST_UPDATE__DEAL_CANCELLED, () => {
                 mutate();
                 setDeal(null);
                 setPostStatus(PostStatusEnum.POST_INIT);
@@ -90,7 +89,6 @@ const BiddingViewHoc: FC<BiddingViewHocProps> = ({ authState, post }) => {
                         authState={ authState }
                         post={ post }
                         deal={ deal }
-                        mutate={ mutate }
                     />
                 )
             }

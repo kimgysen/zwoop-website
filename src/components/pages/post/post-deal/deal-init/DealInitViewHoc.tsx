@@ -6,8 +6,6 @@ import AuthState from "@models/auth/AuthState";
 import Post from "@models/db/entity/Post";
 import CancelDealModal from "@components/pages/post/post-deal/deal-init/modal/CancelDealModal";
 import ApiResult from "@api_clients/type/ApiResult";
-import {KeyedMutator} from "swr";
-import Bidding from "@models/db/entity/Bidding";
 import {cancelDealApi} from "@api_clients/feature/deal/DealApiClient";
 import {isOp} from "../../../../../util/PostUtil";
 import Deal from "@models/db/entity/Deal";
@@ -16,11 +14,10 @@ import Deal from "@models/db/entity/Deal";
 interface AcceptedBiddingViewProps {
     authState: AuthState,
     post: Post,
-    deal: Deal,
-    mutate: KeyedMutator<Bidding[]>
+    deal: Deal
 }
 
-const DealInitViewHoc: FC<AcceptedBiddingViewProps> = ({ authState, post, deal, mutate }) => {
+const DealInitViewHoc: FC<AcceptedBiddingViewProps> = ({ authState, post, deal }) => {
 
     const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -32,7 +29,6 @@ const DealInitViewHoc: FC<AcceptedBiddingViewProps> = ({ authState, post, deal, 
         const res = await cancelDealApi(dealId);
         setCancelDealResult(res);
         onClose();
-        await mutate();
     }
 
     return (

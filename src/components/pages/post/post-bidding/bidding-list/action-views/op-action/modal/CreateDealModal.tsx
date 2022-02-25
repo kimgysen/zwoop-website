@@ -21,12 +21,12 @@ interface AcceptBiddingModalProps {
     onClose: () => void,
     post: Post,
     biddingItem: Bidding,
-    acceptBidding: (postId: string, biddingId: string) => void,
-    acceptResult: ApiResult<boolean>
+    createDeal: (biddingId: string) => void,
+    createDealResult: ApiResult<boolean>
 }
 
-const AcceptBiddingModal: FC<AcceptBiddingModalProps> =
-    ({ isOpen, onClose, post, biddingItem, acceptBidding, acceptResult }) => {
+const CreateDealModal: FC<AcceptBiddingModalProps> =
+    ({ isOpen, onClose, post, biddingItem, createDeal, createDealResult }) => {
 
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
@@ -42,7 +42,7 @@ const AcceptBiddingModal: FC<AcceptBiddingModalProps> =
                 <ModalFooter>
                     <VStack align='right'>
                         {
-                            acceptResult.loading &&
+                            createDealResult.loading &&
                             <Button
                                 disabled
                                 isLoading
@@ -52,22 +52,22 @@ const AcceptBiddingModal: FC<AcceptBiddingModalProps> =
                             />
                         }
                         {
-                            !acceptResult.loading &&
+                            !createDealResult.loading &&
                             <Button
                                 colorScheme='blue'
-                                onClick={ () => acceptBidding(post?.postId, biddingItem?.biddingId) }
+                                onClick={ () => createDeal(biddingItem?.biddingId) }
                                 w='80px'
                             >
                                 Yes
                             </Button>
                         }
                         {
-                            acceptResult.success &&
+                            createDealResult.success &&
                             <Box color='green'>Success</Box>
                         }
                         {
-                            acceptResult.error &&
-                            <Box color='red'>{ acceptResult.error }</Box>
+                            createDealResult.error &&
+                            <Box color='red'>{ createDealResult.error }</Box>
                         }
                     </VStack>
                 </ModalFooter>
@@ -76,4 +76,4 @@ const AcceptBiddingModal: FC<AcceptBiddingModalProps> =
     )
 }
 
-export default AcceptBiddingModal;
+export default CreateDealModal;

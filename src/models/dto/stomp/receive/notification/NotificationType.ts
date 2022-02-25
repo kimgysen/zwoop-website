@@ -1,6 +1,6 @@
 
 export enum NotificationFeatureType {
-    DEAL_OPENED = 'DEAL_OPENED',
+    DEAL_INIT = 'DEAL_INIT',
     DEAL_CANCELLED = 'DEAL_CANCELLED',
     DEAL_PAID = 'DEAL_PAID'
 }

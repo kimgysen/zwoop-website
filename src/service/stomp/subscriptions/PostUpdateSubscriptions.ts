@@ -16,7 +16,8 @@ import BiddingAddedDto from "@models/dto/stomp/receive/post/feature/bidding/Bidd
 import BiddingChangedDto from "@models/dto/stomp/receive/post/feature/bidding/BiddingChangedDto";
 import BiddingRemovedDto from "@models/dto/stomp/receive/post/feature/bidding/BiddingRemovedDto";
 import {dispatchCustomMessage} from "./SubscriptionUtil";
-import DealInitDto from "@models/dto/stomp/receive/common/deal/DealInitDto";
+import DealInitDto from "@models/dto/stomp/receive/dealbox/DealInitDto";
+import DealCancelledDto from "@models/dto/stomp/receive/dealbox/DealCancelledDto";
 
 
 export const subscribeToPostUpdates = (postId: string) => {
@@ -38,7 +39,6 @@ export const subscribeToPostUpdates = (postId: string) => {
                     break;
 
                 case PostUpdateFeatureType.BIDDING_CHANGED:
-                    console.log(postUpdateFeatureDto);
                     dispatchCustomMessage(POST_UPDATE__BIDDING_CHANGED, postUpdateFeatureDto.dto as BiddingChangedDto);
                     break;
 
@@ -51,7 +51,7 @@ export const subscribeToPostUpdates = (postId: string) => {
                     break;
 
                 case PostUpdateFeatureType.DEAL_CANCELLED:
-                    dispatchCustomMessage(POST_UPDATE__DEAL_CANCELLED, postUpdateFeatureDto.dto as DealInitDto);
+                    dispatchCustomMessage(POST_UPDATE__DEAL_CANCELLED, postUpdateFeatureDto.dto as DealCancelledDto);
                     break;
 
             }
