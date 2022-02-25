@@ -1,10 +1,10 @@
 import React, {FC, useEffect, useState} from "react";
 import {Avatar, Box, HStack, Tag, Text, VStack} from "@chakra-ui/react";
-import InboxItemReceiveDto from "../../../../../service/stomp/dto/receive/inbox/InboxItemReceiveDto";
+import InboxItemReceiveDto from "../../../../../models/dto/stomp/receive/inbox/InboxItemReceiveDto";
 import TimeAgo from "react-timeago";
 import ChatPartner from "@models/chat/ChatPartner";
-import PartnerReadDto from "../../../../../service/stomp/dto/receive/private_chat/feature/PartnerReadDto";
-import TypingDto from "../../../../../service/stomp/dto/receive/private_chat/feature/TypingDto";
+import PartnerReadDto from "../../../../../models/dto/stomp/receive/private_chat/feature/PartnerReadDto";
+import TypingDto from "../../../../../models/dto/stomp/receive/private_chat/feature/TypingDto";
 import PartnerTypingBox from "@components/pages/post/post_chat/private_chat/chatbox/subviews/PartnerTypingBox";
 import PartnerReadBox from "@components/pages/post/post_chat/private_chat/chatbox/subviews/PartnerReadBox";
 import {getStompDispatcher} from "../../../../../event_dispatchers/StompDispatcher";

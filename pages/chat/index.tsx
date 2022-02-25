@@ -4,20 +4,18 @@ import AppLayout from "@components/layout/AppLayout";
 import React, {useEffect, useState} from "react";
 import GeneralAppChatBox from "@components/pages/chat/GeneralAppChatBox";
 import {useSession} from "next-auth/react";
-import AuthState from "@models/user/AuthState";
+import AuthState, {defaultAuthState} from "@models/auth/AuthState";
+import {getAuthState} from "@components/auth/AuthStateHelper";
 
 
 const ChatPage: NextPage = () => {
-    const { data: session } = useSession();
-    const [authState, setAuthState] = useState<AuthState>({ isLoggedIn: false });
+    const { data: session, status } = useSession();
+    const [authState, setAuthState] = useState<AuthState>(defaultAuthState);
 
     useEffect(() => {
-        if (session && session.userId) {
-            setAuthState({ isLoggedIn: true, principalId: session.userId as string })
-        } else {
-            setAuthState({ isLoggedIn: false, principalId: undefined });
-        }
-    }, [session?.userId]);
+        setAuthState(
+            getAuthState(session, status));
+    }, [session, status]);
 
 
     return (

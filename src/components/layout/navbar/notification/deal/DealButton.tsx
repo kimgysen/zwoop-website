@@ -13,15 +13,15 @@ import {
 import React, {FC, useState} from "react";
 import {css} from '@emotion/react';
 import {FaHandshake} from "react-icons/fa";
-import AuthState from "@models/user/AuthState";
+import AuthState from "@models/auth/AuthState";
 import DealBox from "@components/layout/navbar/notification/deal/dealbox/DealBox";
-import DealOpenedDto from "../../../../../service/stomp/dto/receive/notification/feature/deal/DealOpenedDto";
+import DealInitDto from "@models/dto/stomp/receive/common/deal/DealInitDto";
 
 
 interface DealButtonProps {
     authState: AuthState
     dealBoxLoading: boolean,
-    dealBoxItems?: DealOpenedDto[] | null
+    dealBoxItems?: DealInitDto[] | null
 }
 
 const DealButton: FC<DealButtonProps> = ({ authState, dealBoxLoading, dealBoxItems }) => {

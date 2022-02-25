@@ -1,6 +1,6 @@
 import {FC, useEffect} from "react";
 import {useRouter} from "next/router";
-import AuthState from "@models/user/AuthState";
+import AuthState from "@models/auth/AuthState";
 import {disconnectStomp} from "../../../service/stomp/StompService";
 import {connectToPublicChat} from "@components/stomp/tag/TagStompConnectHelper";
 

@@ -1,5 +1,5 @@
 import React, {FC} from "react";
-import Currency from "@models/post/Currency";
+import Currency from "@models/db/entity/Currency";
 import {Center, VStack} from "@chakra-ui/react";
 
 interface BnbBoxSmProps {

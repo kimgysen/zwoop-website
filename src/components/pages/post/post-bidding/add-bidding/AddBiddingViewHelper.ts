@@ -1,9 +1,9 @@
 import {getRawJwt} from "../../../../../service/jwt/JwtService";
-import {saveBiddingApi} from "@api_clients/feature/bidding/BiddingService";
-import CreateBidding from "@models/post/bidding/CreateBidding";
+import {createBiddingApi} from "@api_clients/feature/bidding/BiddingApiClient";
+import CreateBiddingDto from "@models/dto/rest/send/bidding/CreateBiddingDto";
 import ApiResult from "@api_clients/type/ApiResult";
 
-export const createBidding = async (bidding: CreateBidding): Promise<ApiResult<boolean>> => {
+export const createBidding = async (bidding: CreateBiddingDto): Promise<ApiResult<boolean>> => {
     const jwt = await getRawJwt();
-    return saveBiddingApi(bidding, jwt);
+    return createBiddingApi(bidding, jwt);
 }

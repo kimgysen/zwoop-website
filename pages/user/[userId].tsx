@@ -5,11 +5,12 @@ import ThreeColumnLayout from "@components/layout/column-layouts/ThreeColumnLayo
 import {Box} from "@chakra-ui/react";
 import React, {useEffect, useState} from "react";
 import UserCard from "@components/pages/user/UserCard";
-import {getUserById} from "@api_clients/feature/user/UserService";
+import {getUserById} from "@api_clients/feature/user/UserApiClient";
 import UserMenu from "@components/pages/user/UserMenu";
 import {useSession} from "next-auth/react";
-import AuthState from "@models/user/AuthState";
+import AuthState, {defaultAuthState} from "@models/auth/AuthState";
 import WatchListHoc from "@components/widgets/watchlist/WatchListHoc";
+import {getAuthState} from "@components/auth/AuthStateHelper";
 
 
 export async function getServerSideProps(ctx: { query: { userId: string } }) {
@@ -25,17 +26,11 @@ const UserProfile: NextPage = (props: any) => {
     const userRes = props;
     const { data: session, status } = useSession();
 
-    const defaultAuthState = { isLoading: true, isLoggedIn: false };
     const [authState, setAuthState] = useState<AuthState>(defaultAuthState);
 
     useEffect(() => {
-        if (status === 'loading') {
-            setAuthState({ ...defaultAuthState, isLoading: true })
-        } else if (session?.userId) {
-            setAuthState({ isLoading: false, isLoggedIn: true, principalId: session.userId as string, principalAvatar: session?.user?.image as string });
-        } else {
-            setAuthState({ isLoading: false, isLoggedIn: false, principalId: undefined, principalAvatar: undefined });
-        }
+        setAuthState(
+            getAuthState(session, status));
     }, [session, status]);
 
 

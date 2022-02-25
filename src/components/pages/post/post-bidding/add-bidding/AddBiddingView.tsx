@@ -10,7 +10,7 @@ import FormCard from "@components/widgets/form/FormCard";
 import {Flex} from "@chakra-ui/layout/src/flex";
 import SaveButton from "@components/widgets/form/buttons/SaveButton";
 import {Box} from "@chakra-ui/layout/src/box";
-import Post from "@models/post/Post";
+import Post from "@models/db/entity/Post";
 
 interface AddBidViewProps {
     post: Post,

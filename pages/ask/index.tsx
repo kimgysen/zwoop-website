@@ -6,14 +6,15 @@ import CenterContainer from "@components/layout/center/CenterContainer";
 import {Box} from "@chakra-ui/layout/src/box";
 import {Flex} from "@chakra-ui/react";
 import EditFormDetailsView from "@components/pages/ask/EditFormDetailsView";
-import Tag from "@models/tag/Tag";
+import Tag from "@models/db/entity/Tag";
 import {getRawJwt} from "../../src/service/jwt/JwtService";
 import SaveButton from "@components/widgets/form/buttons/SaveButton";
-import {createPost} from "@api_clients/feature/post/PostService";
+import {createPost} from "@api_clients/feature/post/PostApiClient";
 import {useRouter} from "next/router";
 import {validateForm} from "@components/pages/ask/validate";
 import {useSession} from "next-auth/react";
-import AuthState from "@models/user/AuthState";
+import AuthState, {defaultAuthState} from "@models/auth/AuthState";
+import {getAuthState} from "@components/auth/AuthStateHelper";
 
 
 const Ask: NextPage = () => {
@@ -28,17 +29,11 @@ const Ask: NextPage = () => {
     const [saveError, setSaveError] = useState<string|null>(null);
 
 
-    const defaultAuthState = { isLoading: true, isLoggedIn: false };
     const [authState, setAuthState] = useState<AuthState>(defaultAuthState);
 
     useEffect(() => {
-        if (status === 'loading') {
-            setAuthState({ ...defaultAuthState, isLoading: true })
-        } else if (session?.userId) {
-            setAuthState({ isLoading: false, isLoggedIn: true, principalId: session.userId as string, principalAvatar: session?.user?.image as string });
-        } else {
-            setAuthState({ isLoading: false, isLoggedIn: false, principalId: undefined, principalAvatar: undefined });
-        }
+        setAuthState(
+            getAuthState(session, status));
     }, [session, status]);
 
     useEffect(() => {
@@ -121,7 +116,6 @@ const Ask: NextPage = () => {
             </AppLayout>
         </>
     )
-
 }
 
 export default Ask;

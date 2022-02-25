@@ -4,16 +4,17 @@ import AppLayout from "@components/layout/AppLayout";
 import ThreeColumnLayout from "@components/layout/column-layouts/ThreeColumnLayout";
 import React, {useEffect, useState} from "react";
 import {useRouter} from "next/router";
-import {PostStatusEnum} from "@models/post/Post";
 import TagChatWidget from "@components/pages/tag/chat/TagChatWidget";
-import {FeedTypeEnum} from "@api_clients/feature/post/PostService";
+import {FeedTypeEnum} from "@api_clients/feature/post/PostApiClient";
 import {useSession} from "next-auth/react";
 import Card from "@components/layout/components/card/Card";
-import AuthState from "@models/user/AuthState";
+import AuthState, {defaultAuthState} from "@models/auth/AuthState";
 import WatchListHoc from "@components/widgets/watchlist/WatchListHoc";
 import TagHeaderHoc from "@components/pages/tag/header/TagHeaderHoc";
 import FeedListHoc from "@components/widgets/feed/FeedListHoc";
 import TagStompConnect from "@components/stomp/tag/TagStompConnect";
+import {getAuthState} from "@components/auth/AuthStateHelper";
+import {PostStatusEnum} from "@models/db/entity/PostStatus";
 
 
 const FeedByTag: NextPage = () => {
@@ -23,20 +24,12 @@ const FeedByTag: NextPage = () => {
     const router = useRouter();
     const query = router.query;
 
+    const [authState, setAuthState] = useState<AuthState>(defaultAuthState);
     const [isWatchListDirty, setWatchListDirty] = useState<boolean>(true);
 
-
-    const defaultAuthState = { isLoading: true, isLoggedIn: false };
-    const [authState, setAuthState] = useState<AuthState>(defaultAuthState);
-
     useEffect(() => {
-        if (status === 'loading') {
-            setAuthState({ ...defaultAuthState, isLoading: true })
-        } else if (session?.userId) {
-            setAuthState({ isLoading: false, isLoggedIn: true, principalId: session.userId as string, principalAvatar: session?.user?.image as string });
-        } else {
-            setAuthState({ isLoading: false, isLoggedIn: false, principalId: undefined, principalAvatar: undefined });
-        }
+        setAuthState(
+            getAuthState(session, status));
     }, [session, status]);
 
     return (
@@ -66,7 +59,7 @@ const FeedByTag: NextPage = () => {
                                 />
                                 <FeedListHoc
                                     feedType={ FeedTypeEnum.FEED_BY_TAG }
-                                    postStatus={ PostStatusEnum.OPEN }
+                                    postStatus={ PostStatusEnum.POST_INIT }
                                     page={ 0 }
                                     pageSize={ 50 }
                                     tagName={ query.tagName as string }

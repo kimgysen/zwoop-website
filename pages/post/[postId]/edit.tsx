@@ -1,5 +1,5 @@
 import {NextPage} from "next";
-import {getSsrPostById, updatePost} from "@api_clients/feature/post/PostService";
+import {getSsrPostById, updatePost} from "@api_clients/feature/post/PostApiClient";
 import {AxiosError, AxiosResponse} from "axios";
 import {useSession} from "next-auth/react";
 import {useRouter} from "next/router";
@@ -11,10 +11,11 @@ import {Flex} from "@chakra-ui/react";
 import {Box} from "@chakra-ui/layout/src/box";
 import EditFormDetailsView from "@components/pages/ask/EditFormDetailsView";
 import SaveButton from "@components/widgets/form/buttons/SaveButton";
-import Tag from "@models/tag/Tag";
+import Tag from "@models/db/entity/Tag";
 import {getRawJwt} from "../../../src/service/jwt/JwtService";
 import CancelButton from "@components/widgets/form/buttons/CancelButton";
-import AuthState from "@models/user/AuthState";
+import AuthState, {defaultAuthState} from "@models/auth/AuthState";
+import {getAuthState} from "@components/auth/AuthStateHelper";
 
 
 export async function getServerSideProps(ctx: { query: { postId: string } }) {
@@ -40,23 +41,16 @@ const PostEditPage: NextPage = (props: any) => {
     const [isFormValid, setFormValid] = useState(true);
     const [saveError, setSaveError] = useState<string|null>(null);
 
-
-    const defaultAuthState = { isLoading: true, isLoggedIn: false };
     const [authState, setAuthState] = useState<AuthState>(defaultAuthState);
 
     useEffect(() => {
-        if (status === 'loading') {
-            setAuthState({ ...defaultAuthState, isLoading: true })
-        } else if (session?.userId) {
-            setAuthState({ isLoading: false, isLoggedIn: true, principalId: session.userId as string, principalAvatar: session?.user?.image as string });
-        } else {
-            setAuthState({ isLoading: false, isLoggedIn: false, principalId: undefined, principalAvatar: undefined });
-        }
+        setAuthState(
+            getAuthState(session, status));
     }, [session, status]);
 
     const onSave = async (e: any) => {
         const jwt = await getRawJwt();
-        const resp = await updatePost(post.postId, {
+        const resp = await updatePost(post?.postId, {
             title,
             text: descriptionMd,
             tags,
@@ -67,7 +61,7 @@ const PostEditPage: NextPage = (props: any) => {
         if (resp.error) {
             setSaveError(resp.error);
         } else {
-            router.push(`/post/${ post.postId }`);
+            router.push(`/post/${ post?.postId }`);
         }
     }
 

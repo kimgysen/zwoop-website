@@ -1,7 +1,7 @@
 import React, {FC, useEffect, useState} from "react";
-import InboxItemReceiveDto from "../../../../../service/stomp/dto/receive/inbox/InboxItemReceiveDto";
+import InboxItemReceiveDto from "../../../../../models/dto/stomp/receive/inbox/InboxItemReceiveDto";
 import {countUnreadMessages, rebuildInbox, sortInboxItems} from "../../../../../util/InboxUtil";
-import AuthState from "@models/user/AuthState";
+import AuthState from "@models/auth/AuthState";
 import {getStompDispatcher} from "../../../../../event_dispatchers/StompDispatcher";
 import {
     APP_INBOX__ON_INBOX_UPDATE_RECEIVED,

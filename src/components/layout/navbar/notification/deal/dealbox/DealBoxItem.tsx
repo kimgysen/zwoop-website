@@ -1,11 +1,11 @@
 import React, {FC} from "react";
-import DealOpenedDto from "../../../../../../service/stomp/dto/receive/notification/feature/deal/DealOpenedDto";
+import DealInitDto from "@models/dto/stomp/receive/common/deal/DealInitDto";
 import {useRouter} from "next/router";
 import {Box} from "@chakra-ui/layout/src/box";
 
 
 interface DealBoxItemProps {
-    deal: DealOpenedDto,
+    deal: DealInitDto,
     closePopup: () => void
 }
 

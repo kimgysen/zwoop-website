@@ -1,7 +1,7 @@
 import TagsSearchBox from "@components/widgets/tags/TagsSearchBox";
 import {FC, useState} from "react";
-import Tag from "@models/tag/Tag";
-import {findTagsStartingWith} from "../../../api_clients/feature/tag/TagService";
+import Tag from "@models/db/entity/Tag";
+import {findTagsStartingWith} from "@api_clients/feature/tag/TagApiClient";
 import {Box} from "@chakra-ui/layout/src/box";
 
 

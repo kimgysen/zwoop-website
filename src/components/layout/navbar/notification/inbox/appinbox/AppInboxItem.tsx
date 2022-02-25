@@ -1,9 +1,9 @@
-import InboxItemReceiveDto from "../../../../../../service/stomp/dto/receive/inbox/InboxItemReceiveDto";
+import InboxItemReceiveDto from "../../../../../../models/dto/stomp/receive/inbox/InboxItemReceiveDto";
 import React, {FC} from "react";
 import {Avatar, Box, HStack, Tag, Text, VStack} from "@chakra-ui/react";
 import TimeAgo from "react-timeago";
 import ChatPartner from "@models/chat/ChatPartner";
-import AuthState from "@models/user/AuthState";
+import AuthState from "@models/auth/AuthState";
 import {useRouter} from "next/router";
 import {getPartnerFromInboxItem, hasUnreadMessages} from "../../../../../../util/InboxUtil";
 

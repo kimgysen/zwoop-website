@@ -1,29 +1,30 @@
 import React, {FC} from "react";
-import Bidding from "@models/post/bidding/Bidding";
+import Bidding from "@models/db/entity/Bidding";
 import {Link, Td, Text, Tr} from "@chakra-ui/react";
-import AskerActionViewHoc
-    from "@components/pages/post/post-bidding/bidding-list/action-views/asker-action/AskerActionViewHoc";
+import OpActionViewHoc from "@components/pages/post/post-bidding/bidding-list/action-views/op-action/OpActionViewHoc";
 import NextLink from "next/link";
-import Post, {PostStatusEnum} from "@models/post/Post";
+import Post from "@models/db/entity/Post";
 import BidderActionViewHoc
     from "@components/pages/post/post-bidding/bidding-list/action-views/bidder-action/BidderActionViewHoc";
 import {KeyedMutator} from "swr";
-import {isPostOwner, principalIsBidder} from "@components/pages/post/post-bidding/BiddingViewHelper";
-import BiddingAcceptedDto from "../../../../../service/stomp/dto/receive/post/feature/bidding/BiddingAcceptedDto";
+import {PostStatusEnum} from "@models/db/entity/PostStatus";
+import Deal from "@models/db/entity/Deal";
+import {isBiddingConsultant, isOp} from "../../../../../util/PostUtil";
+import AuthState from "@models/auth/AuthState";
 
 
 interface BiddingItemProps {
-    principalId: string,
+    authState: AuthState,
     post: Post,
     postStatus: PostStatusEnum,
     biddingItem: Bidding,
-    acceptedBidding: BiddingAcceptedDto|null,
-    mutate: KeyedMutator<Bidding[]>
+    mutate: KeyedMutator<Bidding[]>,
+    deal?: Deal|null,
 }
 
-const BiddingItem: FC<BiddingItemProps> = ({ principalId, post, postStatus, biddingItem, acceptedBidding, mutate }) => {
+const BiddingItem: FC<BiddingItemProps> = ({ authState, post, postStatus, biddingItem, deal, mutate }) => {
 
-    const isSelectedUser = acceptedBidding?.userId === biddingItem?.respondent?.userId;
+    const isSelectedUser = deal?.bidding?.consultant?.userId === biddingItem?.consultant?.userId;
 
     return (
         <Tr>
@@ -34,21 +35,21 @@ const BiddingItem: FC<BiddingItemProps> = ({ principalId, post, postStatus, bidd
             <Td fontSize='sm'
                 bg={ isSelectedUser ? 'yellow.100' : 'white' }
             >
-                <NextLink href={`/user/${ biddingItem.respondent.userId }`} passHref>
+                <NextLink href={`/user/${ biddingItem?.consultant?.userId }`} passHref>
                     <Link>
                         <Text isTruncated>
-                            { biddingItem.respondent.nickName }
+                            { biddingItem?.consultant?.nickName }
                         </Text>
                     </Link>
                 </NextLink>
             </Td>
             <Td>
                 {
-                    postStatus === PostStatusEnum.OPEN
-                    && principalIsBidder(principalId, biddingItem)
+                    postStatus === PostStatusEnum.POST_INIT
+                    && isBiddingConsultant(authState, biddingItem)
                     && (
                         <BidderActionViewHoc
-                            principalId={ principalId }
+                            authState={ authState }
                             post={ post }
                             biddingItem={ biddingItem }
                             mutate={ mutate }
@@ -56,11 +57,11 @@ const BiddingItem: FC<BiddingItemProps> = ({ principalId, post, postStatus, bidd
                     )
                 }
                 {
-                    postStatus === PostStatusEnum.OPEN
-                    && isPostOwner(post, principalId)
+                    postStatus === PostStatusEnum.POST_INIT
+                    && isOp(authState, post)
                     && (
-                        <AskerActionViewHoc
-                            principalId={ principalId }
+                        <OpActionViewHoc
+                            authState={ authState }
                             post={ post }
                             biddingItem={ biddingItem }
                             mutate={ mutate }

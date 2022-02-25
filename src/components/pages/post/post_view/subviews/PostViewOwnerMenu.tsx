@@ -3,7 +3,7 @@ import {Flex, Link, useDisclosure} from "@chakra-ui/react";
 import NextLink from "next/link";
 import DeletePostModal from "@components/pages/post/post_view/modal/DeletePostModal";
 import ApiResult from "@api_clients/type/ApiResult";
-import {PostStatusEnum} from "@models/post/Post";
+import {PostStatusEnum} from "@models/db/entity/PostStatus";
 
 
 interface PostViewOwnerMenuProps {
@@ -30,7 +30,7 @@ const PostViewOwnerMenu: FC<PostViewOwnerMenuProps> = ({ postId, postStatus }) =
                 color={ 'gray.400' }
             >
                 {
-                    postStatus === PostStatusEnum.OPEN
+                    postStatus === PostStatusEnum.POST_INIT
                     && (
                         <>
                             <NextLink href={`/post/${ postId }/edit`} passHref>

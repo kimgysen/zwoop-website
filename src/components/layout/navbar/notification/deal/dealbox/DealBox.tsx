@@ -1,6 +1,6 @@
 import React, {FC} from "react";
-import AuthState from "@models/user/AuthState";
-import DealOpenedDto from "../../../../../../service/stomp/dto/receive/notification/feature/deal/DealOpenedDto";
+import AuthState from "@models/auth/AuthState";
+import DealInitDto from "@models/dto/stomp/receive/common/deal/DealInitDto";
 import DealBoxLoading from "@components/layout/navbar/notification/deal/dealbox/fallbackviews/DealBoxLoading";
 import {isDealBoxEmpty, isLastDealBoxItem} from "@components/layout/navbar/notification/deal/dealbox/DealBoxHelper";
 import DealBoxEmpty from "@components/layout/navbar/notification/deal/dealbox/fallbackviews/DealBoxEmpty";
@@ -11,7 +11,7 @@ import DealBoxItem from "@components/layout/navbar/notification/deal/dealbox/Dea
 interface DealBoxProps {
     authState: AuthState
     dealBoxLoading: boolean,
-    dealBoxItems?: DealOpenedDto[] | null,
+    dealBoxItems?: DealInitDto[] | null,
     closePopup: () => void
 }
 

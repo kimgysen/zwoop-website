@@ -1,7 +1,7 @@
 import useSWR from "swr";
 import {verifyJwt as fetcher} from "../../../api_clients/feature/authentication/VerifyJwtService";
 import UnauthorizedException from "../../../api_clients/exception/UnauthorizedException";
-import AuthenticatedUser from "@models/user/AuthenticatedUser";
+import AuthenticatedUser from "@models/auth/AuthenticatedUser";
 
 
 export default function useAuthenticatedUser() {

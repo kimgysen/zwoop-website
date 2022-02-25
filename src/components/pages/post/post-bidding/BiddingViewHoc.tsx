@@ -1,6 +1,6 @@
 import {FC, useEffect, useState} from "react";
-import AuthState from "@models/user/AuthState";
-import Post, {PostStatusEnum} from "@models/post/Post";
+import AuthState from "@models/auth/AuthState";
+import Post from "@models/db/entity/Post";
 import useBidding from "../../../../service/swr/bidding/UseBidding";
 import BiddingView from "@components/pages/post/post-bidding/BiddingView";
 import BiddingListLoading from "@components/pages/post/post-bidding/fallbackviews/BiddingListLoading";
@@ -8,22 +8,20 @@ import BiddingListEmpty from "@components/pages/post/post-bidding/fallbackviews/
 import BiddingListError from "@components/pages/post/post-bidding/fallbackviews/BiddingListError";
 import {getStompDispatcher} from "../../../../event_dispatchers/StompDispatcher";
 import {
-    BIDDING_UPDATE__BIDDING_ACCEPTED,
-    BIDDING_UPDATE__BIDDING_ADDED,
-    BIDDING_UPDATE__BIDDING_CHANGED,
-    BIDDING_UPDATE__BIDDING_REMOVE_ACCEPTED,
-    BIDDING_UPDATE__BIDDING_REMOVED
+    POST_UPDATE__BIDDING_ADDED,
+    POST_UPDATE__BIDDING_CHANGED,
+    POST_UPDATE__BIDDING_REMOVED,
+    POST_UPDATE__DEAL_CANCELLED,
+    POST_UPDATE__DEAL_INIT
 } from "../../../../event_dispatchers/config/StompEvents";
-import BiddingAddedDto from "../../../../service/stomp/dto/receive/post/feature/bidding/BiddingAddedDto";
-import BiddingChangedDto from "../../../../service/stomp/dto/receive/post/feature/bidding/BiddingChangedDto";
-import BiddingRemovedDto from "../../../../service/stomp/dto/receive/post/feature/bidding/BiddingRemovedDto";
+import BiddingChangedDto from "../../../../models/dto/stomp/receive/post/feature/bidding/BiddingChangedDto";
+import BiddingRemovedDto from "../../../../models/dto/stomp/receive/post/feature/bidding/BiddingRemovedDto";
 import {infoToast} from "@components/widgets/toast/AppToast";
-import {findAcceptedBidding, isSentByPrincipal} from "@components/pages/post/post-bidding/BiddingViewHelper";
-import BiddingAcceptedDto from "../../../../service/stomp/dto/receive/post/feature/bidding/BiddingAcceptedDto";
-import AcceptedBiddingViewHoc from "@components/pages/post/post-bidding/accepted-bidding/AcceptedBiddingViewHoc";
-import BiddingRemoveAcceptedDto
-    from "../../../../service/stomp/dto/receive/post/feature/bidding/BiddingRemoveAcceptedDto";
+import DealInitViewHoc from "@components/pages/post/post-deal/deal-init/DealInitViewHoc";
 import {getPostStatusFromPost} from "@components/pages/post/PostPageHelper";
+import {PostStatusEnum} from "@models/db/entity/PostStatus";
+import BiddingUpdateDto from "@models/dto/stomp/receive/post/feature/bidding/BiddingUpdateDto";
+import Deal from "@models/db/entity/Deal";
 
 
 interface BiddingViewHocProps {
@@ -36,59 +34,48 @@ const stompDispatcher = getStompDispatcher();
 const BiddingViewHoc: FC<BiddingViewHocProps> = ({ authState, post }) => {
     const { loading, data: biddingList, error, mutate } = useBidding(post?.postId);
     const [postStatus, setPostStatus] = useState<PostStatusEnum>(getPostStatusFromPost(post));
-    const [acceptedBidding, setAcceptedBidding] = useState<BiddingAcceptedDto|null>(null);
+    const [deal, setDeal] = useState<Deal|null|undefined>(post?.postState?.deal);
 
     useEffect(() => {
         setPostStatus(getPostStatusFromPost(post));
-    }, [post?.postStatus])
-
-    useEffect(() => {
-        if (biddingList) {
-            setAcceptedBidding(
-                findAcceptedBidding(biddingList))
-        }
-    }, [biddingList]);
+    }, [post?.postState?.postStatus])
 
     useEffect(() => {
         if (post?.postId) {
-
-            stompDispatcher.on(BIDDING_UPDATE__BIDDING_ADDED, (biddingDto: BiddingAddedDto) => {
+            stompDispatcher.on(POST_UPDATE__BIDDING_ADDED, (biddingDto: BiddingUpdateDto) => {
                 mutate();
-                if (!isSentByPrincipal(authState, biddingDto))
-                    infoToast(`Bidding submitted by ${ biddingDto.nickName }`);
+                infoToast(`Bidding submitted by ${ biddingDto?.consultant?.nickName }`);
             });
 
-            stompDispatcher.on(BIDDING_UPDATE__BIDDING_CHANGED, (changedBiddingDto: BiddingChangedDto) => {
+            stompDispatcher.on(POST_UPDATE__BIDDING_CHANGED, (changedBiddingDto: BiddingChangedDto) => {
                 mutate();
-                if (!isSentByPrincipal(authState, changedBiddingDto))
-                    infoToast(`Bidding updated by ${ changedBiddingDto.nickName }`);
+                infoToast(`Bidding updated by ${ changedBiddingDto?.consultant?.nickName }`);
             });
 
-            stompDispatcher.on(BIDDING_UPDATE__BIDDING_REMOVED, (removedBiddingDto: BiddingRemovedDto) => {
+            stompDispatcher.on(POST_UPDATE__BIDDING_REMOVED, (removedBiddingDto: BiddingRemovedDto) => {
                 mutate();
-                if (!isSentByPrincipal(authState, removedBiddingDto))
-                    infoToast(`Bidding deleted by ${ removedBiddingDto.nickName }`);
+                infoToast(`Bidding deleted by ${ removedBiddingDto?.consultant?.nickName }`);
             });
 
-            stompDispatcher.on(BIDDING_UPDATE__BIDDING_ACCEPTED, (acceptedBiddingDto: BiddingAcceptedDto) => {
+            stompDispatcher.on(POST_UPDATE__DEAL_INIT, (deal: Deal) => {
                 mutate();
-                setAcceptedBidding(acceptedBiddingDto);
-                setPostStatus(PostStatusEnum.IN_PROGRESS);
+                setDeal(deal);
+                setPostStatus(PostStatusEnum.DEAL_INIT);
             });
 
-            stompDispatcher.on(BIDDING_UPDATE__BIDDING_REMOVE_ACCEPTED, (removeAcceptedBiddingDto: BiddingRemoveAcceptedDto) => {
+            stompDispatcher.on(POST_UPDATE__DEAL_CANCELLED, (deal: Deal) => {
                 mutate();
-                setAcceptedBidding(null);
-                setPostStatus(PostStatusEnum.OPEN);
+                setDeal(null);
+                setPostStatus(PostStatusEnum.POST_INIT);
             });
         }
 
         return function cleanUp() {
-            stompDispatcher.remove(BIDDING_UPDATE__BIDDING_ADDED);
-            stompDispatcher.remove(BIDDING_UPDATE__BIDDING_CHANGED);
-            stompDispatcher.remove(BIDDING_UPDATE__BIDDING_REMOVED);
-            stompDispatcher.remove(BIDDING_UPDATE__BIDDING_ACCEPTED);
-            stompDispatcher.remove(BIDDING_UPDATE__BIDDING_REMOVE_ACCEPTED);
+            stompDispatcher.remove(POST_UPDATE__BIDDING_ADDED);
+            stompDispatcher.remove(POST_UPDATE__BIDDING_CHANGED);
+            stompDispatcher.remove(POST_UPDATE__BIDDING_REMOVED);
+            stompDispatcher.remove(POST_UPDATE__DEAL_INIT);
+            stompDispatcher.remove(POST_UPDATE__DEAL_CANCELLED);
         }
 
     }, [post?.postId, authState, mutate]);
@@ -96,25 +83,26 @@ const BiddingViewHoc: FC<BiddingViewHocProps> = ({ authState, post }) => {
     return (
         <>
             {
-                postStatus === PostStatusEnum.IN_PROGRESS
+                postStatus === PostStatusEnum.DEAL_INIT
+                && !!deal
                 && (
-                    <AcceptedBiddingViewHoc
+                    <DealInitViewHoc
                         authState={ authState }
                         post={ post }
-                        biddingAcceptedDto={ acceptedBidding as BiddingAcceptedDto }
+                        deal={ deal }
                         mutate={ mutate }
                     />
                 )
             }
             {
-                postStatus === PostStatusEnum.OPEN
+                postStatus === PostStatusEnum.POST_INIT
                 && biddingList
                 && <BiddingView
                     authState={ authState }
                     post={ post }
                     postStatus={ postStatus }
                     biddingList={ biddingList }
-                    acceptedBidding={ acceptedBidding }
+                    deal={ deal }
                     mutate={ mutate }
                 />
             }

@@ -3,21 +3,23 @@ import Head from "next/head";
 import AppLayout from "@components/layout/AppLayout";
 import ThreeColumnLayout from "@components/layout/column-layouts/ThreeColumnLayout";
 import React, {useEffect, useState} from "react";
-import {getCsrPostById, getSsrPostById} from "@api_clients/feature/post/PostService";
+import {getCsrPostById, getSsrPostById} from "@api_clients/feature/post/PostApiClient";
 import PostView from "@components/pages/post/post_view/PostView";
 import {useSession} from "next-auth/react";
-import AuthState from "@models/user/AuthState";
+import AuthState, {defaultAuthState} from "@models/auth/AuthState";
 import PostChatWidget from "@components/pages/post/post_chat/PostChatWidget";
 import WatchListHoc from "@components/widgets/watchlist/WatchListHoc";
 import {useRouter} from "next/router";
 import BiddingViewHoc from "@components/pages/post/post-bidding/BiddingViewHoc";
 import ApiResult from "@api_clients/type/ApiResult";
-import User from "@models/user/User";
-import {getUserById} from "@api_clients/feature/user/UserService";
+import User from "@models/db/entity/User";
+import {getUserById} from "@api_clients/feature/user/UserApiClient";
 import PostStompConnect from "@components/stomp/post/PostStompConnect";
-import {getViewState, isChatAllowed, PostPageViewState} from "@components/pages/post/PostPageHelper";
+import {getViewState, isAnswerAllowed, isChatAllowed, PostPageViewState} from "@components/pages/post/PostPageHelper";
+import Post from "@models/db/entity/Post";
+import AnswerButton from "@components/pages/post/post_view/subviews/AnswerButton";
+import {getAuthState} from "@components/auth/AuthStateHelper";
 import {AxiosError, AxiosResponse} from "axios";
-import Post from "@models/post/Post";
 
 
 export async function getServerSideProps(ctx: { query: { postId: string } }) {
@@ -46,22 +48,15 @@ const PostByIdPage: NextPage = (props: any) => {
 
     const queryPartnerId = query?.partnerId;
 
+    const [authState, setAuthState] = useState<AuthState>(defaultAuthState);
     const [viewState, setViewState] = useState<PostPageViewState>(PostPageViewState.LOGGED_OFF);
     const [partnerRes, setPartnerRes] = useState<ApiResult<User>>();
     const [post, setPost] = useState<Post>(ssrPost);
 
 
-    const defaultAuthState = { isLoading: true, isLoggedIn: false };
-    const [authState, setAuthState] = useState<AuthState>(defaultAuthState);
-
     useEffect(() => {
-        if (status === 'loading') {
-            setAuthState({ ...defaultAuthState });
-        } else if (session?.userId) {
-            setAuthState({ isLoading: false, isLoggedIn: true, principalId: session.userId as string, principalAvatar: session?.user?.image as string });
-        } else {
-            setAuthState({ isLoading: false, isLoggedIn: false, principalId: undefined, principalAvatar: undefined });
-        }
+        setAuthState(
+            getAuthState(session, status));
     }, [session, status]);
 
     useEffect(() => {
@@ -83,7 +78,7 @@ const PostByIdPage: NextPage = (props: any) => {
     }, [queryPartnerId]);
 
     useEffect(() => {
-        if (post.postId && authState.isLoggedIn) {
+        if (post?.postId && authState.isLoggedIn) {
             const viewState = getViewState(authState, post, queryPartnerId as string);
             setViewState(viewState);
         }
@@ -124,6 +119,14 @@ const PostByIdPage: NextPage = (props: any) => {
                                                 authState={ authState }
                                                 post={ post }
                                             />
+                                            {
+                                                isAnswerAllowed(authState, post)
+                                                && (
+                                                    <AnswerButton
+                                                        post={ post }
+                                                    />
+                                                )
+                                            }
                                         </>
                                     )
                                 }

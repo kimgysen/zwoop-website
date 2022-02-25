@@ -1,4 +1,4 @@
-import PublicMessageSendDto from "../dto/send/PublicMessageSendDto";
+import PublicMessageSendDto from "../../../models/dto/stomp/send/PublicMessageSendDto";
 import {getStompClient} from "../StompService";
 
 export const sendPublicMessage = (publicMessage: PublicMessageSendDto) => {

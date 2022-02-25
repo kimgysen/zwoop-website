@@ -1,6 +1,6 @@
 import 'react-toastify/dist/ReactToastify.css';
 
-import Post, {PostStatusEnum} from "@models/post/Post";
+import Post from "@models/db/entity/Post";
 import Card from "@components/layout/components/card/Card";
 import {Box, Divider, Flex} from "@chakra-ui/react";
 import remarkGfm from "remark-gfm";
@@ -10,20 +10,21 @@ import TagsList from "@components/widgets/tags/TagsList";
 import BnbBoxSm from "./subviews/BnbBoxSm";
 import PostTitleView from "@components/pages/post/post_view/subviews/PostTitleView";
 import PostUserBox from "@components/pages/post/post_view/subviews/PostUserBox";
-import AuthState from "@models/user/AuthState";
-import {getPostStatusFromPost, isPostOwner} from "@components/pages/post/PostPageHelper";
+import AuthState from "@models/auth/AuthState";
+import {getPostStatusFromPost} from "@components/pages/post/PostPageHelper";
 import PostViewOwnerMenu from "@components/pages/post/post_view/subviews/PostViewOwnerMenu";
 import {getStompDispatcher} from "../../../../event_dispatchers/StompDispatcher";
 import {
-    POST_UPDATE__BIDDING_ACCEPTED,
-    POST_UPDATE__BIDDING_REMOVE_ACCEPTED,
+    POST_UPDATE__DEAL_CANCELLED,
+    POST_UPDATE__DEAL_INIT,
     POST_UPDATE__POST_CHANGED,
     POST_UPDATE__POST_REMOVED
 } from "../../../../event_dispatchers/config/StompEvents";
-import PostChangedDto from "../../../../service/stomp/dto/receive/post/feature/post/PostChangedDto";
-import Tag from "@models/tag/Tag";
+import PostChangedDto from "../../../../models/dto/stomp/receive/post/feature/post/PostChangedDto";
+import Tag from "@models/db/entity/Tag";
 import {infoToast} from "@components/widgets/toast/AppToast";
-import BiddingAcceptedDto from "../../../../service/stomp/dto/receive/post/feature/bidding/BiddingAcceptedDto";
+import {PostStatusEnum} from "@models/db/entity/PostStatus";
+import {isOp} from "../../../../util/PostUtil";
 
 
 interface PostViewProps {
@@ -67,20 +68,20 @@ const PostView: React.FC<PostViewProps> = ({ authState, post }) => {
                 console.log('post got removed');
             });
 
-            stompDispatcher.on(POST_UPDATE__BIDDING_ACCEPTED, (acceptBidding: BiddingAcceptedDto) => {
-                setPostStatus(PostStatusEnum.IN_PROGRESS);
+            stompDispatcher.on(POST_UPDATE__DEAL_INIT, () => {
+                setPostStatus(PostStatusEnum.DEAL_INIT);
             });
 
-            stompDispatcher.on(POST_UPDATE__BIDDING_REMOVE_ACCEPTED, (acceptBidding: BiddingAcceptedDto) => {
-                setPostStatus(PostStatusEnum.OPEN);
+            stompDispatcher.on(POST_UPDATE__DEAL_CANCELLED, () => {
+                setPostStatus(PostStatusEnum.POST_INIT);
             });
         }
 
         return function cleanUp() {
             stompDispatcher.remove(POST_UPDATE__POST_CHANGED);
             stompDispatcher.remove(POST_UPDATE__POST_REMOVED);
-            stompDispatcher.remove(POST_UPDATE__BIDDING_ACCEPTED);
-            stompDispatcher.remove(POST_UPDATE__BIDDING_REMOVE_ACCEPTED);
+            stompDispatcher.remove(POST_UPDATE__DEAL_INIT);
+            stompDispatcher.remove(POST_UPDATE__DEAL_CANCELLED);
         }
 
     }, [post?.postId]);
@@ -115,14 +116,16 @@ const PostView: React.FC<PostViewProps> = ({ authState, post }) => {
             <Divider />
             <Flex flex={1}
                   justifyContent={
-                      isPostOwner(authState, post)
+                      isOp(authState, post)
+                      && postStatus === PostStatusEnum.POST_INIT
                           ? 'space-between'
                           : 'flex-end' }
                   pt='10px' pb='10px'
                   fontSize='sm'
             >
                 {
-                    isPostOwner(authState, post)
+                    isOp(authState, post)
+                    && postStatus === PostStatusEnum.POST_INIT
                     && (
                         <PostViewOwnerMenu
                             postId={ post?.postId}
@@ -131,9 +134,9 @@ const PostView: React.FC<PostViewProps> = ({ authState, post }) => {
                     )
                 }
                 <PostUserBox
-                    userId={ post.asker.userId }
-                    nickName={ post.asker.nickName }
-                    avatarSrc={ post.asker.profilePic }
+                    userId={ post?.op?.userId }
+                    nickName={ post?.op?.nickName }
+                    avatar={ post?.op?.profilePic }
                 />
             </Flex>
         </Card>)

@@ -1,13 +1,14 @@
 import React, {FC} from "react";
-import AuthState from "@models/user/AuthState";
-import Post from "@models/post/Post";
+import AuthState from "@models/auth/AuthState";
+import Post from "@models/db/entity/Post";
 import PrivateChatWidget from "@components/pages/post/post_chat/private_chat/PrivateChatWidget";
 import PostInbox from "@components/pages/post/post_chat/inbox/PostInbox";
 import Card from "@components/layout/components/card/Card";
 import PostChatHeader from "@components/pages/post/post_chat/PostChatHeader";
-import User from "@models/user/User";
+import User from "@models/db/entity/User";
 import ApiResult from "@api_clients/type/ApiResult";
-import {isPostOwner, PostPageViewState} from "@components/pages/post/PostPageHelper";
+import {PostPageViewState} from "@components/pages/post/PostPageHelper";
+import {isOp} from "../../../../util/PostUtil";
 
 
 interface PostSubViewManagerProps {
@@ -22,17 +23,17 @@ const PostChatWidget: FC<PostSubViewManagerProps> = ({ authState, post, viewStat
         <>
             <Card p={ "1" }>
                 <PostChatHeader
-                    postId={ post.postId }
+                    postId={ post?.postId }
                     viewState={ viewState }
                     partnerId={
-                        isPostOwner(authState, post)
+                        isOp(authState, post)
                             ? partnerRes?.success?.userId as string
-                            : post?.asker?.userId
+                            : post?.op?.userId
                     }
                     partnerNickName={
-                        isPostOwner(authState, post)
+                        isOp(authState, post)
                         ? partnerRes?.success?.nickName as string
-                        : post?.asker?.nickName }
+                        : post?.op?.nickName }
                 />
 
                     {
@@ -42,12 +43,12 @@ const PostChatWidget: FC<PostSubViewManagerProps> = ({ authState, post, viewStat
                     {
                         viewState === PostPageViewState.VISITOR_PRIVATE_CHAT &&
                             <PrivateChatWidget
-                                postId={ post.postId }
+                                postId={ post?.postId }
                                 principalId={ authState.principalId as string }
                                 partner={{
-                                    partnerId: post.asker.userId,
-                                    partnerNickName: post.asker.nickName,
-                                    partnerAvatar: post.asker.profilePic
+                                    partnerId: post?.op?.userId,
+                                    partnerNickName: post?.op?.nickName,
+                                    partnerAvatar: post?.op?.profilePic
                                 }}
                                 isLoading={ false }
                             />
@@ -56,7 +57,7 @@ const PostChatWidget: FC<PostSubViewManagerProps> = ({ authState, post, viewStat
                         viewState === PostPageViewState.INBOX &&
                             <PostInbox
                                 principalId={ authState.principalId as string }
-                                postId={ post.postId }
+                                postId={ post?.postId }
                             />
                     }
                     {
@@ -74,7 +75,7 @@ const PostChatWidget: FC<PostSubViewManagerProps> = ({ authState, post, viewStat
                         && partnerRes?.success
                         && (
                             <PrivateChatWidget
-                                postId={ post.postId }
+                                postId={ post?.postId }
                                 principalId={ authState.principalId as string }
                                 partner={{
                                     partnerId: partnerRes.success.userId,

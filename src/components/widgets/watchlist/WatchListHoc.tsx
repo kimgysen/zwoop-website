@@ -1,9 +1,9 @@
 import {Dispatch, FC, SetStateAction, useEffect, useState} from "react";
 import ApiRes from "../../../api_clients/type/ApiResult";
-import AuthState from "@models/user/AuthState";
-import {getFollowedTags} from "@api_clients/feature/user/UserService";
+import AuthState from "@models/auth/AuthState";
+import {getFollowedTags} from "@api_clients/feature/user/UserApiClient";
 import WatchList from "@components/widgets/watchlist/WatchList";
-import Tag from "@models/tag/Tag";
+import Tag from "@models/db/entity/Tag";
 
 
 interface WatchListHocProps {

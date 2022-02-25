@@ -5,8 +5,8 @@ import FacebookProvider from "next-auth/providers/facebook"
 import GithubProvider from "next-auth/providers/github"
 import TwitterProvider from "next-auth/providers/twitter"
 import Auth0Provider from "next-auth/providers/auth0"
-import {AuthProviderEnum} from "@models/user/AuthProvider";
-import {findUserByProviderAndOauthId, loginUser, registerUser} from "@api_clients/feature/authentication/UserService";
+import {AuthProviderEnum} from "@models/db/entity/AuthProvider";
+import {findUserByProviderAndOauthId, loginUser, registerUser} from "@api_clients/feature/authentication/UserApiClient";
 
 
 const secret = process.env.SECRET;

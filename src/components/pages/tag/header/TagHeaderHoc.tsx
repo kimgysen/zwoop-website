@@ -1,8 +1,8 @@
 import {Dispatch, FC, SetStateAction, useEffect, useState} from "react";
 import TagHeader from "@components/pages/tag/header/TagHeader";
 import ApiResult from "@api_clients/type/ApiResult";
-import {isWatching, unwatchTag, watchTag} from "@api_clients/feature/tag/TagService";
-import {IsWatchingTag} from "@models/user/IsWatchingTag";
+import {isWatching, unwatchTag, watchTag} from "@api_clients/feature/tag/TagApiClient";
+import {IsWatchingTag} from "@models/dto/user/IsWatchingTag";
 
 
 interface TagHeaderHoc {

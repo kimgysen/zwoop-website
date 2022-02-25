@@ -1,4 +1,4 @@
-import PublicMessageReceiveDto from "../../../../../service/stomp/dto/receive/public_chat/PublicMessageReceiveDto";
+import PublicMessageReceiveDto from "../../../../../models/dto/stomp/receive/public_chat/PublicMessageReceiveDto";
 import {sendPublicMessage} from "../../../../../service/stomp/publishers/PublicChatPublisher";
 
 export const handleSendPublicMessage = (tagName: string, message: string) => {

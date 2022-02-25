@@ -1,61 +1,57 @@
 import {getStompClient} from "../StompService";
-import PostUpdateFeatureDto from "../dto/receive/post/PostUpdateFeatureDto";
-import {PostUpdateFeatureType} from "../dto/receive/post/PostUpdateFeatureType";
 import {
-    BIDDING_UPDATE__BIDDING_ACCEPTED,
-    BIDDING_UPDATE__BIDDING_ADDED,
-    BIDDING_UPDATE__BIDDING_CHANGED,
-    BIDDING_UPDATE__BIDDING_REMOVE_ACCEPTED,
-    BIDDING_UPDATE__BIDDING_REMOVED,
-    POST_UPDATE__BIDDING_ACCEPTED,
-    POST_UPDATE__BIDDING_REMOVE_ACCEPTED,
+    POST_UPDATE__BIDDING_ADDED,
+    POST_UPDATE__BIDDING_CHANGED,
+    POST_UPDATE__BIDDING_REMOVED,
+    POST_UPDATE__DEAL_CANCELLED,
+    POST_UPDATE__DEAL_INIT,
     POST_UPDATE__POST_CHANGED,
     POST_UPDATE__POST_REMOVED
 } from "../../../event_dispatchers/config/StompEvents";
-import PostChangedDto from "../dto/receive/post/feature/post/PostChangedDto";
-import PostRemovedDto from "../dto/receive/post/feature/post/PostRemovedDto";
-import BiddingAddedDto from "../dto/receive/post/feature/bidding/BiddingAddedDto";
-import BiddingChangedDto from "../dto/receive/post/feature/bidding/BiddingChangedDto";
-import BiddingRemovedDto from "../dto/receive/post/feature/bidding/BiddingRemovedDto";
-import BiddingAcceptedDto from "../dto/receive/post/feature/bidding/BiddingAcceptedDto";
+import PostUpdateDto from "@models/dto/stomp/receive/post/PostUpdateDto";
+import {PostUpdateFeatureType} from "@models/dto/stomp/receive/post/PostUpdateFeatureType";
+import PostChangedDto from "@models/dto/stomp/receive/post/feature/post/PostChangedDto";
+import PostRemovedDto from "@models/dto/stomp/receive/post/feature/post/PostRemovedDto";
+import BiddingAddedDto from "@models/dto/stomp/receive/post/feature/bidding/BiddingAddedDto";
+import BiddingChangedDto from "@models/dto/stomp/receive/post/feature/bidding/BiddingChangedDto";
+import BiddingRemovedDto from "@models/dto/stomp/receive/post/feature/bidding/BiddingRemovedDto";
 import {dispatchCustomMessage} from "./SubscriptionUtil";
-import BiddingRemoveAcceptedDto from "../dto/receive/post/feature/bidding/BiddingRemoveAcceptedDto";
+import DealInitDto from "@models/dto/stomp/receive/common/deal/DealInitDto";
 
 
 export const subscribeToPostUpdates = (postId: string) => {
     getStompClient()
         .subscribe(`/topic/${ postId }.post.updates`, (msg) => {
-            const postUpdateFeatureDto = JSON.parse(msg.body) as PostUpdateFeatureDto<any>;
+            const postUpdateFeatureDto = JSON.parse(msg.body) as PostUpdateDto<any>;
 
             switch (postUpdateFeatureDto.postUpdateType) {
                 case PostUpdateFeatureType.POST_CHANGED:
-                    dispatchCustomMessage(POST_UPDATE__POST_CHANGED, postUpdateFeatureDto.postUpdateDto as PostChangedDto);
+                    dispatchCustomMessage(POST_UPDATE__POST_CHANGED, postUpdateFeatureDto.dto as PostChangedDto);
                     break;
 
                 case PostUpdateFeatureType.POST_REMOVED:
-                    dispatchCustomMessage(POST_UPDATE__POST_REMOVED, postUpdateFeatureDto.postUpdateDto as PostRemovedDto);
+                    dispatchCustomMessage(POST_UPDATE__POST_REMOVED, postUpdateFeatureDto.dto as PostRemovedDto);
                     break;
 
                 case PostUpdateFeatureType.BIDDING_ADDED:
-                    dispatchCustomMessage(BIDDING_UPDATE__BIDDING_ADDED, postUpdateFeatureDto.postUpdateDto as BiddingAddedDto);
+                    dispatchCustomMessage(POST_UPDATE__BIDDING_ADDED, postUpdateFeatureDto.dto as BiddingAddedDto);
                     break;
 
                 case PostUpdateFeatureType.BIDDING_CHANGED:
-                    dispatchCustomMessage(BIDDING_UPDATE__BIDDING_CHANGED, postUpdateFeatureDto.postUpdateDto as BiddingChangedDto);
+                    console.log(postUpdateFeatureDto);
+                    dispatchCustomMessage(POST_UPDATE__BIDDING_CHANGED, postUpdateFeatureDto.dto as BiddingChangedDto);
                     break;
 
                 case PostUpdateFeatureType.BIDDING_REMOVED:
-                    dispatchCustomMessage(BIDDING_UPDATE__BIDDING_REMOVED, postUpdateFeatureDto.postUpdateDto as BiddingRemovedDto);
+                    dispatchCustomMessage(POST_UPDATE__BIDDING_REMOVED, postUpdateFeatureDto.dto as BiddingRemovedDto);
                     break;
 
-                case PostUpdateFeatureType.BIDDING_ACCEPTED:
-                    dispatchCustomMessage(BIDDING_UPDATE__BIDDING_ACCEPTED, postUpdateFeatureDto.postUpdateDto as BiddingAcceptedDto);
-                    dispatchCustomMessage(POST_UPDATE__BIDDING_ACCEPTED, postUpdateFeatureDto.postUpdateDto as BiddingAcceptedDto);
+                case PostUpdateFeatureType.DEAL_INIT:
+                    dispatchCustomMessage(POST_UPDATE__DEAL_INIT, postUpdateFeatureDto.dto as DealInitDto);
                     break;
 
-                case PostUpdateFeatureType.BIDDING_REMOVE_ACCEPTED:
-                    dispatchCustomMessage(BIDDING_UPDATE__BIDDING_REMOVE_ACCEPTED, postUpdateFeatureDto.postUpdateDto as BiddingRemoveAcceptedDto);
-                    dispatchCustomMessage(POST_UPDATE__BIDDING_REMOVE_ACCEPTED, postUpdateFeatureDto.postUpdateDto as BiddingRemoveAcceptedDto);
+                case PostUpdateFeatureType.DEAL_CANCELLED:
+                    dispatchCustomMessage(POST_UPDATE__DEAL_CANCELLED, postUpdateFeatureDto.dto as DealInitDto);
                     break;
 
             }

@@ -1,7 +1,7 @@
 import FeedItem from "./feed-item/FeedItem";
 import {FC} from "react";
 import {Box} from "@chakra-ui/react";
-import Post from "@models/post/Post";
+import Post from "@models/db/entity/Post";
 import ApiResult from "../../../api_clients/type/ApiResult";
 import {isEmptyFeed} from "@components/widgets/feed/FeedListHelper";
 import FeedListEmpty from "@components/widgets/feed/fallbackviews/FeedListEmpty";
@@ -39,7 +39,7 @@ const FeedList: FC<FeedListProps> = ({ feedListRes }) => {
                 feedListRes.success
                 && feedList.map(post =>
                     <FeedItem
-                        key={ post.postId }
+                        key={ post?.postId }
                         post={ post }
                 />)
             }

@@ -12,11 +12,11 @@ import {
     useColorModeValue
 } from '@chakra-ui/react';
 import React, {FC} from "react";
-import InboxItemReceiveDto from "../../../../../service/stomp/dto/receive/inbox/InboxItemReceiveDto";
+import InboxItemReceiveDto from "../../../../../models/dto/stomp/receive/inbox/InboxItemReceiveDto";
 import AppInbox from "@components/layout/navbar/notification/inbox/appinbox/AppInbox";
 import {css} from "@emotion/react";
 import {FaComment} from "react-icons/fa"
-import AuthState from "@models/user/AuthState";
+import AuthState from "@models/auth/AuthState";
 
 
 interface AppInboxButtonProps {

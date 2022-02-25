@@ -1,5 +1,5 @@
-import Post from "@models/post/Post";
-import Bidding from "@models/post/bidding/Bidding";
+import Post from "@models/db/entity/Post";
+import Bidding from "@models/db/entity/Bidding";
 import React, {FC, useState} from "react";
 import {IconButton, useDisclosure} from "@chakra-ui/react";
 import {Flex} from "@chakra-ui/layout/src/flex";
@@ -9,21 +9,19 @@ import EditAskPriceModal
 import DeleteBiddingModal
     from "@components/pages/post/post-bidding/bidding-list/action-views/bidder-action/modal/DeleteBiddingModal";
 import ApiResult from "@api_clients/type/ApiResult";
-import {
-    deleteBidding,
-    updateBidding
-} from "@components/pages/post/post-bidding/bidding-list/action-views/bidder-action/BidderActionViewHelpert";
 import {KeyedMutator} from "swr";
+import AuthState from "@models/auth/AuthState";
+import {deleteBiddingApi, updateBiddingApi} from "@api_clients/feature/bidding/BiddingApiClient";
 
 
 interface BidderActionViewHocProps {
-    principalId: string,
+    authState: AuthState,
     post: Post,
     biddingItem: Bidding,
     mutate: KeyedMutator<Bidding[]>
 }
 
-const BidderActionViewHoc: FC<BidderActionViewHocProps> = ({ principalId, post, biddingItem, mutate }) => {
+const BidderActionViewHoc: FC<BidderActionViewHocProps> = ({ authState, post, biddingItem, mutate }) => {
 
     const { isOpen: isEditAskOpen, onOpen: onEditAskOpen, onClose: onEditAskClose } = useDisclosure();
     const { isOpen: isDeleteModalOpen, onOpen: onDeleteModalOpen, onClose: onDeleteModalClose } = useDisclosure();
@@ -34,12 +32,8 @@ const BidderActionViewHoc: FC<BidderActionViewHocProps> = ({ principalId, post, 
 
     const handleUpdateBidding = async (askPrice: string) => {
         setUpdateResult({ ...defaultResult, loading: true });
-        const res = await updateBidding({
-            postId: post?.postId,
-            userId: principalId,
-            askPrice,
-            currencyCode: biddingItem?.currency?.currencyCode
-        });
+        const res = await updateBiddingApi(
+            biddingItem?.biddingId, { askPrice });
         setUpdateResult(res);
         await mutate();
         onEditAskClose();
@@ -47,10 +41,7 @@ const BidderActionViewHoc: FC<BidderActionViewHocProps> = ({ principalId, post, 
 
     const handleDeleteBidding = async () => {
         setDeleteResult({ ...defaultResult, loading: true });
-        const res = await deleteBidding({
-            postId: post?.postId,
-            userId: principalId
-        });
+        const res = await deleteBiddingApi(biddingItem?.biddingId);
         setDeleteResult(res);
         await mutate();
         onDeleteModalClose();

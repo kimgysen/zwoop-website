@@ -12,10 +12,10 @@ import {
     ModalOverlay,
     VStack
 } from "@chakra-ui/react";
-import {updateNickName} from "@api_clients/feature/user/UserService";
+import {updateNickName} from "@api_clients/feature/user/UserApiClient";
 import {getRawJwt} from "../../../../service/jwt/JwtService";
 import ApiResult from "@api_clients/type/ApiResult";
-import User from "@models/user/User";
+import User from "@models/db/entity/User";
 
 
 interface EditNickModalProps {

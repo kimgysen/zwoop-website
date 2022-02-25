@@ -11,10 +11,10 @@ import {
     ModalOverlay,
     VStack
 } from "@chakra-ui/react";
-import User from "@models/user/User";
+import User from "@models/db/entity/User";
 import MarkdownEditor from "@components/widgets/markdown/MarkdownEditor";
 import ApiResult from "@api_clients/type/ApiResult";
-import {updateAbout} from "@api_clients/feature/user/UserService";
+import {updateAbout} from "@api_clients/feature/user/UserApiClient";
 import {getRawJwt} from "../../../../service/jwt/JwtService";
 
 interface EditAboutModalProps {

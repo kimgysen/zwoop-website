@@ -1,8 +1,8 @@
 import React, {FC} from "react";
-import InboxItemReceiveDto from "../../../../../../service/stomp/dto/receive/inbox/InboxItemReceiveDto";
+import InboxItemReceiveDto from "../../../../../../models/dto/stomp/receive/inbox/InboxItemReceiveDto";
 import {Box, Divider} from "@chakra-ui/react";
 import AppInboxItem from "@components/layout/navbar/notification/inbox/appinbox/AppInboxItem";
-import AuthState from "@models/user/AuthState";
+import AuthState from "@models/auth/AuthState";
 import AppInboxLoading from "@components/layout/navbar/notification/inbox/appinbox/fallbackviews/AppInboxLoading";
 import AppInboxEmpty from "@components/layout/navbar/notification/inbox/appinbox/fallbackviews/AppInboxEmpty";
 import {isInboxEmpty, isLastInboxItem} from "../../../../../../util/InboxUtil";

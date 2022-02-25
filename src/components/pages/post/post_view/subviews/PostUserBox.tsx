@@ -3,15 +3,15 @@ import NextLink from "next/link";
 import {Box, HStack, Image, Link} from "@chakra-ui/react";
 
 
-interface PostUserTsxProps {
+interface PostUserBoxProps {
     userId: string,
     nickName: string,
-    avatarSrc: string
+    avatar: string
 }
 
-const PostUserBox: FC<PostUserTsxProps> = ({ userId, nickName, avatarSrc }) => {
+const PostUserBox: FC<PostUserBoxProps> = ({ userId, nickName, avatar }) => {
 
-    const [imageSrc, setImageSrc] = useState(avatarSrc);
+    const [imageSrc, setImageSrc] = useState(avatar);
 
     const handleError = () => {
         setImageSrc('/static/images/profile_fallback.jpg');

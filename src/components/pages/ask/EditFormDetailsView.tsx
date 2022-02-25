@@ -13,8 +13,8 @@ import FormCard from "@components/widgets/form/FormCard";
 import Card from "@components/layout/components/card/Card";
 import MarkdownEditor from "@components/widgets/markdown/MarkdownEditor";
 import TagsBox from "@components/widgets/tags/TagsBox";
-import {findTagsStartingWith} from "@api_clients/feature/tag/TagService";
-import Tag from "@models/tag/Tag";
+import {findTagsStartingWith} from "@api_clients/feature/tag/TagApiClient";
+import Tag from "@models/db/entity/Tag";
 import Title from "./Title";
 
 

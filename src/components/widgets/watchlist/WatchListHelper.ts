@@ -1,4 +1,4 @@
-import Tag from "@models/tag/Tag";
+import Tag from "@models/db/entity/Tag";
 
 export const isWatchListEmpty = (tags: Tag[]) =>
     tags && tags.length === 0;

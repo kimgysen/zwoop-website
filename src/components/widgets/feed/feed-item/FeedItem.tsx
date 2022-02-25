@@ -2,7 +2,7 @@ import NextLink from 'next/link'
 import {Box, Divider, Flex, Heading, HStack, Image, Link} from "@chakra-ui/react";
 import React, {FC} from "react";
 import Card from "../../../layout/components/card/Card";
-import Post from "@models/post/Post";
+import Post from "@models/db/entity/Post";
 import {BnbBox} from "./BnbBox";
 import TagsList from "../../tags/TagsList";
 import TimeAgo from "react-timeago";
@@ -36,7 +36,7 @@ const FeedItem: FC<FeedItemProps> = ({ post }) => {
                         lineHeight={ "1.4em" }
                         sx={{ overflow: 'hidden' }}
                     >
-                        <NextLink href={ `/post/${post.postId}` } passHref>
+                        <NextLink href={ `/post/${post?.postId}` } passHref>
                             <Link
                                 _hover={{ textDecoration: "underline" }}
                                 isExternal
@@ -78,17 +78,17 @@ const FeedItem: FC<FeedItemProps> = ({ post }) => {
                           pt='10px' pb='10px'
                           fontSize='sm'
                     >
-                        <NextLink href={`/user/${ post.asker.userId }`} passHref>
+                        <NextLink href={`/user/${ post?.op?.userId }`} passHref>
                             <Link>
                                 <HStack>
                                     <Image
                                         w='35px'
                                         h='35px'
                                         mr='10px'
-                                        src={ post.asker.profilePic }
+                                        src={ post?.op?.profilePic }
                                         alt='profile pic'
                                     />
-                                    <Box>{ post.asker.nickName }</Box>
+                                    <Box>{ post?.op?.nickName }</Box>
                                 </HStack>
                             </Link>
                         </NextLink>

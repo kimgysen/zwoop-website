@@ -1,9 +1,8 @@
 import React, {FC} from "react";
-import {Box, Button, Flex, Heading, Spacer} from "@chakra-ui/react";
+import {Box, Flex, Heading, Spacer} from "@chakra-ui/react";
 import ApiResult from "../../../../api_clients/type/ApiResult";
-import {FaEye, FaEyeSlash} from 'react-icons/fa';
 import Card from "@components/layout/components/card/Card";
-import {IsWatchingTag} from "@models/user/IsWatchingTag";
+import {IsWatchingTag} from "@models/dto/user/IsWatchingTag";
 import ButtonIsWatchingLoading from "@components/pages/tag/header/fallbackviews/ButtonIsWatchingLoading";
 import ButtonIsWatchingError from "@components/pages/tag/header/fallbackviews/ButtonIsWatchingError";
 import ButtonIsWatching from "@components/pages/tag/header/ButtonIsWatching";

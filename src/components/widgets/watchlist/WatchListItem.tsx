@@ -1,7 +1,7 @@
 import {FC} from "react";
 import {Box, Link} from "@chakra-ui/react";
 import NextLink from "next/link";
-import Tag from "@models/tag/Tag";
+import Tag from "@models/db/entity/Tag";
 
 
 interface WatchListItemProps {

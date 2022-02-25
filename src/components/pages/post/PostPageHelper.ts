@@ -1,9 +1,7 @@
-import Post, {PostStatusEnum, stringFromPostStatusEnum} from "@models/post/Post";
-import AuthState from "@models/user/AuthState";
-import {
-    DealStatusEnum,
-    dealStatusEnumFromString
-} from "../../../service/stomp/dto/receive/notification/feature/deal/Deal";
+import Post from "@models/db/entity/Post";
+import AuthState from "@models/auth/AuthState";
+import {PostStatusEnum, stringFromPostStatusEnum} from "@models/db/entity/PostStatus";
+import {isDealConsultant, isOp} from "../../../util/PostUtil";
 
 export enum PostPageViewState {
     LOGGED_OFF,
@@ -12,15 +10,10 @@ export enum PostPageViewState {
     INBOX_DETAIL_CHAT
 }
 
-export const isPostOwner = (authState: AuthState, post: Post) =>
-    authState.isLoggedIn &&
-    authState.principalId === post.asker.userId;
-
-
 export const getViewState =
     (authState: AuthState, post: Post, queryPartnerId: string): PostPageViewState => {
-    if (post.postId && authState.isLoggedIn) {
-        const isOwner = isPostOwner(authState, post);
+    if (post?.postId && authState.isLoggedIn) {
+        const isOwner = isOp(authState, post);
 
         if (!authState.isLoggedIn) {
             return PostPageViewState.LOGGED_OFF;
@@ -40,28 +33,22 @@ export const getViewState =
 }
 
 export const getPostStatusFromPost = (post: Post): PostStatusEnum =>
-    post?.postStatus.postStatus as unknown as PostStatusEnum;
+    post?.postState?.postStatus?.status as unknown as PostStatusEnum;
 
-export const postStatusIsOpen = (post: Post) =>
-    post?.postStatus?.postStatus === stringFromPostStatusEnum(PostStatusEnum.OPEN);
+export const isStatusPostInit = (post: Post) =>
+    post?.postState?.postStatus?.status === stringFromPostStatusEnum(PostStatusEnum.POST_INIT);
 
-export const postStatusIsInProgress = (post: Post) =>
-    post?.postStatus?.postStatus === stringFromPostStatusEnum(PostStatusEnum.IN_PROGRESS);
+export const isStatusDealInit = (post: Post) =>
+    post?.postState?.postStatus?.status === stringFromPostStatusEnum(PostStatusEnum.DEAL_INIT);
 
 export const isChatAllowed = (authState: AuthState, post: Post) => {
-    const deal = post.deal;
-    const principalId = authState?.principalId;
-
-    if (!deal
-        || dealStatusEnumFromString(deal?.dealStatus.dealStatus as string) === DealStatusEnum.CANCELLED) {
-        return true;
-
-    } else if (dealStatusEnumFromString(deal?.dealStatus.dealStatus as string) === DealStatusEnum.OPEN
-        && (
-            deal.asker.userId === principalId
-            || deal.respondent.userId === principalId)) {
-        return true;
-    }
-
-    return false;
+    return isStatusPostInit(post)
+        || (isStatusDealInit(post)
+            && (isOp(authState, post) || isDealConsultant(authState, post)));
 }
+
+export const isAnswerAllowed = (authState: AuthState, post: Post) => {
+    return isStatusDealInit(post)
+        && isDealConsultant(authState, post);
+};
+

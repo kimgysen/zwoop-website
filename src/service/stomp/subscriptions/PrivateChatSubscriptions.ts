@@ -9,10 +9,10 @@ import {
     PRIVATE_CHAT__ON_START_TYPING_RECEIVED,
     PRIVATE_CHAT__ON_STOP_TYPING_RECEIVED
 } from "../../../event_dispatchers/config/StompEvents";
-import PrivateChatFeatureDto from "../dto/receive/private_chat/PrivateChatFeatureDto";
-import {PrivateChatFeatureType} from "../dto/receive/private_chat/PrivateChatFeatureType";
-import PartnerReadDto from "../dto/receive/private_chat/feature/PartnerReadDto";
-import TypingDto from "../dto/receive/private_chat/feature/TypingDto";
+import PrivateChatFeatureDto from "@models/dto/stomp/receive/private_chat/PrivateChatFeatureDto";
+import {PrivateChatFeatureType} from "@models/dto/stomp/receive/private_chat/PrivateChatFeatureType";
+import PartnerReadDto from "@models/dto/stomp/receive/private_chat/feature/PartnerReadDto";
+import TypingDto from "@models/dto/stomp/receive/private_chat/feature/TypingDto";
 
 
 export const initPrivateChat = (partnerId: string) => {

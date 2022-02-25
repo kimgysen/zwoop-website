@@ -1,13 +1,15 @@
 import React, {FC} from "react";
-import Post, {PostStatusEnum} from "@models/post/Post";
-import AuthState from "@models/user/AuthState";
-import {biddingListIsEmpty, isPostOwner, principalHasBid} from "@components/pages/post/post-bidding/BiddingViewHelper";
+import Post from "@models/db/entity/Post";
+import AuthState from "@models/auth/AuthState";
+import {biddingListIsEmpty, principalHasBid} from "@components/pages/post/post-bidding/BiddingViewHelper";
 import AddBiddingViewHoc from "@components/pages/post/post-bidding/add-bidding/AddBiddingViewHoc";
-import Bidding from "@models/post/bidding/Bidding";
+import Bidding from "@models/db/entity/Bidding";
 import BiddingList from "@components/pages/post/post-bidding/bidding-list/BiddingList";
 import {KeyedMutator} from "swr";
 import Card from "@components/layout/components/card/Card";
-import BiddingAcceptedDto from "../../../../service/stomp/dto/receive/post/feature/bidding/BiddingAcceptedDto";
+import {isOp} from "../../../../util/PostUtil";
+import {PostStatusEnum} from "@models/db/entity/PostStatus";
+import Deal from "@models/db/entity/Deal";
 
 
 interface BiddingViewProps {
@@ -15,19 +17,19 @@ interface BiddingViewProps {
     post: Post,
     postStatus: PostStatusEnum,
     biddingList: Bidding[],
-    acceptedBidding: BiddingAcceptedDto|null,
-    mutate: KeyedMutator<Bidding[]>
+    mutate: KeyedMutator<Bidding[]>,
+    deal?: Deal|null,
 }
 
 const BiddingView: FC<BiddingViewProps> = (
-    { authState, post, postStatus, biddingList, acceptedBidding, mutate }) => {
+    { authState, post, postStatus, biddingList, mutate, deal }) => {
 
     return (
         <>
             {
                 authState.isLoggedIn
-                && !isPostOwner(post, authState.principalId)
-                && !principalHasBid(biddingList, authState.principalId)
+                && !isOp(authState, post)
+                && !principalHasBid(biddingList, authState)
                 && (
                     <Card color='teal.50'>
                         <AddBiddingViewHoc
@@ -45,9 +47,9 @@ const BiddingView: FC<BiddingViewProps> = (
                         <BiddingList
                             post={ post }
                             postStatus={ postStatus }
-                            principalId={ authState?.principalId as string }
+                            authState={ authState }
                             biddingList={ biddingList }
-                            acceptedBidding={ acceptedBidding }
+                            deal={ deal }
                             mutate={ mutate }
                         />
                     </Card>
