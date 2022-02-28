@@ -4,3 +4,20 @@
 .markdown-body pre {
     max-height: 300px;
 }
+
+.post-question-box .mde-text {
+    height: 400px !important;
+}
+
+.post-answer-box .mde-text {
+    height: 300px;
+}
+
+.mde-preview-content{
+    max-width: 520px;
+}
+.mde-preview-content pre {
+    max-height: 300px;
+    overflow: scroll !important;
+}
+

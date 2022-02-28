@@ -43,7 +43,7 @@ export const getFollowedTags:
             .catch((reason: AxiosError) => handleAxiosError(reason));
 }
 
-export const updateNickName:
+export const updateNickNameApi:
     (userId: string, nickName: string) => Promise<ApiResult<User>> =
     async (userId, nickName) => {
         const url = urlJoin(userApiPrivateEndpoint, userId, 'nickname');

@@ -1,7 +1,9 @@
 import Post from "@models/db/entity/Post";
 import AuthState from "@models/auth/AuthState";
 import {PostStatusEnum, stringFromPostStatusEnum} from "@models/db/entity/PostStatus";
-import {isDealConsultant, isOp} from "../../../util/PostUtil";
+import {isOp, isPostDealConsultant} from "../../../util/PostUtil";
+import {isDealConsultant} from "../../../util/DealUtil";
+import Deal from "@models/db/entity/Deal";
 
 export enum PostPageViewState {
     LOGGED_OFF,
@@ -32,8 +34,10 @@ export const getViewState =
     return PostPageViewState.LOGGED_OFF;
 }
 
-export const getPostStatusFromPost = (post: Post): PostStatusEnum =>
-    post?.postState?.postStatus?.status as unknown as PostStatusEnum;
+export const getPostStatusFromPost = (post?: Post): PostStatusEnum =>
+    post
+        ? post?.postState?.postStatus?.status as unknown as PostStatusEnum
+        : PostStatusEnum.POST_SETUP;
 
 export const isStatusPostInit = (post: Post) =>
     post?.postState?.postStatus?.status === stringFromPostStatusEnum(PostStatusEnum.POST_INIT);
@@ -44,11 +48,11 @@ export const isStatusDealInit = (post: Post) =>
 export const isChatAllowed = (authState: AuthState, post: Post) => {
     return isStatusPostInit(post)
         || (isStatusDealInit(post)
-            && (isOp(authState, post) || isDealConsultant(authState, post)));
+            && (isOp(authState, post) || isPostDealConsultant(authState, post)));
 }
 
-export const isAnswerAllowed = (authState: AuthState, post: Post) => {
-    return isStatusDealInit(post)
-        && isDealConsultant(authState, post);
+export const isAnswerAllowed = (authState: AuthState, postStatus: PostStatusEnum, deal?: Deal|null) => {
+    return postStatus === PostStatusEnum.DEAL_INIT
+        && isDealConsultant(authState, deal);
 };
 

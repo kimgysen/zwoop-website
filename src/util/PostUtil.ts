@@ -7,8 +7,8 @@ export const isOp = (authState: AuthState, post: Post) =>
     authState?.principalId === post?.op?.userId;
 
 
-export const isBiddingConsultant = (authState: AuthState, biddingItem: Bidding) =>
+export const isPostBiddingConsultant = (authState: AuthState, biddingItem: Bidding) =>
     authState?.principalId === biddingItem?.consultant?.userId;
 
-export const isDealConsultant = (authState: AuthState, post: Post) =>
+export const isPostDealConsultant = (authState: AuthState, post: Post) =>
     authState?.principalId === post?.postState?.deal?.bidding?.consultant?.userId;

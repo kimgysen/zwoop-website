@@ -1,0 +1,94 @@
+.wrapper {
+    width: 160px;
+    font-family: 'Helvetica';
+    font-size: 14px;
+    padding-top: 15px;
+}
+
+.step-progress {
+    position: relative;
+    padding-left: 45px;
+    list-style: none;
+    color: #8e8e8e;
+}
+
+.step-progress::before {
+    display: inline-block;
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 15px;
+    width: 10px;
+    height: 100%;
+    border-left: 2px solid #8e8e8e;
+}
+
+.step-progress-item {
+    position: relative;
+    counter-increment: list;
+}
+
+.step-progress-item:not(:last-child) {
+    padding-bottom: 20px;
+}
+
+.step-progress-item::before {
+    display: inline-block;
+    content: '';
+    position: absolute;
+    left: -30px;
+    height: 100%;
+    width: 10px;
+}
+
+.step-progress-item::after {
+    content: '';
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    left: -37px;
+    width: 12px;
+    height: 12px;
+    border: 2px solid #8e8e8e;
+    border-radius: 50%;
+    background-color: #FFF;
+    box-sizing: content-box;
+}
+
+.step-progress-item.is-done {
+    color: green;
+}
+
+.step-progress-item.is-done::before {
+    border-left: 2px solid green;
+}
+.step-progress-item.is-done::after {
+    content: "✔";
+    padding-bottom: 2px;
+    font-size: 10px;
+    color: #FFF;
+    text-align: center;
+    border: 2px solid green;
+    background-color: green;
+}
+
+.step-progress-item.current {
+    color: #000;
+}
+.step-progress-item.current::before {
+    border-left: 2px solid green;
+}
+
+.step-progress-item.current::after {
+    content: counter(list);
+    padding-bottom: 4px;
+    width: 22px;
+    height: 18px;
+    top: -4px;
+    left: -42px;
+    font-size: 14px;
+    text-align: center;
+    color: green;
+    border: 2px solid green;
+    background-color: white;
+}

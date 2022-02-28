@@ -1,12 +1,16 @@
 import {getStompClient} from "../StompService";
 import {
-    POST_UPDATE__BIDDING_ADDED,
-    POST_UPDATE__BIDDING_CHANGED,
-    POST_UPDATE__BIDDING_REMOVED,
-    POST_UPDATE__DEAL_CANCELLED,
-    POST_UPDATE__DEAL_INIT,
-    POST_UPDATE__POST_CHANGED,
-    POST_UPDATE__POST_REMOVED
+    POST_STATUS__BIDDING_ADDED,
+    POST_STATUS__BIDDING_CHANGED,
+    POST_STATUS__BIDDING_REMOVED,
+    POST_STATUS__DEAL_CANCELLED,
+    POST_STATUS__DEAL_INIT,
+    POST_STEPPER__DEAL_CANCELLED,
+    POST_STEPPER__DEAL_INIT,
+    POST_VIEW__DEAL_CANCELLED,
+    POST_VIEW__DEAL_INIT,
+    POST_VIEW__POST_CHANGED,
+    POST_VIEW__POST_REMOVED,
 } from "../../../event_dispatchers/config/StompEvents";
 import PostUpdateDto from "@models/dto/stomp/receive/post/PostUpdateDto";
 import {PostUpdateFeatureType} from "@models/dto/stomp/receive/post/PostUpdateFeatureType";
@@ -27,31 +31,35 @@ export const subscribeToPostUpdates = (postId: string) => {
 
             switch (postUpdateFeatureDto.postUpdateType) {
                 case PostUpdateFeatureType.POST_CHANGED:
-                    dispatchCustomMessage(POST_UPDATE__POST_CHANGED, postUpdateFeatureDto.dto as PostChangedDto);
+                    dispatchCustomMessage(POST_VIEW__POST_CHANGED, postUpdateFeatureDto.dto as PostChangedDto);
                     break;
 
                 case PostUpdateFeatureType.POST_REMOVED:
-                    dispatchCustomMessage(POST_UPDATE__POST_REMOVED, postUpdateFeatureDto.dto as PostRemovedDto);
+                    dispatchCustomMessage(POST_VIEW__POST_REMOVED, postUpdateFeatureDto.dto as PostRemovedDto);
                     break;
 
                 case PostUpdateFeatureType.BIDDING_ADDED:
-                    dispatchCustomMessage(POST_UPDATE__BIDDING_ADDED, postUpdateFeatureDto.dto as BiddingAddedDto);
+                    dispatchCustomMessage(POST_STATUS__BIDDING_ADDED, postUpdateFeatureDto.dto as BiddingAddedDto);
                     break;
 
                 case PostUpdateFeatureType.BIDDING_CHANGED:
-                    dispatchCustomMessage(POST_UPDATE__BIDDING_CHANGED, postUpdateFeatureDto.dto as BiddingChangedDto);
+                    dispatchCustomMessage(POST_STATUS__BIDDING_CHANGED, postUpdateFeatureDto.dto as BiddingChangedDto);
                     break;
 
                 case PostUpdateFeatureType.BIDDING_REMOVED:
-                    dispatchCustomMessage(POST_UPDATE__BIDDING_REMOVED, postUpdateFeatureDto.dto as BiddingRemovedDto);
+                    dispatchCustomMessage(POST_STATUS__BIDDING_REMOVED, postUpdateFeatureDto.dto as BiddingRemovedDto);
                     break;
 
                 case PostUpdateFeatureType.DEAL_INIT:
-                    dispatchCustomMessage(POST_UPDATE__DEAL_INIT, postUpdateFeatureDto.dto as DealInitDto);
+                    dispatchCustomMessage(POST_VIEW__DEAL_INIT, postUpdateFeatureDto.dto as DealInitDto);
+                    dispatchCustomMessage(POST_STATUS__DEAL_INIT, postUpdateFeatureDto.dto as DealInitDto);
+                    dispatchCustomMessage(POST_STEPPER__DEAL_INIT, postUpdateFeatureDto.dto as DealInitDto);
                     break;
 
                 case PostUpdateFeatureType.DEAL_CANCELLED:
-                    dispatchCustomMessage(POST_UPDATE__DEAL_CANCELLED, postUpdateFeatureDto.dto as DealCancelledDto);
+                    dispatchCustomMessage(POST_VIEW__DEAL_CANCELLED, postUpdateFeatureDto.dto as DealCancelledDto);
+                    dispatchCustomMessage(POST_STATUS__DEAL_CANCELLED, postUpdateFeatureDto.dto as DealCancelledDto);
+                    dispatchCustomMessage(POST_STEPPER__DEAL_CANCELLED, postUpdateFeatureDto.dto as DealInitDto);
                     break;
 
             }

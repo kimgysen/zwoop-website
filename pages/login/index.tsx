@@ -26,7 +26,7 @@ const Login: NextPage = () => {
             <Head>
                 <title>Register / Login</title>
             </Head>
-            <Navbar authState={{ isLoggedIn: false }} />
+            <Navbar authState={{ isLoading: false, isLoggedIn: false }} />
             <Box h='100vh'>
                 <Hero />
             </Box>

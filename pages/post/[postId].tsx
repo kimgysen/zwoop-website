@@ -4,22 +4,21 @@ import AppLayout from "@components/layout/AppLayout";
 import ThreeColumnLayout from "@components/layout/column-layouts/ThreeColumnLayout";
 import React, {useEffect, useState} from "react";
 import {getCsrPostById, getSsrPostById} from "@api_clients/feature/post/PostApiClient";
-import PostView from "@components/pages/post/post_view/PostView";
+import PostViewHoc from "@components/pages/post/post_view/PostViewHoc";
 import {useSession} from "next-auth/react";
 import AuthState, {defaultAuthState} from "@models/auth/AuthState";
 import PostChatWidget from "@components/pages/post/post_chat/PostChatWidget";
-import WatchListHoc from "@components/widgets/watchlist/WatchListHoc";
 import {useRouter} from "next/router";
-import BiddingViewHoc from "@components/pages/post/post-bidding/BiddingViewHoc";
+import PostStatusViewHoc from "@components/pages/post/post-status/PostStatusViewHoc";
 import ApiResult from "@api_clients/type/ApiResult";
 import User from "@models/db/entity/User";
 import {getUserById} from "@api_clients/feature/user/UserApiClient";
 import PostStompConnect from "@components/stomp/post/PostStompConnect";
-import {getViewState, isAnswerAllowed, isChatAllowed, PostPageViewState} from "@components/pages/post/PostPageHelper";
+import {getViewState, isChatAllowed, PostPageViewState} from "@components/pages/post/PostPageHelper";
 import Post from "@models/db/entity/Post";
-import AnswerButton from "@components/pages/post/post_view/subviews/AnswerButton";
 import {getAuthState} from "@components/auth/AuthStateHelper";
 import {AxiosError, AxiosResponse} from "axios";
+import PostStepperHoc from "@components/pages/post/post-stepper/PostStepperHoc";
 
 
 export async function getServerSideProps(ctx: { query: { postId: string } }) {
@@ -99,34 +98,23 @@ const PostByIdPage: NextPage = (props: any) => {
                 >
                     <ThreeColumnLayout
                         leftComponent={
-                            authState.isLoggedIn
-                            && (
-                                <WatchListHoc
-                                    authState={ authState }
-                                />
-                            )
+                            <PostStepperHoc
+                                post={ post }
+                            />
                         }
                         centerComponent={
                             <>
                                 {
                                     post && (
                                         <>
-                                            <PostView
+                                            <PostViewHoc
                                                 authState={ authState }
                                                 post={ post }
                                             />
-                                            <BiddingViewHoc
+                                            <PostStatusViewHoc
                                                 authState={ authState }
                                                 post={ post }
                                             />
-                                            {
-                                                isAnswerAllowed(authState, post)
-                                                && (
-                                                    <AnswerButton
-                                                        post={ post }
-                                                    />
-                                                )
-                                            }
                                         </>
                                     )
                                 }

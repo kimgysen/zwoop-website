@@ -20,7 +20,7 @@ export enum FeedTypeEnum {
     FEED_BY_TAG
 }
 
-export const createPost:
+export const createPostApi:
     (post: CreatePostDto) => Promise<ApiResult<string>> =
     async (post) => {
         const jwt = await getRawJwt();
@@ -38,7 +38,7 @@ export const createPost:
         .catch((reason: AxiosError) => handleAxiosError(reason));
 }
 
-export const updatePost:
+export const updatePostApi:
     (postId: string, post: CreatePostDto) => Promise<ApiResult<string>> =
     async (postId, post) => {
         const url = urlJoin(postApiPrivateEndpoint, postId);
