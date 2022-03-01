@@ -66,22 +66,24 @@ export const updateNickNameApi:
     ));
 }
 
-export const updateAbout: (userId: string, aboutText: string, jwt: string) => Promise<ApiResult<User>> = (userId, aboutText, jwt) => {
-    const url = urlJoin(userApiPrivateEndpoint!, userId, 'about');
-
-    return axios.put(url, { aboutText }, {
-        headers: {
-            Authorization: `Bearer ${ jwt }`
-        }
-    })
-        .then(res => handleAxiosResponse({
-            res,
-            successStatus: 200,
-            successProp: res.data
-        }))
-        .catch((reason: AxiosError) => handleAxiosError(reason, [
-            { status: 404, message: 'User not found.' },
-            { status: 403, message: 'Not allowed to update the user profile.' }
-        ]
-    ));
+export const updateAboutApi:
+    (userId: string, aboutText: string) => Promise<ApiResult<User>> =
+    async (userId, aboutText) => {
+        const url = urlJoin(userApiPrivateEndpoint!, userId, 'about');
+        const jwt = await getRawJwt();
+        return axios.put(url, { aboutText }, {
+            headers: {
+                Authorization: `Bearer ${ jwt }`
+            }
+        })
+            .then(res => handleAxiosResponse({
+                res,
+                successStatus: 200,
+                successProp: res.data
+            }))
+            .catch((reason: AxiosError) => handleAxiosError(reason, [
+                { status: 404, message: 'User not found.' },
+                { status: 403, message: 'Not allowed to update the user profile.' }
+            ]
+        ));
 }

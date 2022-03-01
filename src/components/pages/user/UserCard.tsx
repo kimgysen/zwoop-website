@@ -1,4 +1,4 @@
-import {Box, Divider, Flex, Heading, Icon, IconButton, Image, useDisclosure, VStack} from '@chakra-ui/react';
+import {Box, Divider, Flex, Heading, Icon, IconButton, Image, VStack} from '@chakra-ui/react';
 import User from "@models/db/entity/User";
 import Card from "@components/layout/components/card/Card";
 import React, {useState} from "react";
@@ -7,8 +7,8 @@ import {FaClock, FaPencilAlt} from 'react-icons/fa';
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import TagsList from "@components/widgets/tags/TagsList";
-import EditAboutModal from "@components/pages/user/edit/EditAboutModal";
-import EditNickModal from "@components/pages/user/edit/EditNickModal";
+import EditNick from "@components/pages/user/edit/EditNick";
+import EditAbout from "@components/pages/user/edit/EditAbout";
 
 
 interface UserCardProps {
@@ -19,8 +19,9 @@ interface UserCardProps {
 const UserCard: React.FC<UserCardProps> = ({ profileUser, principalId }) => {
 
     const [editUser, setEditUser] = useState<User>(profileUser);
-    const { isOpen: isEditNickOpen, onOpen: onEditNickOpen, onClose: onEditNickClose } = useDisclosure();
-    const { isOpen: isEditAboutOpen, onOpen: onEditAboutOpen, onClose: onEditAboutClose } = useDisclosure();
+
+    const [isNickEdit, setNickEdit] = useState<boolean>(false);
+    const [isAboutEdit, setAboutEdit] = useState<boolean>(false);
 
     return (
         <Box>
@@ -39,9 +40,25 @@ const UserCard: React.FC<UserCardProps> = ({ profileUser, principalId }) => {
                                 }}
                                 alt='profile pic'
                             />
-                            <Heading fontSize={'xl'} fontWeight={500} fontFamily={'body'}>
-                                { editUser.nickName }
-                            </Heading>
+                            {
+                                !isNickEdit
+                                && (
+                                    <Heading fontSize={'xl'} fontWeight={500} fontFamily={'body'}>
+                                        { editUser.nickName }
+                                    </Heading>
+                                )
+                            }
+                            {
+                                isNickEdit
+                                && (
+                                    <EditNick
+                                        userId={ editUser?.userId }
+                                        nickName={ editUser?.nickName }
+                                        setCurrentUser={ setEditUser }
+                                        closeEdit={ () => setNickEdit(false) }
+                                    />
+                                )
+                            }
                         </Flex>
                         {
                             profileUser.userId === principalId && (
@@ -52,7 +69,7 @@ const UserCard: React.FC<UserCardProps> = ({ profileUser, principalId }) => {
                                     aria-label='Edit nickname'
                                     size='xs'
                                     icon={<FaPencilAlt/>}
-                                    onClick={ onEditNickOpen }
+                                    onClick={ () => setNickEdit(!isNickEdit) }
                                 />
                             )
                         }
@@ -83,37 +100,38 @@ const UserCard: React.FC<UserCardProps> = ({ profileUser, principalId }) => {
                                     aria-label='Edit about'
                                     size='xs'
                                     icon={<FaPencilAlt />}
-                                    onClick={ onEditAboutOpen }
+                                    onClick={ () => setAboutEdit(!isAboutEdit) }
                                 />
                             )
                         }
                         {
-                            editUser.aboutText &&
-                            <Box className='markdown-body'>
-                                <ReactMarkdown remarkPlugins={ [remarkGfm] }>{ editUser.aboutText }</ReactMarkdown>
-                            </Box>
+                            !isAboutEdit
+                            && !editUser?.aboutText
+                            && <i>Write something about yourself</i>
                         }
                         {
-                            !editUser.aboutText &&
-                            <i>Write something about yourself</i>
+                            !isAboutEdit
+                            && editUser?.aboutText
+                            && (
+                                <Box className='markdown-body'>
+                                    <ReactMarkdown remarkPlugins={ [remarkGfm] }>{ editUser.aboutText }</ReactMarkdown>
+                                </Box>
+                            )
+                        }
+                        {
+                            isAboutEdit
+                            && (
+                                <EditAbout
+                                    userId={ profileUser.userId }
+                                    defaultAboutText={ editUser?.aboutText }
+                                    setCurrentUser={ setEditUser }
+                                    closeEdit={ () => setAboutEdit(false) }
+                                />
+                            )
                         }
                     </Box>
                 </VStack>
             </Card>
-            <EditNickModal
-                userId={ principalId }
-                setCurrentUser={ setEditUser }
-                isOpen={ isEditNickOpen }
-                onClose={ onEditNickClose }
-                nickName={ profileUser.nickName as string }
-            />
-            <EditAboutModal
-                userId={ principalId }
-                setCurrentUser={ setEditUser }
-                isOpen={ isEditAboutOpen }
-                onClose={ onEditAboutClose }
-                aboutText={ profileUser.aboutText }
-            />
         </Box>
     );
 }
