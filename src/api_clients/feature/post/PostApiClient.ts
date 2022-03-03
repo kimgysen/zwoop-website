@@ -1,6 +1,6 @@
 import axios, {AxiosError, AxiosResponse} from "axios";
 import ApiResult from "../../type/ApiResult";
-import CreatePostDto from "@models/dto/rest/send/post/CreatePostDto";
+import SavePostDto from "@models/dto/rest/send/post/SavePostDto";
 import Post from "@models/db/entity/Post";
 import {handleAxiosError, handleAxiosResponse} from "../../util/ResponseUtil";
 import urlJoin from "url-join";
@@ -21,7 +21,7 @@ export enum FeedTypeEnum {
 }
 
 export const createPostApi:
-    (post: CreatePostDto) => Promise<ApiResult<string>> =
+    (post: SavePostDto) => Promise<ApiResult<string>> =
     async (post) => {
         const jwt = await getRawJwt();
 
@@ -39,7 +39,7 @@ export const createPostApi:
 }
 
 export const updatePostApi:
-    (postId: string, post: CreatePostDto) => Promise<ApiResult<string>> =
+    (postId: string, post: SavePostDto) => Promise<ApiResult<string>> =
     async (postId, post) => {
         const url = urlJoin(postApiPrivateEndpoint, postId);
 

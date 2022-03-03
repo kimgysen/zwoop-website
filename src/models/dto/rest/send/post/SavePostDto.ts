@@ -1,6 +1,6 @@
 import Tag from "@models/db/entity/Tag";
 
-export default interface CreatePostDto {
+export default interface SavePostDto {
     title: string,
     text: string,
     bidPrice: string,

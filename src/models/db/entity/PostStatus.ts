@@ -1,5 +1,4 @@
 
-
 export enum PostStatusEnum {
     POST_SETUP = 'POST_SETUP',
     POST_INIT= 'POST_INIT',

@@ -42,13 +42,9 @@ export const getPostStatusFromPost = (post?: Post): PostStatusEnum =>
 export const isStatusPostInit = (post: Post) =>
     post?.postState?.postStatus?.status === stringFromPostStatusEnum(PostStatusEnum.POST_INIT);
 
-export const isStatusDealInit = (post: Post) =>
-    post?.postState?.postStatus?.status === stringFromPostStatusEnum(PostStatusEnum.DEAL_INIT);
-
 export const isChatAllowed = (authState: AuthState, post: Post) => {
     return isStatusPostInit(post)
-        || (isStatusDealInit(post)
-            && (isOp(authState, post) || isPostDealConsultant(authState, post)));
+        || (isOp(authState, post) || isPostDealConsultant(authState, post));
 }
 
 export const isAnswerAllowed = (authState: AuthState, postStatus: PostStatusEnum, deal?: Deal|null) => {

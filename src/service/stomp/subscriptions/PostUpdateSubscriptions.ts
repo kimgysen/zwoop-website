@@ -1,10 +1,15 @@
 import {getStompClient} from "../StompService";
 import {
+    POST_STATUS__ANSWER_ADDED,
+    POST_STATUS__ANSWER_CHANGED,
+    POST_STATUS__ANSWER_REMOVED,
     POST_STATUS__BIDDING_ADDED,
     POST_STATUS__BIDDING_CHANGED,
     POST_STATUS__BIDDING_REMOVED,
     POST_STATUS__DEAL_CANCELLED,
     POST_STATUS__DEAL_INIT,
+    POST_STEPPER__ANSWER_ADDED,
+    POST_STEPPER__ANSWER_REMOVED,
     POST_STEPPER__DEAL_CANCELLED,
     POST_STEPPER__DEAL_INIT,
     POST_VIEW__DEAL_CANCELLED,
@@ -22,6 +27,9 @@ import BiddingRemovedDto from "@models/dto/stomp/receive/post/feature/bidding/Bi
 import {dispatchCustomMessage} from "./SubscriptionUtil";
 import DealInitDto from "@models/dto/stomp/receive/dealbox/DealInitDto";
 import DealCancelledDto from "@models/dto/stomp/receive/dealbox/DealCancelledDto";
+import AnswerAddedDto from "@models/dto/stomp/receive/post/feature/answer/AnswerAddedDto";
+import AnswerChangedDto from "@models/dto/stomp/receive/post/feature/answer/AnswerChangedDto";
+import AnswerRemovedDto from "@models/dto/stomp/receive/post/feature/answer/AnswerRemovedDto";
 
 
 export const subscribeToPostUpdates = (postId: string) => {
@@ -62,6 +70,21 @@ export const subscribeToPostUpdates = (postId: string) => {
                     dispatchCustomMessage(POST_STEPPER__DEAL_CANCELLED, postUpdateFeatureDto.dto as DealInitDto);
                     break;
 
+                case PostUpdateFeatureType.ANSWER_ADDED:
+                    console.log('answer added');
+                    dispatchCustomMessage(POST_STATUS__ANSWER_ADDED, postUpdateFeatureDto.dto as AnswerAddedDto);
+                    dispatchCustomMessage(POST_STEPPER__ANSWER_ADDED, postUpdateFeatureDto.dto as AnswerAddedDto);
+                    break;
+
+                case PostUpdateFeatureType.ANSWER_CHANGED:
+                    dispatchCustomMessage(POST_STATUS__ANSWER_CHANGED, postUpdateFeatureDto.dto as AnswerChangedDto);
+                    break;
+
+                case PostUpdateFeatureType.ANSWER_REMOVED:
+                    dispatchCustomMessage(POST_STATUS__ANSWER_REMOVED, postUpdateFeatureDto.dto as AnswerRemovedDto);
+                    dispatchCustomMessage(POST_STEPPER__ANSWER_REMOVED, postUpdateFeatureDto.dto as AnswerRemovedDto);
+                    break;
             }
+
         });
 }

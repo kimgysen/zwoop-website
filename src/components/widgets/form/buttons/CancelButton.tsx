@@ -3,17 +3,19 @@ import {Button} from "@chakra-ui/react";
 
 
 interface ICancelButton {
-    onCancel: (e: React.MouseEvent) => void
+    onCancel: (e: React.MouseEvent) => void,
+    size?: string
 }
 
-const CancelButton: FC<ICancelButton> = ({ onCancel }) => {
+const CancelButton: FC<ICancelButton> = ({ onCancel, size }) => {
     return (
         <Button
             bg={'red.400'}
-            mr={3}
             color={'white'}
             _hover={{ bg: 'red.500' }}
-            onClick={ e => onCancel(e) }>
+            onClick={ e => onCancel(e) }
+            size={ size || 'md' }
+        >
             Cancel
         </Button>
     )

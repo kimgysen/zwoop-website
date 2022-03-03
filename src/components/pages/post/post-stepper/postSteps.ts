@@ -17,7 +17,7 @@ const postSteps: ProgressStep[] = [
     {
         id: PostStatusEnum.DEAL_INIT,
         title: 'Deal made',
-        caption: 'Problem solving',
+        caption: 'Find resolution',
         isActive: false
     },
     {

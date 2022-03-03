@@ -7,15 +7,17 @@ interface SaveButtonProps {
     label: string,
     onSave: (e: React.MouseEvent) => void,
     shouldDisableSave: boolean,
-    saveError?: string | null
+    saveError?: string | null,
+    size?: string
 }
 
-const SaveButton: FC<SaveButtonProps> = ({ label, onSave, shouldDisableSave, saveError }) => {
+const SaveButton: FC<SaveButtonProps> = ({ label, onSave, shouldDisableSave, saveError, size }) => {
     return (
         <Box>
             <Flex>
                 <Spacer />
                 <Button
+                    size={ size || 'md' }
                     bg={'blue.400'}
                     color={'white'}
                     _hover={{ bg: 'blue.500' }}
@@ -38,7 +40,6 @@ const SaveButton: FC<SaveButtonProps> = ({ label, onSave, shouldDisableSave, sav
                 }
             </Flex>
         </Box>
-
     )
 }
 
