@@ -1,18 +1,18 @@
 import AuthState from "@models/auth/AuthState";
-import Post from "@models/db/entity/Post";
-import Bidding from "@models/db/entity/Bidding";
-import Answer from "@models/db/entity/Answer";
+import BiddingDto from "@models/dto/rest/receive/bidding/BiddingDto";
+import AnswerDto from "@models/dto/rest/receive/answer/AnswerDto";
+import PostDto from "@models/dto/rest/receive/post/PostDto";
 
 
-export const isOp = (authState: AuthState, post: Post) =>
-    authState?.principalId === post?.op?.userId;
+export const isOp = (authState: AuthState, postDto: PostDto) =>
+    authState?.principalId === postDto?.op?.userId;
 
 
-export const isPostBiddingConsultant = (authState: AuthState, biddingItem: Bidding) =>
-    authState?.principalId === biddingItem?.consultant?.userId;
+export const isPostBiddingConsultant = (authState: AuthState, biddingDto: BiddingDto) =>
+    authState?.principalId === biddingDto?.consultant?.userId;
 
-export const isPostDealConsultant = (authState: AuthState, post: Post) =>
-    authState?.principalId === post?.postState?.deal?.bidding?.consultant?.userId;
+export const isPostDealConsultant = (authState: AuthState, postDto: PostDto) =>
+    authState?.principalId === postDto?.postState?.deal?.consultant?.userId;
 
-export const isAnswerOwner = (authState: AuthState, answer: Answer) =>
-    authState?.principalId === answer?.consultant?.userId;
+export const isAnswerOwner = (authState: AuthState, answerDto: AnswerDto) =>
+    authState?.principalId === answerDto?.consultant?.userId;

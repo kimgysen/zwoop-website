@@ -1,8 +1,10 @@
 import UserDto from "@models/dto/stomp/receive/common/user/UserDto";
 
-
-export default interface AnswerRemovedDto {
+export default interface AnswerDto{
     answerId: string;
-    op: UserDto,
+    op: UserDto;
     consultant: UserDto;
+    answerText: string;
+    createdAt: Date;
+    updatedAt: Date;
 }

@@ -1,20 +1,18 @@
 import React, {FC} from "react";
-import Bidding from "@models/db/entity/Bidding";
 import BiddingItem from "@components/pages/post/post-status/post-bidding/bidding-list/BiddingItem";
 import {Table, Tbody, Th, Thead, Tr} from "@chakra-ui/react";
-import Post from "@models/db/entity/Post";
-import {KeyedMutator} from "swr";
 import AuthState from "@models/auth/AuthState";
+import BiddingDto from "@models/dto/rest/receive/bidding/BiddingDto";
+import PostDto from "@models/dto/rest/receive/post/PostDto";
 
 interface BiddingListProps {
     authState: AuthState,
-    post: Post,
-    biddingList: Bidding[],
-    mutate: KeyedMutator<Bidding[]>
+    postDto: PostDto,
+    biddingDtoList: BiddingDto[]
 }
 
 
-const BiddingList: FC<BiddingListProps> = ({ authState, post, biddingList, mutate }) => {
+const BiddingList: FC<BiddingListProps> = ({ authState, postDto, biddingDtoList }) => {
     return (
         <Table
             size="sm"
@@ -31,13 +29,12 @@ const BiddingList: FC<BiddingListProps> = ({ authState, post, biddingList, mutat
             </Thead>
             <Tbody>
                 {
-                    biddingList?.map((biddingItem, idx) => (
+                    biddingDtoList?.map((biddingDto, idx) => (
                         <BiddingItem
                             key={ `bidding-${ idx }` }
                             authState={ authState }
-                            post={ post }
-                            biddingItem={ biddingItem }
-                            mutate={ mutate }
+                            postDto={ postDto }
+                            biddingDto={ biddingDto }
                         />
                     ))
                 }

@@ -1,9 +1,9 @@
-import Post from "@models/db/entity/Post";
 import AuthState from "@models/auth/AuthState";
 import {PostStatusEnum, stringFromPostStatusEnum} from "@models/db/entity/PostStatus";
 import {isOp, isPostDealConsultant} from "../../../util/PostUtil";
 import {isDealConsultant} from "../../../util/DealUtil";
-import Deal from "@models/db/entity/Deal";
+import PostDto from "@models/dto/rest/receive/post/PostDto";
+import DealDto from "@models/dto/rest/receive/deal/DealDto";
 
 export enum PostPageViewState {
     LOGGED_OFF,
@@ -13,9 +13,9 @@ export enum PostPageViewState {
 }
 
 export const getViewState =
-    (authState: AuthState, post: Post, queryPartnerId: string): PostPageViewState => {
-    if (post?.postId && authState.isLoggedIn) {
-        const isOwner = isOp(authState, post);
+    (authState: AuthState, postDto: PostDto, queryPartnerId: string): PostPageViewState => {
+    if (postDto?.postId && authState.isLoggedIn) {
+        const isOwner = isOp(authState, postDto);
 
         if (!authState.isLoggedIn) {
             return PostPageViewState.LOGGED_OFF;
@@ -34,21 +34,26 @@ export const getViewState =
     return PostPageViewState.LOGGED_OFF;
 }
 
-export const getPostStatusFromPost = (post?: Post): PostStatusEnum =>
+export const getPostStatusFromPost = (post?: PostDto): PostStatusEnum =>
     post
         ? post?.postState?.postStatus?.status as unknown as PostStatusEnum
         : PostStatusEnum.POST_SETUP;
 
-export const isStatusPostInit = (post: Post) =>
-    post?.postState?.postStatus?.status === stringFromPostStatusEnum(PostStatusEnum.POST_INIT);
+export const isStatusPostInit = (postDto: PostDto) =>
+    postDto?.postState?.postStatus?.status === stringFromPostStatusEnum(PostStatusEnum.POST_INIT);
 
-export const isChatAllowed = (authState: AuthState, post: Post) => {
-    return isStatusPostInit(post)
-        || (isOp(authState, post) || isPostDealConsultant(authState, post));
+export const isChatAllowed = (authState: AuthState, postDto: PostDto) => {
+    return isStatusPostInit(postDto)
+        || (isOp(authState, postDto) || isPostDealConsultant(authState, postDto));
 }
 
-export const isAnswerAllowed = (authState: AuthState, postStatus: PostStatusEnum, deal?: Deal|null) => {
+export const isPostEditAllowed = (authState: AuthState, postDto: PostDto) => {
+    return isOp(authState, postDto)
+        && postDto?.postState?.postStatus?.status === 'POST_INIT';
+}
+
+export const isAnswerAllowed = (authState: AuthState, postStatus: PostStatusEnum, dealDto?: DealDto|null) => {
     return postStatus === PostStatusEnum.DEAL_INIT
-        && isDealConsultant(authState, deal);
+        && isDealConsultant(authState, dealDto);
 };
 

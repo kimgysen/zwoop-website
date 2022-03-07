@@ -1,4 +1,4 @@
-import InboxItemReceiveDto from "../../../../../../models/dto/stomp/receive/inbox/InboxItemReceiveDto";
+import InboxItemDto from "@models/dto/stomp/receive/user-notification/feature/inbox/InboxItemDto";
 import React, {FC} from "react";
 import {Avatar, Box, HStack, Tag, Text, VStack} from "@chakra-ui/react";
 import TimeAgo from "react-timeago";
@@ -10,7 +10,7 @@ import {getPartnerFromInboxItem, hasUnreadMessages} from "../../../../../../util
 
 interface AppInboxItemProps {
     authState: AuthState,
-    inboxItem: InboxItemReceiveDto,
+    inboxItem: InboxItemDto,
     closePopup: () => void
 }
 

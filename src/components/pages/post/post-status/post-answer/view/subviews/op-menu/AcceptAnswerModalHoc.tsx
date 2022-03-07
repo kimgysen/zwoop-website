@@ -12,17 +12,17 @@ import {
     VStack
 } from "@chakra-ui/react";
 import ApiResult from "@api_clients/type/ApiResult";
-import Answer from "@models/db/entity/Answer";
+import AnswerDto from "@models/dto/rest/receive/answer/AnswerDto";
 
 
 interface AcceptAnswerModalProps {
-    answer: Answer,
+    answerDto: AnswerDto,
     isOpen: boolean,
     onClose: () => void
 }
 
 const AcceptAnswerModalHoc: FC<AcceptAnswerModalProps> =
-    ({ answer, isOpen, onClose }) => {
+    ({ answerDto, isOpen, onClose }) => {
 
         const defaultResult = { loading: false, success: null, error: null };
         const [acceptRes, setAcceptRes] = useState<ApiResult<boolean>>(defaultResult);

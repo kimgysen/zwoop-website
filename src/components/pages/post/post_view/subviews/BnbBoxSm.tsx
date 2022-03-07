@@ -1,13 +1,12 @@
 import React, {FC} from "react";
-import Currency from "@models/db/entity/Currency";
 import {Center, VStack} from "@chakra-ui/react";
 
 interface BnbBoxSmProps {
     price: string,
-    currency: Currency
+    currencyCode: string
 }
 
-const BnbBoxSm: FC<BnbBoxSmProps> = ({ price, currency }) => {
+const BnbBoxSm: FC<BnbBoxSmProps> = ({ price, currencyCode }) => {
     return (
         <VStack>
             <Center
@@ -24,7 +23,7 @@ const BnbBoxSm: FC<BnbBoxSmProps> = ({ price, currency }) => {
                 fontWeight={ 600 }
                 color="ruby.600"
             >
-                { currency?.currencyCode }
+                { currencyCode }
             </Center>
         </VStack>
     )

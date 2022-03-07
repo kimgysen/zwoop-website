@@ -10,16 +10,16 @@ import FormCard from "@components/widgets/form/FormCard";
 import {Flex} from "@chakra-ui/layout/src/flex";
 import SaveButton from "@components/widgets/form/buttons/SaveButton";
 import {Box} from "@chakra-ui/layout/src/box";
-import Post from "@models/db/entity/Post";
+import PostDto from "@models/dto/rest/receive/post/PostDto";
 
 interface AddBidViewProps {
-    post: Post,
+    postDto: PostDto,
     onSaveBidding: (askPrice: string, currencyCode: string) => void
 }
 
-const AddBiddingView: FC<AddBidViewProps> = ({ post, onSaveBidding }) => {
+const AddBiddingView: FC<AddBidViewProps> = ({ postDto, onSaveBidding }) => {
 
-    const [bidPrice, setBidPrice] = useState<string>(post?.bidPrice);
+    const [bidPrice, setBidPrice] = useState<string>(postDto?.bidPrice);
 
     return (
         <FormCard
@@ -33,7 +33,7 @@ const AddBiddingView: FC<AddBidViewProps> = ({ post, onSaveBidding }) => {
                     <NumberInput
                         size='md'
                         maxW="32"
-                        defaultValue={ post?.bidPrice }
+                        defaultValue={ postDto?.bidPrice }
                         inputMode='decimal'
                         precision={ 2 }
                         step={ .01 }
@@ -51,7 +51,7 @@ const AddBiddingView: FC<AddBidViewProps> = ({ post, onSaveBidding }) => {
                 </Box>
                 <SaveButton
                     label='Submit'
-                    onSave = { () => onSaveBidding(bidPrice, post?.currency?.currencyCode) }
+                    onSave = { () => onSaveBidding(bidPrice, postDto?.currencyCode) }
                     shouldDisableSave={ false }
                     saveError={ '' }
                 />

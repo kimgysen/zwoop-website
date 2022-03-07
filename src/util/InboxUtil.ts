@@ -1,8 +1,8 @@
-import InboxItemReceiveDto from "../models/dto/stomp/receive/inbox/InboxItemReceiveDto";
+import InboxItemDto from "@models/dto/stomp/receive/user-notification/feature/inbox/InboxItemDto";
 import ChatPartner from "@models/chat/ChatPartner";
 
 // Public api
-export const rebuildInbox = (lastReceived: InboxItemReceiveDto, inboxItems: InboxItemReceiveDto[]): InboxItemReceiveDto[] => {
+export const rebuildInbox = (lastReceived: InboxItemDto, inboxItems: InboxItemDto[]): InboxItemDto[] => {
     let inbox;
     if (inboxIsEmpty(inboxItems)) {
         inbox = [lastReceived];
@@ -17,16 +17,16 @@ export const rebuildInbox = (lastReceived: InboxItemReceiveDto, inboxItems: Inbo
     return inbox;
 }
 
-export const isInboxEmpty = (items: InboxItemReceiveDto[]): boolean =>
+export const isInboxEmpty = (items: InboxItemDto[]): boolean =>
     !items || items.length === 0;
 
-export const isLastInboxItem = (items: InboxItemReceiveDto[], idx: number): boolean =>
+export const isLastInboxItem = (items: InboxItemDto[], idx: number): boolean =>
     items.length - 1 === idx;
 
-export const findItemByPartnerId = (inboxItems: InboxItemReceiveDto[], queryPartnerId: string) =>
+export const findItemByPartnerId = (inboxItems: InboxItemDto[], queryPartnerId: string) =>
     inboxItems.find(item => item.partnerId === queryPartnerId);
 
-export const getPartnerFromInboxItem = (inboxItem: InboxItemReceiveDto): ChatPartner =>
+export const getPartnerFromInboxItem = (inboxItem: InboxItemDto): ChatPartner =>
     inboxItem.userId === inboxItem.fromUserId
         ? { partnerId: inboxItem.partnerId,
             partnerNickName: inboxItem.toNickName,
@@ -35,9 +35,9 @@ export const getPartnerFromInboxItem = (inboxItem: InboxItemReceiveDto): ChatPar
             partnerNickName: inboxItem.fromNickName,
             partnerAvatar: inboxItem.fromAvatar };
 
-export const hasUnreadMessages = (inboxItem: InboxItemReceiveDto) => inboxItem.unread > 0;
+export const hasUnreadMessages = (inboxItem: InboxItemDto) => inboxItem.unread > 0;
 
-export const countUnreadMessages = (principalId: string, inboxItems: InboxItemReceiveDto[]) =>
+export const countUnreadMessages = (principalId: string, inboxItems: InboxItemDto[]) =>
     inboxItems && inboxItems.length > 0 ?
         inboxItems.filter(item =>
             item.fromUserId !== principalId
@@ -45,20 +45,20 @@ export const countUnreadMessages = (principalId: string, inboxItems: InboxItemRe
         ).length
         : 0;
 
-export const sortInboxItems = (inboxItems: InboxItemReceiveDto[]) =>
+export const sortInboxItems = (inboxItems: InboxItemDto[]) =>
     inboxItems.sort((a, b) => a.lastMessageDate < b.lastMessageDate ? 1 : -1);
 
 
-const inboxIsEmpty = (inboxItems: InboxItemReceiveDto[]) =>
+const inboxIsEmpty = (inboxItems: InboxItemDto[]) =>
     inboxItems.length === 0;
 
-const findInboxItemIdx = (lastReceived: InboxItemReceiveDto, inboxItems: InboxItemReceiveDto[]) =>
+const findInboxItemIdx = (lastReceived: InboxItemDto, inboxItems: InboxItemDto[]) =>
     inboxItems.findIndex(inboxItem => inboxItem.partnerId === lastReceived.partnerId);
 
-const inboxItemExists = (lastReceived: InboxItemReceiveDto, inboxItems: InboxItemReceiveDto[]) =>
+const inboxItemExists = (lastReceived: InboxItemDto, inboxItems: InboxItemDto[]) =>
     findInboxItemIdx(lastReceived, inboxItems) !== -1;
 
-const replaceInboxItem = (lastReceived: InboxItemReceiveDto, inboxItems: InboxItemReceiveDto[]) => {
+const replaceInboxItem = (lastReceived: InboxItemDto, inboxItems: InboxItemDto[]) => {
     const idx = findInboxItemIdx(lastReceived, inboxItems);
     if (idx !== -1) {
         inboxItems[idx] = lastReceived;

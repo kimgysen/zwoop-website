@@ -1,17 +1,17 @@
 import {FC} from "preact/compat";
 import {Flex, Link, useDisclosure} from "@chakra-ui/react";
 import React from "react";
-import Answer from "@models/db/entity/Answer";
 import DeleteAnswerModalHoc
     from "@components/pages/post/post-status/post-answer/view/subviews/consultant-menu/DeleteAnswerModalHoc";
+import AnswerDto from "@models/dto/rest/receive/answer/AnswerDto";
 
 interface AnswerViewOwnerMenuProps {
-    answer: Answer,
+    answerDto: AnswerDto,
     activateEditView: () => void
 }
 
 
-export const AnswerViewConsultantMenu:FC<AnswerViewOwnerMenuProps> = ({ activateEditView, answer }) => {
+export const AnswerViewConsultantMenu:FC<AnswerViewOwnerMenuProps> = ({ activateEditView, answerDto }) => {
     const { isOpen: isDelModalOpen, onOpen: onDelModalOpen, onClose: onDelModalClose } = useDisclosure();
 
     return (
@@ -34,7 +34,7 @@ export const AnswerViewConsultantMenu:FC<AnswerViewOwnerMenuProps> = ({ activate
                 </Link>
             </Flex>
             <DeleteAnswerModalHoc
-                answer={ answer }
+                answerDto={ answerDto }
                 isOpen={ isDelModalOpen }
                 onClose={ onDelModalClose }
             />

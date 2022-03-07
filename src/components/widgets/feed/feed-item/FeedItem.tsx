@@ -2,27 +2,27 @@ import NextLink from 'next/link'
 import {Box, Divider, Flex, Heading, HStack, Image, Link} from "@chakra-ui/react";
 import React, {FC} from "react";
 import Card from "../../../layout/components/card/Card";
-import Post from "@models/db/entity/Post";
 import {BnbBox} from "./BnbBox";
 import TagsList from "../../tags/TagsList";
 import TimeAgo from "react-timeago";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import PostDto from "@models/dto/rest/receive/post/PostDto";
 
 export interface FeedItemProps {
-    post: Post
+    postDto: PostDto
 }
 
 //TODO: Use sanitizer library
 //https://marked.js.org/using_advanced#options
 
-const FeedItem: FC<FeedItemProps> = ({ post }) => {
+const FeedItem: FC<FeedItemProps> = ({ postDto }) => {
     return (
         <Card>
             <Flex
                 minH={{ base: '50px' }}
             >
-                <BnbBox price={ post.bidPrice } />
+                <BnbBox price={ postDto?.bidPrice } />
                 <Box
                     ml={ "20px" }
                     width={'80%'}
@@ -36,18 +36,18 @@ const FeedItem: FC<FeedItemProps> = ({ post }) => {
                         lineHeight={ "1.4em" }
                         sx={{ overflow: 'hidden' }}
                     >
-                        <NextLink href={ `/post/${post?.postId}` } passHref>
+                        <NextLink href={ `/post/${postDto?.postId}` } passHref>
                             <Link
                                 _hover={{ textDecoration: "underline" }}
                                 isExternal
                                 d="block"
                             >
-                                { post.postTitle }
+                                { postDto?.postTitle }
                             </Link>
                         </NextLink>
                     </Heading>
                     <Box fontSize='xs'>
-                        <TimeAgo date={ post.createdAt } />
+                        <TimeAgo date={ postDto?.createdAt } />
                     </Box>
                     <Box
                         className='markdown-body'
@@ -64,13 +64,13 @@ const FeedItem: FC<FeedItemProps> = ({ post }) => {
                                 maskImage: "linear-gradient(180deg, #000 60%, transparent)"
                             }}
                         >
-                            <ReactMarkdown remarkPlugins={ [remarkGfm] }>{ post.postText }</ReactMarkdown>
+                            <ReactMarkdown remarkPlugins={ [remarkGfm] }>{ postDto?.postText }</ReactMarkdown>
                         </div>
                     </Box>
                     <Box
                         mt={ '10px' }
                     >
-                        <TagsList tags={ post.tags } />
+                        <TagsList tags={ postDto?.tagList } />
                     </Box>
                     <Divider />
                     <Flex flex={1}
@@ -78,17 +78,17 @@ const FeedItem: FC<FeedItemProps> = ({ post }) => {
                           pt='10px' pb='10px'
                           fontSize='sm'
                     >
-                        <NextLink href={`/user/${ post?.op?.userId }`} passHref>
+                        <NextLink href={`/user/${ postDto?.op?.userId }`} passHref>
                             <Link>
                                 <HStack>
                                     <Image
                                         w='35px'
                                         h='35px'
                                         mr='10px'
-                                        src={ post?.op?.profilePic }
+                                        src={ postDto?.op?.avatar }
                                         alt='profile pic'
                                     />
-                                    <Box>{ post?.op?.nickName }</Box>
+                                    <Box>{ postDto?.op?.nickName }</Box>
                                 </HStack>
                             </Link>
                         </NextLink>

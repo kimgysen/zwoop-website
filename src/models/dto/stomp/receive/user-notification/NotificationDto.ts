@@ -1,4 +1,4 @@
-import {NotificationFeatureType} from "./NotificationType";
+import {NotificationFeatureType} from "./UserNotificationType";
 
 
 export default interface NotificationDto<T> {

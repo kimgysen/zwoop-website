@@ -15,10 +15,10 @@ import User from "@models/db/entity/User";
 import {getUserById} from "@api_clients/feature/user/UserApiClient";
 import PostStompConnect from "@components/stomp/post/PostStompConnect";
 import {getViewState, isChatAllowed, PostPageViewState} from "@components/pages/post/PostPageHelper";
-import Post from "@models/db/entity/Post";
 import {getAuthState} from "@components/auth/AuthStateHelper";
 import {AxiosError, AxiosResponse} from "axios";
 import PostStepperHoc from "@components/pages/post/post-stepper/PostStepperHoc";
+import PostDto from "@models/dto/rest/receive/post/PostDto";
 
 
 export async function getServerSideProps(ctx: { query: { postId: string } }) {
@@ -50,7 +50,7 @@ const PostByIdPage: NextPage = (props: any) => {
     const [authState, setAuthState] = useState<AuthState>(defaultAuthState);
     const [viewState, setViewState] = useState<PostPageViewState>(PostPageViewState.LOGGED_OFF);
     const [partnerRes, setPartnerRes] = useState<ApiResult<User>>();
-    const [post, setPost] = useState<Post>(ssrPost);
+    const [postDto, setPostDto] = useState<PostDto>(ssrPost);
 
 
     useEffect(() => {
@@ -62,7 +62,7 @@ const PostByIdPage: NextPage = (props: any) => {
         (async() => {
             if (query?.postId) {
                 const csrPostRes = await getCsrPostById(query?.postId as string);
-                setPost({ ...csrPostRes.success as Post });
+                setPostDto({ ...csrPostRes.success as PostDto });
             }
         })();
     }, [query?.postId]);
@@ -77,43 +77,43 @@ const PostByIdPage: NextPage = (props: any) => {
     }, [queryPartnerId]);
 
     useEffect(() => {
-        if (post?.postId && authState.isLoggedIn) {
-            const viewState = getViewState(authState, post, queryPartnerId as string);
+        if (postDto?.postId && authState.isLoggedIn) {
+            const viewState = getViewState(authState, postDto, queryPartnerId as string);
             setViewState(viewState);
         }
-    }, [authState.isLoggedIn, post?.postId, queryPartnerId]);
+    }, [authState.isLoggedIn, postDto?.postId, queryPartnerId]);
 
 
     return (
         <>
             <Head>
-                <title>{ post?.postTitle }</title>
+                <title>{ postDto?.postTitle }</title>
             </Head>
             <AppLayout authState={ authState }>
                 <PostStompConnect
                     authState={ authState }
                     viewState={ viewState }
-                    post={ post }
+                    postDto={ postDto }
                     queryPartnerId={ queryPartnerId as string }
                 >
                     <ThreeColumnLayout
                         leftComponent={
                             <PostStepperHoc
-                                post={ post }
+                                postDto={ postDto }
                             />
                         }
                         centerComponent={
                             <>
                                 {
-                                    post && (
+                                    postDto && (
                                         <>
                                             <PostViewHoc
                                                 authState={ authState }
-                                                post={ post }
+                                                postDto={ postDto }
                                             />
                                             <PostStatusViewHoc
                                                 authState={ authState }
-                                                post={ post }
+                                                postDto={ postDto }
                                             />
                                         </>
                                     )
@@ -122,11 +122,11 @@ const PostByIdPage: NextPage = (props: any) => {
                         }
                         rightComponent={
                             authState.isLoggedIn
-                            && isChatAllowed(authState, post)
+                            && isChatAllowed(authState, postDto)
                             && (
                                 <PostChatWidget
                                     authState={ authState }
-                                    post={ post }
+                                    postDto={ postDto }
                                     viewState={ viewState }
                                     partnerRes={ partnerRes }
                                 />

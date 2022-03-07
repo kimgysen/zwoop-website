@@ -1,22 +1,26 @@
 import AuthState from "@models/auth/AuthState";
-import DealBoxDto from "@models/dto/stomp/receive/dealbox/DealBoxDto";
 import UserDto from "@models/dto/stomp/receive/common/user/UserDto";
-import Deal from "@models/db/entity/Deal";
+import DealDto from "@models/dto/rest/receive/deal/DealDto";
 
 
 export const getDealCounterpart =
-    (authState: AuthState, dealBoxDto: DealBoxDto): UserDto|null => {
-        const principalId = authState?.principalId;
+    (authState: AuthState, dealDto: DealDto): UserDto|null => {
 
-        if (principalId === dealBoxDto?.op.userId) {
-            return dealBoxDto?.consultant;
+        if (isDealOp(authState, dealDto)) {
+            return dealDto?.consultant;
 
-        } else if (principalId === dealBoxDto?.consultant?.userId) {
-            return dealBoxDto?.op;
+        } else if (isDealConsultant(authState, dealDto)) {
+            return dealDto?.op;
         }
 
         return null;
 }
 
-export const isDealConsultant = (authState: AuthState, deal?: Deal|null) =>
-    authState?.principalId === deal?.bidding?.consultant?.userId;
+export const isDealParticipant = (authState: AuthState, deal?: DealDto|null) =>
+    isDealOp(authState, deal) || isDealConsultant(authState, deal);
+
+export const isDealOp = (authState: AuthState, deal?: DealDto|null) =>
+    authState?.principalId === deal?.op?.userId;
+
+export const isDealConsultant = (authState: AuthState, deal?: DealDto|null) =>
+    authState?.principalId === deal?.consultant?.userId;

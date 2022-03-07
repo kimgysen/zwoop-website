@@ -1,18 +1,18 @@
 import React, {FC, useState} from "react";
-import Answer from "@models/db/entity/Answer";
 import Card from "@components/layout/components/card/Card";
 import AuthState from "@models/auth/AuthState";
 import AnswerReadView from "@components/pages/post/post-status/post-answer/view/subviews/AnswerReadView";
 import AnswerUpdateViewHoc from "@components/pages/post/post-status/post-answer/view/subviews/AnswerUpdateViewHoc";
-import Post from "@models/db/entity/Post";
+import PostDto from "@models/dto/rest/receive/post/PostDto";
+import AnswerDto from "@models/dto/rest/receive/answer/AnswerDto";
 
 interface AnswerViewProps {
     authState: AuthState,
-    post: Post,
-    answer: Answer
+    postDto: PostDto,
+    answerDto: AnswerDto
 }
 
-const AnswerView: FC<AnswerViewProps> = ({ authState, post, answer }) => {
+const AnswerView: FC<AnswerViewProps> = ({ authState, postDto, answerDto }) => {
     const [isEditView, setEditView] = useState<boolean>(false);
 
     return (
@@ -22,16 +22,16 @@ const AnswerView: FC<AnswerViewProps> = ({ authState, post, answer }) => {
                     !isEditView
                     && <AnswerReadView
                             authState={ authState }
-                            post={ post }
-                            answer={ answer }
+                            postDto={ postDto }
+                            answerDto={ answerDto }
                             activateEditView={ () => setEditView(true) }
                         />
                 }
                 {
                     isEditView
                     && <AnswerUpdateViewHoc
-                            postId={ post?.postId }
-                            answer={ answer }
+                            postId={ postDto?.postId }
+                            answerDto={ answerDto }
                             deactivateEditView={ () => setEditView(false) }
                         />
                 }

@@ -1,11 +1,11 @@
 import axios, {AxiosError, AxiosResponse} from "axios";
 import ApiResult from "../../type/ApiResult";
 import SavePostDto from "@models/dto/rest/send/post/SavePostDto";
-import Post from "@models/db/entity/Post";
 import {handleAxiosError, handleAxiosResponse} from "../../util/ResponseUtil";
 import urlJoin from "url-join";
 import {PostStatusEnum} from "@models/db/entity/PostStatus";
 import {getRawJwt} from "../../../service/jwt/JwtService";
+import PostDto from "@models/dto/rest/receive/post/PostDto";
 
 const backendBaseUri = process.env.NEXT_PUBLIC_API_BACKEND_BASE_URI;
 const postApiPrivatePath = process.env.NEXT_PUBLIC_API_V1_PRIVATE_POST_PREFIX;
@@ -39,7 +39,7 @@ export const createPostApi:
 }
 
 export const updatePostApi:
-    (postId: string, post: SavePostDto) => Promise<ApiResult<string>> =
+    (postId: string, post: SavePostDto) => Promise<ApiResult<boolean>> =
     async (postId, post) => {
         const url = urlJoin(postApiPrivateEndpoint, postId);
 
@@ -58,13 +58,13 @@ export const updatePostApi:
 }
 
 export const getSsrPostById:
-    (postId: string) => Promise<AxiosResponse<Post>> =
+    (postId: string) => Promise<AxiosResponse<PostDto>> =
     (postId) => {
         const url = urlJoin(postApiPublicEndpoint, postId);
         return axios.get(url)
 }
 
-export const getCsrPostById: (postId: string) => Promise<ApiResult<Post>> = (postId) => {
+export const getCsrPostById: (postId: string) => Promise<ApiResult<PostDto>> = (postId) => {
     const url = urlJoin(postApiPublicEndpoint, postId);
     return axios.get(url)
         .then(res => handleAxiosResponse({
@@ -76,7 +76,7 @@ export const getCsrPostById: (postId: string) => Promise<ApiResult<Post>> = (pos
 }
 
 export const getFeed:
-    (feedType: FeedTypeEnum, postStatus: PostStatusEnum, page: number, size: number, tagName?: string) => Promise<ApiResult<Post[]>> =
+    (feedType: FeedTypeEnum, postStatus: PostStatusEnum, page: number, size: number, tagName?: string) => Promise<ApiResult<PostDto[]>> =
     (feedType, postStatus, page, size, tagName) => {
     let params: any = {
         feedType: FeedTypeEnum[feedType],

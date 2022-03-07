@@ -4,6 +4,7 @@ import {getRawJwt} from "../../../service/jwt/JwtService";
 import urlJoin from "url-join";
 import axios, {AxiosError} from "axios";
 import {handleAxiosError, handleAxiosResponse} from "@api_clients/util/ResponseUtil";
+import AnswerDto from "@models/dto/rest/receive/answer/AnswerDto";
 
 const backendBaseUri = process.env.NEXT_PUBLIC_API_BACKEND_BASE_URI;
 const answerApiPrivatePath = process.env.NEXT_PUBLIC_API_V1_PRIVATE_ANSWER_PREFIX;
@@ -11,7 +12,7 @@ const answerApiPrivateEndpoint = urlJoin(backendBaseUri!, answerApiPrivatePath!)
 
 
 export const createAnswerApi:
-    (answer: SaveAnswerDto) => Promise<ApiResult<boolean>> =
+    (saveAnswerDto: SaveAnswerDto) => Promise<ApiResult<AnswerDto>> =
     async (saveAnswerDto) => {
         const jwt = await getRawJwt();
         return axios
@@ -23,13 +24,13 @@ export const createAnswerApi:
             .then(res => handleAxiosResponse({
                 res,
                 successStatus: 201,
-                successProp: true
+                successProp: res.data as AnswerDto
             }))
             .catch((reason: AxiosError) => handleAxiosError(reason));
     }
 
 export const updateAnswerApi:
-    (answerId: string, saveDto: SaveAnswerDto) => Promise<ApiResult<boolean>> =
+    (answerId: string, saveDto: SaveAnswerDto) => Promise<ApiResult<AnswerDto>> =
     async (answerId, saveDto) => {
         const jwt = await getRawJwt();
         const url = urlJoin(answerApiPrivateEndpoint, answerId);
@@ -42,8 +43,8 @@ export const updateAnswerApi:
             })
             .then(res => handleAxiosResponse({
                 res,
-                successStatus: 204,
-                successProp: true
+                successStatus: 200,
+                successProp: res.data as AnswerDto
             }))
             .catch((reason: AxiosError) => handleAxiosError(reason));
     }

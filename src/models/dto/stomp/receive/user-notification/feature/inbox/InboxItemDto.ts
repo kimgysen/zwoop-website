@@ -1,5 +1,5 @@
 
-export default interface InboxItemReceiveDto {
+export default interface InboxItemDto {
     postId: string,
     userId: string,
     partnerId: string,

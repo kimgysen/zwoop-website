@@ -1,33 +1,31 @@
 import React, {FC, useEffect, useState} from "react";
 import AuthState from "@models/auth/AuthState";
-import Post from "@models/db/entity/Post";
 import AddBiddingView from "@components/pages/post/post-status/post-bidding/add-bidding/AddBiddingView";
 import ApiResult from "@api_clients/type/ApiResult";
-import {KeyedMutator} from "swr";
-import Bidding from "@models/db/entity/Bidding";
 import {createBiddingApi} from "@api_clients/feature/bidding/BiddingApiClient";
+import PostDto from "@models/dto/rest/receive/post/PostDto";
+import BiddingDto from "@models/dto/rest/receive/bidding/BiddingDto";
 
 
 interface AddBidViewHocProps {
     authState: AuthState,
-    post: Post,
-    mutate: KeyedMutator<Bidding[]>
+    postDto: PostDto
 }
 
 
-const AddBiddingViewHoc: FC<AddBidViewHocProps> = ({ authState, post, mutate }) => {
-    const [saveRes, setSaveRes] = useState<ApiResult<boolean>>();
+const AddBiddingViewHoc: FC<AddBidViewHocProps> = ({ authState, postDto }) => {
+    const [saveRes, setSaveRes] = useState<ApiResult<BiddingDto>>();
 
 
     useEffect(() => {
         if (saveRes?.success) {
-            mutate();
+            // dispatchCustomMessage(POST_STEPPER__DEAL_INIT, postUpdateFeatureDto.dto as DealInitDto);
         }
     }, [saveRes]);
 
     const onSaveBidding = async (askPrice: string, currencyCode: string) => {
         const res = await createBiddingApi({
-            postId: post?.postId,
+            postId: postDto?.postId,
             askPrice,
             currencyCode
         })
@@ -37,7 +35,7 @@ const AddBiddingViewHoc: FC<AddBidViewHocProps> = ({ authState, post, mutate }) 
     return (
         <>
             <AddBiddingView
-                post={ post }
+                postDto={ postDto }
                 onSaveBidding={ onSaveBidding }
             />
         </>

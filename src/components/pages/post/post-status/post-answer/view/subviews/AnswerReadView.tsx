@@ -7,20 +7,20 @@ import {isAnswerOwner, isOp} from "../../../../../../../util/PostUtil";
 import AnswerViewConsultantMenu
     from "@components/pages/post/post-status/post-answer/view/subviews/consultant-menu/AnswerViewConsultantMenu";
 import PostUserBox from "@components/pages/post/post_view/subviews/PostUserBox";
-import Answer from "@models/db/entity/Answer";
 import AuthState from "@models/auth/AuthState";
-import Post from "@models/db/entity/Post";
 import AnswerViewOpMenu from "@components/pages/post/post-status/post-answer/view/subviews/op-menu/AnswerViewOpMenu";
+import AnswerDto from "@models/dto/rest/receive/answer/AnswerDto";
+import PostDto from "@models/dto/rest/receive/post/PostDto";
 
 
 interface AnswerReadViewProps {
     authState: AuthState,
-    post: Post,
-    answer: Answer,
+    postDto: PostDto,
+    answerDto: AnswerDto,
     activateEditView: () => void
 }
 
-const AnswerReadView: FC<AnswerReadViewProps> = ({ authState, post, answer, activateEditView }) => {
+const AnswerReadView: FC<AnswerReadViewProps> = ({ authState, postDto, answerDto, activateEditView }) => {
     return (
         <>
             <Heading
@@ -38,34 +38,34 @@ const AnswerReadView: FC<AnswerReadViewProps> = ({ authState, post, answer, acti
                 overflowX='scroll'
             >
                 <Box className='markdown-body'>
-                    <ReactMarkdown remarkPlugins={ [remarkGfm] }>{ answer?.answerText }</ReactMarkdown>
+                    <ReactMarkdown remarkPlugins={ [remarkGfm] }>{ answerDto?.answerText }</ReactMarkdown>
                 </Box>
             </Box>
             <Divider />
             <Flex flex={1}
                   justifyContent={
-                      isAnswerOwner(authState, answer)
-                      || isOp(authState, post)
+                      isAnswerOwner(authState, answerDto)
+                      || isOp(authState, postDto)
                           ? 'space-between'
                           : 'flex-end' }
                   pt='10px' pb='10px'
                   fontSize='sm'
             >
                 {
-                    isAnswerOwner(authState, answer)
+                    isAnswerOwner(authState, answerDto)
                     && <AnswerViewConsultantMenu
-                            answer={ answer }
+                            answerDto={ answerDto }
                             activateEditView={ activateEditView }
                         />
                 }
                 {
-                    isOp(authState, post)
-                    && <AnswerViewOpMenu answer={ answer } />
+                    isOp(authState, postDto)
+                    && <AnswerViewOpMenu answerDto={ answerDto } />
                 }
                 <PostUserBox
-                    userId={ answer?.consultant?.userId }
-                    nickName={ answer?.consultant?.nickName }
-                    avatar={ answer?.consultant?.profilePic }
+                    userId={ answerDto?.consultant?.userId }
+                    nickName={ answerDto?.consultant?.nickName }
+                    avatar={ answerDto?.consultant?.avatar }
                 />
             </Flex>
         </>

@@ -1,35 +1,40 @@
 import React, {FC, useEffect, useState} from "react";
 import ProgressStepper from "@components/widgets/progress-stepper/ProgressStepper";
 import postProgressSteps from "@components/pages/post/post-stepper/postSteps";
-import Post from "@models/db/entity/Post";
 import ProgressStep from "@components/widgets/progress-stepper/ProgressStep";
 import {setActiveStep} from "@components/pages/post/post-stepper/PostStepperHelper";
 import {getPostStatusFromPost} from "@components/pages/post/PostPageHelper";
 import {getStompDispatcher} from "../../../../event_dispatchers/StompDispatcher";
-import {POST_STEPPER__DEAL_CANCELLED, POST_STEPPER__DEAL_INIT} from "../../../../event_dispatchers/config/StompEvents";
+import {
+    POST_STEPPER__ANSWER_ADDED,
+    POST_STEPPER__ANSWER_REMOVED,
+    POST_STEPPER__DEAL_CANCELLED,
+    POST_STEPPER__DEAL_INIT
+} from "../../../../event_dispatchers/config/StompEvents";
 import {PostStatusEnum, stringFromPostStatusEnum} from "@models/db/entity/PostStatus";
 import {Box} from "@chakra-ui/layout/src/box";
+import PostDto from "@models/dto/rest/receive/post/PostDto";
 
 
 interface PostStepperHocProps {
-    post?: Post
+    postDto?: PostDto
 }
 
 const stompDispatcher = getStompDispatcher();
 
-const PostStepperHoc: FC<PostStepperHocProps> = ({ post }) => {
+const PostStepperHoc: FC<PostStepperHocProps> = ({ postDto }) => {
 
-    const defaultSteps = setActiveStep(getPostStatusFromPost(post), postProgressSteps);
+    const defaultSteps = setActiveStep(getPostStatusFromPost(postDto), postProgressSteps);
     const [postSteps, setPostSteps] = useState<ProgressStep[]>(defaultSteps);
 
 
     useEffect(() => {
         setPostSteps(
-            setActiveStep(getPostStatusFromPost(post), postSteps));
-    }, [post?.postId]);
+            setActiveStep(getPostStatusFromPost(postDto), postSteps));
+    }, [postDto?.postId]);
 
     useEffect(() => {
-        if (post) {
+        if (postDto) {
             stompDispatcher.on(POST_STEPPER__DEAL_INIT, () => {
                 const updatedSteps = setActiveStep(
                     stringFromPostStatusEnum(PostStatusEnum.DEAL_INIT), postSteps);
@@ -41,15 +46,27 @@ const PostStepperHoc: FC<PostStepperHocProps> = ({ post }) => {
                     stringFromPostStatusEnum(PostStatusEnum.POST_INIT), postSteps);
                 setPostSteps(updatedSteps);
             });
+            stompDispatcher.on(POST_STEPPER__ANSWER_ADDED, () => {
+                const updatedSteps = setActiveStep(
+                    stringFromPostStatusEnum(PostStatusEnum.ANSWERED), postSteps);
+                setPostSteps(updatedSteps);
+            });
+            stompDispatcher.on(POST_STEPPER__ANSWER_REMOVED, () => {
+                const updatedSteps = setActiveStep(
+                    stringFromPostStatusEnum(PostStatusEnum.DEAL_INIT), postSteps);
+                setPostSteps(updatedSteps);
+            });
         }
 
         return function cleanUp() {
-            if (post) {
+            if (postDto) {
                 stompDispatcher.remove(POST_STEPPER__DEAL_INIT);
                 stompDispatcher.remove(POST_STEPPER__DEAL_CANCELLED);
+                stompDispatcher.remove(POST_STEPPER__ANSWER_ADDED);
+                stompDispatcher.remove(POST_STEPPER__ANSWER_REMOVED);
             }
         }
-    }, [post?.postId, postSteps]);
+    }, [postDto?.postId, postSteps]);
 
     return (
         <>

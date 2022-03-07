@@ -1,5 +1,5 @@
 import React, {FC, useEffect, useState} from "react";
-import InboxItemReceiveDto from "../../../../../models/dto/stomp/receive/inbox/InboxItemReceiveDto";
+import InboxItemDto from "@models/dto/stomp/receive/user-notification/feature/inbox/InboxItemDto";
 import {countUnreadMessages, rebuildInbox, sortInboxItems} from "../../../../../util/InboxUtil";
 import AuthState from "@models/auth/AuthState";
 import {getStompDispatcher} from "../../../../../event_dispatchers/StompDispatcher";
@@ -23,7 +23,7 @@ interface AppInboxButtonHocProps {
 const AppInboxButtonHoc: FC<AppInboxButtonHocProps> = ({ authState, url }) => {
 
     const [inboxLoading, setInboxLoading] = useState<boolean>(true);
-    const [inboxItems, setInboxItems] = useState<InboxItemReceiveDto[]>([]);
+    const [inboxItems, setInboxItems] = useState<InboxItemDto[]>([]);
     const [nrUnread, setNrUnread] = useState<number>(0);
 
     const stompDispatcher = getStompDispatcher();
@@ -36,13 +36,13 @@ const AppInboxButtonHoc: FC<AppInboxButtonHocProps> = ({ authState, url }) => {
             stompDispatcher.on(APP_INBOX__ON_INIT_ITEMS_LOADING, (isLoading: boolean) =>
                 setInboxLoading(isLoading));
 
-            stompDispatcher.on(APP_INBOX__ON_INIT_ITEMS_RECEIVED, (inboxItems: InboxItemReceiveDto[]) => {
+            stompDispatcher.on(APP_INBOX__ON_INIT_ITEMS_RECEIVED, (inboxItems: InboxItemDto[]) => {
                 setInboxLoading(false);
                 setInboxItems(sortInboxItems(inboxItems));
                 setNrUnread(countUnreadMessages(principalId, inboxItems));
             });
 
-            stompDispatcher.on(APP_INBOX__ON_INBOX_UPDATE_RECEIVED, (inboxItem: InboxItemReceiveDto) => {
+            stompDispatcher.on(APP_INBOX__ON_INBOX_UPDATE_RECEIVED, (inboxItem: InboxItemDto) => {
                 let updatedInboxItems = rebuildInbox(inboxItem, inboxItems);
                 setInboxItems(updatedInboxItems);
                 setNrUnread(countUnreadMessages(principalId, updatedInboxItems));

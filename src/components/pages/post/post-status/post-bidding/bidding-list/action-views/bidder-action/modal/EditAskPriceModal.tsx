@@ -17,6 +17,7 @@ import {
     VStack
 } from "@chakra-ui/react";
 import ApiResult from "@api_clients/type/ApiResult";
+import BiddingDto from "@models/dto/rest/receive/bidding/BiddingDto";
 
 
 interface EditNickModalProps {
@@ -24,7 +25,7 @@ interface EditNickModalProps {
     isOpen: boolean,
     onClose: () => void,
     updateBidding: (askPrice: string) => void,
-    updateResult: ApiResult<boolean>
+    updateResult: ApiResult<BiddingDto>
 }
 
 const EditAskPriceModal: FC<EditNickModalProps> =

@@ -1,6 +1,6 @@
 import React, {FC, useEffect, useState} from "react";
 import {Avatar, Box, HStack, Tag, Text, VStack} from "@chakra-ui/react";
-import InboxItemReceiveDto from "../../../../../models/dto/stomp/receive/inbox/InboxItemReceiveDto";
+import InboxItemDto from "@models/dto/stomp/receive/user-notification/feature/inbox/InboxItemDto";
 import TimeAgo from "react-timeago";
 import ChatPartner from "@models/chat/ChatPartner";
 import PartnerReadDto from "../../../../../models/dto/stomp/receive/private_chat/feature/PartnerReadDto";
@@ -19,7 +19,7 @@ import {useRouter} from "next/router";
 interface InboxItemProps {
     postId: string,
     principalId: string,
-    inboxItem: InboxItemReceiveDto
+    inboxItem: InboxItemDto
 }
 
 const PostInboxItem: FC<InboxItemProps> = (

@@ -1,23 +1,22 @@
 import {FC, useEffect, useState} from "react";
 import {FeedTypeEnum, getFeed} from "@api_clients/feature/post/PostApiClient";
-import Post from "@models/db/entity/Post";
 import ApiResult from "../../../api_clients/type/ApiResult";
 import FeedList from "@components/widgets/feed/FeedList";
 import {PostStatusEnum} from "@models/db/entity/PostStatus";
+import PostDto from "@models/dto/rest/receive/post/PostDto";
 
 interface FeedListHocProps {
     feedType: FeedTypeEnum,
     postStatus: PostStatusEnum,
     page: number,
     pageSize: number,
-    userId?: string,
     tagName?: string
 }
 
 const FeedListHoc: FC<FeedListHocProps> = (
-    { feedType, postStatus, page, pageSize, userId, tagName }) => {
+    { feedType, postStatus, page, pageSize, tagName }) => {
 
-    const [feedRes, setFeedRes] = useState<ApiResult<Post[]>>({ loading: true, success: [], error: null });
+    const [feedRes, setFeedRes] = useState<ApiResult<PostDto[]>>({ loading: true, success: [], error: null });
 
     useEffect(() => {
         (async () => {

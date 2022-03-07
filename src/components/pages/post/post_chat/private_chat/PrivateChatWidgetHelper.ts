@@ -3,7 +3,7 @@ import PrivateMessageReceiveDto
 import {NextRouter} from "next/router";
 import ChatPartner from "@models/chat/ChatPartner";
 import PartnerReadDto from "../../../../../models/dto/stomp/receive/private_chat/feature/PartnerReadDto";
-import InboxItemReceiveDto from "../../../../../models/dto/stomp/receive/inbox/InboxItemReceiveDto";
+import InboxItemDto from "@models/dto/stomp/receive/user-notification/feature/inbox/InboxItemDto";
 import {sendPrivateMessage} from "../../../../../service/stomp/publishers/PrivateChatPublisher";
 
 
@@ -14,7 +14,7 @@ export const redirectToLogin = (router: NextRouter) => {
 export const isEmptyList = (messages: PrivateMessageReceiveDto[]) =>
     messages.length === 0;
 
-export const resetCounterForPartner = (inboxItems: InboxItemReceiveDto[], partnerId: string) => {
+export const resetCounterForPartner = (inboxItems: InboxItemDto[], partnerId: string) => {
     const idx = findInboxItemIndexByPartnerId(inboxItems, partnerId);
     if (inboxItems[idx]) {
         inboxItems[idx].unread = 0;
@@ -26,7 +26,7 @@ export const lastMessageWasSentByPrincipal = (messages: PrivateMessageReceiveDto
     return lastMessageSentBy(messages) === principalId;
 }
 
-const findInboxItemIndexByPartnerId = (inboxItems: InboxItemReceiveDto[], partnerId: string) =>
+const findInboxItemIndexByPartnerId = (inboxItems: InboxItemDto[], partnerId: string) =>
     inboxItems.findIndex(item => item.partnerId === partnerId);
 
 

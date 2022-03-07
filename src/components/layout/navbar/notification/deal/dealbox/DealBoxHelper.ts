@@ -1,17 +1,17 @@
-import DealInitDto from "@models/dto/stomp/receive/dealbox/DealInitDto";
+import DealDto from "@models/dto/rest/receive/deal/DealDto";
 
-export const isDealBoxEmpty = (deals?: DealInitDto[] | null) =>
+export const isDealBoxEmpty = (deals?: DealDto[] | null) =>
     !deals || deals.length === 0;
 
-export const addDeal = (deals: DealInitDto[] | null, dealInitDto: DealInitDto) =>
-     deals
-        ? [dealInitDto, ...deals]
-        : [dealInitDto];
+export const addDeal = (dealDtoList: DealDto[] | null, dealDto: DealDto) =>
+    dealDtoList
+        ? [dealDto, ...dealDtoList]
+        : [dealDto];
 
-export const removeDealById = (deals: DealInitDto[] | null, dealId: string) =>
-    deals
-        ? deals.filter(deal => deal.dealId !== dealId)
+export const removeDealById = (dealDtoList: DealDto[] | null, dealId: string) =>
+    dealDtoList
+        ? dealDtoList.filter(dealDto => dealDto.dealId !== dealId)
         : [];
 
-export const isLastDealBoxItem = (dealBoxItems: DealInitDto[], idx: number) =>
-    dealBoxItems.length - 1 === idx;
+export const isLastDealBoxItem = (dealDtoList: DealDto[], idx: number) =>
+    dealDtoList.length - 1 === idx;

@@ -1,14 +1,7 @@
 import {getStompClient} from "../StompService";
-import {dispatchCustomMessage, dispatchStompMessage} from "./SubscriptionUtil";
-import {
-    APP_DEAL_BOX__DEAL_CANCELLED,
-    APP_DEAL_BOX__DEAL_INIT,
-    APP_INBOX__ON_INIT_ITEMS_RECEIVED
-} from "../../../event_dispatchers/config/StompEvents";
-import NotificationDto from "../../../models/dto/stomp/receive/notification/NotificationDto";
-import {NotificationFeatureType} from "@models/dto/stomp/receive/notification/NotificationType";
-import DealInitDto from "@models/dto/stomp/receive/dealbox/DealInitDto";
-import DealCancelledDto from "@models/dto/stomp/receive/dealbox/DealCancelledDto";
+import {dispatchStompMessage} from "./SubscriptionUtil";
+import {APP_INBOX__ON_INIT_ITEMS_RECEIVED} from "../../../event_dispatchers/config/StompEvents";
+import NotificationDto from "../../../models/dto/stomp/receive/user-notification/NotificationDto";
 
 
 export const initAppInbox = () => {
@@ -25,13 +18,6 @@ export const subscribeToNotifications = () => {
 
             switch (notificationDto.notificationType) {
 
-                case NotificationFeatureType.DEAL_INIT:
-                    dispatchCustomMessage(APP_DEAL_BOX__DEAL_INIT, notificationDto.dto as DealInitDto);
-                    break;
-
-                case NotificationFeatureType.DEAL_CANCELLED:
-                    dispatchCustomMessage(APP_DEAL_BOX__DEAL_CANCELLED, notificationDto.dto as DealCancelledDto);
-                    break;
             }
         });
 }

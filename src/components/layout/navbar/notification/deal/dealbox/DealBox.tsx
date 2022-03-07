@@ -1,21 +1,21 @@
 import React, {FC} from "react";
 import AuthState from "@models/auth/AuthState";
-import DealInitDto from "@models/dto/stomp/receive/dealbox/DealInitDto";
 import DealBoxLoading from "@components/layout/navbar/notification/deal/dealbox/fallbackviews/DealBoxLoading";
 import {isDealBoxEmpty, isLastDealBoxItem} from "@components/layout/navbar/notification/deal/dealbox/DealBoxHelper";
 import DealBoxEmpty from "@components/layout/navbar/notification/deal/dealbox/fallbackviews/DealBoxEmpty";
 import {Box, Divider} from "@chakra-ui/react";
 import DealBoxItem from "@components/layout/navbar/notification/deal/dealbox/DealBoxItem";
+import DealDto from "@models/dto/rest/receive/deal/DealDto";
 
 
 interface DealBoxProps {
     authState: AuthState
     dealBoxLoading: boolean,
-    dealBoxItems?: DealInitDto[] | null,
+    dealDtoList?: DealDto[] | null,
     closePopup: () => void
 }
 
-const DealBox: FC<DealBoxProps> = ({ authState, dealBoxLoading, dealBoxItems, closePopup }) => {
+const DealBox: FC<DealBoxProps> = ({ authState, dealBoxLoading, dealDtoList, closePopup }) => {
     return (
         <>
             {
@@ -24,22 +24,22 @@ const DealBox: FC<DealBoxProps> = ({ authState, dealBoxLoading, dealBoxItems, cl
             }
             {
                 !dealBoxLoading
-                && isDealBoxEmpty(dealBoxItems)
+                && isDealBoxEmpty(dealDtoList)
                 && <DealBoxEmpty />
             }
             {
                 !dealBoxLoading
-                && !isDealBoxEmpty(dealBoxItems)
-                && dealBoxItems?.map((dealBoxItem, idx) => (
+                && !isDealBoxEmpty(dealDtoList)
+                && dealDtoList?.map((dealDto, idx) => (
                     <Box key={`dealBoxItem-${ idx }`}
                          textAlign='left'
                     >
                         <DealBoxItem
-                            deal={ dealBoxItem }
+                            dealDto={ dealDto }
                             closePopup={ closePopup }
                         />
                         {
-                            !isLastDealBoxItem(dealBoxItems, idx)
+                            !isLastDealBoxItem(dealDtoList, idx)
                             && <Divider />
                         }
                     </Box>

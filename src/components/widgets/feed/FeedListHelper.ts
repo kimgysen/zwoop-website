@@ -1,4 +1,4 @@
-import Post from "@models/db/entity/Post";
+import PostDto from "@models/dto/rest/receive/post/PostDto";
 
-export const isEmptyFeed = (feedList: Post[]) =>
+export const isEmptyFeed = (feedList: PostDto[]) =>
     feedList.length === 0;

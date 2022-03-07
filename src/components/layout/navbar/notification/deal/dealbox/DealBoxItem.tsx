@@ -1,21 +1,21 @@
 import React, {FC} from "react";
-import DealInitDto from "@models/dto/stomp/receive/dealbox/DealInitDto";
 import {useRouter} from "next/router";
 import {Box} from "@chakra-ui/layout/src/box";
+import DealDto from "@models/dto/rest/receive/deal/DealDto";
 
 
 interface DealBoxItemProps {
-    deal: DealInitDto,
+    dealDto: DealDto,
     closePopup: () => void
 }
 
-const DealBoxItem: FC<DealBoxItemProps> = ({ deal, closePopup }) => {
+const DealBoxItem: FC<DealBoxItemProps> = ({ dealDto, closePopup }) => {
 
     const router = useRouter();
 
     const handleClickDealBoxDetail = async () => {
         closePopup();
-        await router.push(`/post/${ deal?.postId }`);
+        await router.push(`/post/${ dealDto?.postId }`);
     }
 
     return (
@@ -26,7 +26,7 @@ const DealBoxItem: FC<DealBoxItemProps> = ({ deal, closePopup }) => {
             onClick={ handleClickDealBoxDetail }
             cursor='pointer'
         >
-            { deal?.postTitle }
+            { dealDto?.postTitle }
         </Box>
     )
 

@@ -1,6 +1,4 @@
 import 'react-toastify/dist/ReactToastify.css';
-
-import Post from "@models/db/entity/Post";
 import Card from "@components/layout/components/card/Card";
 import {Box, Divider, Flex} from "@chakra-ui/react";
 import remarkGfm from "remark-gfm";
@@ -20,47 +18,46 @@ import {
     POST_VIEW__POST_CHANGED,
     POST_VIEW__POST_REMOVED
 } from "../../../../event_dispatchers/config/StompEvents";
-import PostChangedDto from "../../../../models/dto/stomp/receive/post/feature/post/PostChangedDto";
 import Tag from "@models/db/entity/Tag";
 import {infoToast} from "@components/widgets/toast/AppToast";
 import {PostStatusEnum} from "@models/db/entity/PostStatus";
 import {isOp} from "../../../../util/PostUtil";
+import PostDto from "@models/dto/rest/receive/post/PostDto";
 
 
 interface PostViewProps {
     authState: AuthState,
-    post: Post
+    postDto: PostDto
 }
 
 const stompDispatcher = getStompDispatcher();
 
-const PostViewHoc: React.FC<PostViewProps> = ({ authState, post }) => {
+const PostViewHoc: React.FC<PostViewProps> = ({ authState, postDto }) => {
+    const [title, setTitle] = useState<string>(postDto?.postTitle);
+    const [description, setDescription] = useState<string>(postDto?.postText);
+    const [bidPrice, setBidPrice] = useState<string>(postDto?.bidPrice);
+    const [tags, setTags] = useState<Tag[]>(postDto?.tagList || []);
+    const [postStatus, setPostStatus] = useState<PostStatusEnum>(getPostStatusFromPost(postDto))
 
-    const [title, setTitle] = useState<string>(post?.postTitle);
-    const [description, setDescription] = useState<string>(post?.postText);
-    const [bidPrice, setBidPrice] = useState<string>(post?.bidPrice);
-    const [tags, setTags] = useState<Tag[]>(post?.tags);
-    const [postStatus, setPostStatus] = useState<PostStatusEnum>(getPostStatusFromPost(post))
-
-    const updatePost = (postUpdate: Post) => {
-        setTitle(postUpdate.postTitle);
-        setDescription(postUpdate.postText);
-        setBidPrice(postUpdate.bidPrice);
-        setTags(postUpdate.tags);
+    const updatePost = (postUpdateDto: PostDto) => {
+        setTitle(postUpdateDto.postTitle);
+        setDescription(postUpdateDto.postText);
+        setBidPrice(postUpdateDto.bidPrice);
+        setTags(postUpdateDto.tagList);
     }
 
     useEffect(() => {
-        updatePost(post);
+        updatePost(postDto);
 
-        if (post?.postId) {
-            stompDispatcher.on(POST_VIEW__POST_CHANGED, (postUpdate: PostChangedDto) => {
-                if (postUpdate) {
-                    setTitle(postUpdate.postTitle);
-                    setDescription(postUpdate.postText);
-                    setBidPrice(postUpdate.bidPrice);
-                    setTags(postUpdate.tags);
+        if (postDto?.postId) {
+            stompDispatcher.on(POST_VIEW__POST_CHANGED, (postChangedDto: PostDto) => {
+                if (postChangedDto) {
+                    setTitle(postChangedDto.postTitle);
+                    setDescription(postChangedDto.postText);
+                    setBidPrice(postChangedDto.bidPrice);
+                    setTags(postChangedDto.tagList);
 
-                    infoToast(`${ postUpdate.nickName } updated this post`);
+                    infoToast(`${ postChangedDto.op?.nickName } updated this post`);
                 }
             });
 
@@ -84,7 +81,7 @@ const PostViewHoc: React.FC<PostViewProps> = ({ authState, post }) => {
             stompDispatcher.remove(POST_VIEW__DEAL_CANCELLED);
         }
 
-    }, [post?.postId, postStatus]);
+    }, [postDto?.postId, postStatus]);
 
 
     return (
@@ -93,12 +90,12 @@ const PostViewHoc: React.FC<PostViewProps> = ({ authState, post }) => {
                 <Box pr='10px'>
                     <BnbBoxSm
                         price={ bidPrice }
-                        currency={ post.currency }
+                        currencyCode={ postDto?.currencyCode }
                     />
                 </Box>
                 <PostTitleView
                     title={ title }
-                    createdAt={ post.createdAt }
+                    createdAt={ postDto.createdAt }
                 />
             </Flex>
             <Divider />
@@ -117,7 +114,7 @@ const PostViewHoc: React.FC<PostViewProps> = ({ authState, post }) => {
             <Divider />
             <Flex flex={1}
                   justifyContent={
-                      isOp(authState, post)
+                      isOp(authState, postDto)
                       && postStatus === PostStatusEnum.POST_INIT
                           ? 'space-between'
                           : 'flex-end' }
@@ -125,19 +122,19 @@ const PostViewHoc: React.FC<PostViewProps> = ({ authState, post }) => {
                   fontSize='sm'
             >
                 {
-                    isOp(authState, post)
+                    isOp(authState, postDto)
                     && postStatus === PostStatusEnum.POST_INIT
                     && (
                         <PostViewOwnerMenu
-                            postId={ post?.postId}
+                            postId={ postDto?.postId}
                             postStatus={ postStatus }
                         />
                     )
                 }
                 <PostUserBox
-                    userId={ post?.op?.userId }
-                    nickName={ post?.op?.nickName }
-                    avatar={ post?.op?.profilePic }
+                    userId={ postDto?.op?.userId }
+                    nickName={ postDto?.op?.nickName }
+                    avatar={ postDto?.op?.avatar }
                 />
             </Flex>
         </Card>)

@@ -6,7 +6,7 @@ import {useRouter} from "next/router";
 import React, {useEffect, useState} from "react";
 import Head from "next/head";
 import AppLayout from "@components/layout/AppLayout";
-import {Flex} from "@chakra-ui/react";
+import {Box, Flex} from "@chakra-ui/react";
 import EditFormDetailsView from "@components/pages/ask/subviews/EditFormDetailsView";
 import SaveButton from "@components/widgets/form/buttons/SaveButton";
 import Tag from "@models/db/entity/Tag";
@@ -15,7 +15,7 @@ import AuthState, {defaultAuthState} from "@models/auth/AuthState";
 import {getAuthState} from "@components/auth/AuthStateHelper";
 import ThreeColumnLayout from "@components/layout/column-layouts/ThreeColumnLayout";
 import PostStepperHoc from "@components/pages/post/post-stepper/PostStepperHoc";
-import {getPostStatusFromPost, isAnswerAllowed} from "@components/pages/post/PostPageHelper";
+import {isPostEditAllowed} from "@components/pages/post/PostPageHelper";
 
 
 export async function getServerSideProps(ctx: { query: { postId: string } }) {
@@ -23,7 +23,7 @@ export async function getServerSideProps(ctx: { query: { postId: string } }) {
 
     return getSsrPostById(postId)
         .then((resp: AxiosResponse) =>
-            ({props: { post: resp.data, errorCode: null }}))
+            ({props: { postDto: resp.data, errorCode: null }}))
         .catch((reason: AxiosError) =>
             ({ notFound: true }));
 
@@ -31,14 +31,14 @@ export async function getServerSideProps(ctx: { query: { postId: string } }) {
 
 const PostEditPage: NextPage = (props: any) => {
     const { data: session, status } = useSession();
-    const { post } = props;
+    const { postDto } = props;
     const router = useRouter();
 
     const [isAuthorized, setAuthorized] = useState<boolean>(false);
-    const [title, setTitle] = useState<string>(post?.postTitle);
-    const [descriptionMd, setDescriptionMd] = useState<string>(post?.postText);
-    const [tags, setTags] = useState<Tag[]>(post?.tags);
-    const [bidPrice, setBidPrice] = React.useState<string>(post?.bidPrice);
+    const [title, setTitle] = useState<string>(postDto?.postTitle);
+    const [descriptionMd, setDescriptionMd] = useState<string>(postDto?.postText);
+    const [tags, setTags] = useState<Tag[]>(postDto?.tags);
+    const [bidPrice, setBidPrice] = React.useState<string>(postDto?.bidPrice);
     const [isFormValid, setFormValid] = useState(true);
     const [saveError, setSaveError] = useState<string|null>(null);
 
@@ -49,15 +49,15 @@ const PostEditPage: NextPage = (props: any) => {
         setAuthState(authState);
 
         if (authState?.principalId && router.isReady) {
-            isAnswerAllowed(authState, getPostStatusFromPost(post), post?.deal)
+            isPostEditAllowed(authState, postDto)
             ? setAuthorized(true)
-            : router.push(`/post/${ post?.postId }`);
+            : router.push(`/post/${ postDto?.postId }`);
         }
 
     }, [session, status, router.isReady]);
 
     const onSave = async (e: any) => {
-        const resp = await updatePostApi(post?.postId, {
+        const resp = await updatePostApi(postDto?.postId, {
             title,
             text: descriptionMd,
             tags,
@@ -68,7 +68,7 @@ const PostEditPage: NextPage = (props: any) => {
         if (resp.error) {
             setSaveError(resp.error);
         } else {
-            router.push(`/post/${ post?.postId }`);
+            router.push(`/post/${ postDto?.postId }`);
         }
     }
 
@@ -80,7 +80,7 @@ const PostEditPage: NextPage = (props: any) => {
             <AppLayout authState={ authState }>
                 <ThreeColumnLayout
                     leftComponent={
-                        <PostStepperHoc post={ post } />
+                        <PostStepperHoc postDto={ postDto } />
                     }
                     centerComponent={
                         isAuthorized
@@ -100,11 +100,13 @@ const PostEditPage: NextPage = (props: any) => {
                                     pb={10}
                                     justifyContent={'flex-end'}
                                 >
-                                    <CancelButton
-                                        onCancel={ () => {
-                                            router.push(`/post/${ post?.postId }`)
-                                        }}
-                                    />
+                                    <Box mr='10px'>
+                                        <CancelButton
+                                            onCancel={ () => {
+                                                router.push(`/post/${ postDto?.postId }`)
+                                            }}
+                                        />
+                                    </Box>
                                     <SaveButton
                                         label='Publish'
                                         onSave = { onSave }

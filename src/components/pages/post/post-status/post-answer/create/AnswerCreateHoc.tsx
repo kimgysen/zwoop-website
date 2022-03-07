@@ -4,21 +4,21 @@ import Card from "@components/layout/components/card/Card";
 import ReactMdeEditor from "@components/widgets/react-mde/ReactMde";
 import {Heading} from "@chakra-ui/layout/src/heading";
 import {Box} from "@chakra-ui/layout/src/box";
-import Answer from "@models/db/entity/Answer";
 import SaveButton from "@components/widgets/form/buttons/SaveButton";
 import ApiResult from "@api_clients/type/ApiResult";
 import {createAnswerApi} from "@api_clients/feature/answer/AnswerApiClient";
+import AnswerDto from "@models/dto/rest/receive/answer/AnswerDto";
 
 interface AnswerHocProps {
     authState: AuthState,
     postId: string,
-    answer?: Answer|null
+    answerDto?: AnswerDto|null
 }
 
 const AnswerCreateHoc: FC<AnswerHocProps> = ({ authState, postId }) => {
     const [answerText, setAnswerText] = useState<string>('');
 
-    const [saveRes, setSaveRes] = useState<ApiResult<boolean>>();
+    const [saveRes, setSaveRes] = useState<ApiResult<AnswerDto>>();
 
     const onSave = async () => {
         if (answerText && answerText.length > 0) {

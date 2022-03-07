@@ -3,25 +3,25 @@ import {Heading} from "@chakra-ui/layout/src/heading";
 import {Box} from "@chakra-ui/layout/src/box";
 import ReactMdeEditor from "@components/widgets/react-mde/ReactMde";
 import CancelButton from "@components/widgets/form/buttons/CancelButton";
-import Answer from "@models/db/entity/Answer";
 import {Spacer} from "@chakra-ui/layout/src/spacer";
 import {Flex} from "@chakra-ui/layout/src/flex";
 import ApiResult from "@api_clients/type/ApiResult";
 import {updateAnswerApi} from "@api_clients/feature/answer/AnswerApiClient";
 import SaveButton from "@components/widgets/form/buttons/SaveButton";
+import AnswerDto from "@models/dto/rest/receive/answer/AnswerDto";
 
 
 interface AnswerUpdateHocProps {
     postId: string,
-    answer: Answer,
+    answerDto: AnswerDto,
     deactivateEditView: () => void
 }
 
-const AnswerUpdateViewHoc: FC<AnswerUpdateHocProps> = ({ postId, answer, deactivateEditView }) => {
-    const answerId = answer?.answerId;
+const AnswerUpdateViewHoc: FC<AnswerUpdateHocProps> = ({ postId, answerDto, deactivateEditView }) => {
+    const answerId = answerDto?.answerId;
 
-    const [answerText, setAnswerText] = useState<string>(answer?.answerText);
-    const [updateRes, setUpdateRes] = useState<ApiResult<boolean>>();
+    const [answerText, setAnswerText] = useState<string>(answerDto?.answerText);
+    const [updateRes, setUpdateRes] = useState<ApiResult<AnswerDto>>();
 
     const onUpdate = async () => {
         const res = await updateAnswerApi(answerId, { postId, answerText });

@@ -3,21 +3,21 @@ import Card from "@components/layout/components/card/Card";
 import NextLink from "next/link";
 import {Flex, Link, Text, useDisclosure} from "@chakra-ui/react";
 import AuthState from "@models/auth/AuthState";
-import Post from "@models/db/entity/Post";
 import CancelDealModal from "@components/pages/post/post-status/post-deal/deal-init/modal/CancelDealModal";
 import ApiResult from "@api_clients/type/ApiResult";
 import {cancelDealApi} from "@api_clients/feature/deal/DealApiClient";
 import {isOp} from "../../../../../../util/PostUtil";
-import Deal from "@models/db/entity/Deal";
+import DealDto from "@models/dto/rest/receive/deal/DealDto";
+import PostDto from "@models/dto/rest/receive/post/PostDto";
 
 
 interface AcceptedBiddingViewProps {
     authState: AuthState,
-    post: Post,
-    deal: Deal
+    postDto: PostDto,
+    dealDto: DealDto
 }
 
-const DealInitViewHoc: FC<AcceptedBiddingViewProps> = ({ authState, post, deal }) => {
+const DealInitViewHoc: FC<AcceptedBiddingViewProps> = ({ authState, postDto, dealDto }) => {
 
     const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -38,13 +38,13 @@ const DealInitViewHoc: FC<AcceptedBiddingViewProps> = ({ authState, post, deal }
             >
                 <Text>
                     <b>
-                        <NextLink href={`/user/${ deal?.bidding?.consultant?.userId }`} passHref>
-                            <Link>{ deal?.bidding?.consultant?.nickName }</Link>
+                        <NextLink href={`/user/${ dealDto?.consultant?.userId }`} passHref>
+                            <Link>{ dealDto?.consultant?.nickName }</Link>
                         </NextLink>
                     </b> was assigned.<br />
                 </Text>
                 {
-                    isOp(authState, post)
+                    isOp(authState, postDto)
                     && (
                         <Link
                             fontSize={'sm'}
@@ -62,7 +62,7 @@ const DealInitViewHoc: FC<AcceptedBiddingViewProps> = ({ authState, post, deal }
             <CancelDealModal
                 isOpen={ isOpen }
                 onClose={ onClose }
-                dealId={ deal?.dealId }
+                dealId={ dealDto?.dealId }
                 cancelDeal={ handleCancelDeal }
                 cancelDealResult={ cancelDealResult }
             />

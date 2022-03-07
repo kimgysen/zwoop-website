@@ -1,17 +1,17 @@
 import {FC} from "preact/compat";
 import {Button, Flex, useDisclosure} from "@chakra-ui/react";
 import React from "react";
-import Answer from "@models/db/entity/Answer";
 import AcceptAnswerModalHoc
     from "@components/pages/post/post-status/post-answer/view/subviews/op-menu/AcceptAnswerModalHoc";
 import {FaCheck} from "react-icons/fa";
+import AnswerDto from "@models/dto/rest/receive/answer/AnswerDto";
 
 interface AnswerViewOpMenuProps {
-    answer: Answer
+    answerDto: AnswerDto
 }
 
 
-export const AnswerViewOpMenu:FC<AnswerViewOpMenuProps> = ({ answer }) => {
+export const AnswerViewOpMenu:FC<AnswerViewOpMenuProps> = ({ answerDto }) => {
     const { isOpen: isAcceptModalOpen, onOpen: onAcceptModalOpen, onClose: onAcceptModalClose } = useDisclosure();
 
     return (
@@ -26,7 +26,7 @@ export const AnswerViewOpMenu:FC<AnswerViewOpMenuProps> = ({ answer }) => {
                 </Button>
             </Flex>
             <AcceptAnswerModalHoc
-                answer={ answer }
+                answerDto={ answerDto }
                 isOpen={ isAcceptModalOpen }
                 onClose={ onAcceptModalClose }
             />

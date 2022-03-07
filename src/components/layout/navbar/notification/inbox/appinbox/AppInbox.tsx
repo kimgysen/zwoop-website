@@ -1,5 +1,5 @@
 import React, {FC} from "react";
-import InboxItemReceiveDto from "../../../../../../models/dto/stomp/receive/inbox/InboxItemReceiveDto";
+import InboxItemDto from "@models/dto/stomp/receive/user-notification/feature/inbox/InboxItemDto";
 import {Box, Divider} from "@chakra-ui/react";
 import AppInboxItem from "@components/layout/navbar/notification/inbox/appinbox/AppInboxItem";
 import AuthState from "@models/auth/AuthState";
@@ -11,7 +11,7 @@ import {isInboxEmpty, isLastInboxItem} from "../../../../../../util/InboxUtil";
 interface AppInboxProps {
     authState: AuthState,
     inboxLoading: boolean,
-    inboxItems: InboxItemReceiveDto[],
+    inboxItems: InboxItemDto[],
     closePopup: () => void
 }
 

@@ -12,21 +12,20 @@ import {
     VStack
 } from "@chakra-ui/react";
 import ApiResult from "@api_clients/type/ApiResult";
-import Bidding from "@models/db/entity/Bidding";
-import Post from "@models/db/entity/Post";
+import BiddingDto from "@models/dto/rest/receive/bidding/BiddingDto";
+import DealDto from "@models/dto/rest/receive/deal/DealDto";
 
 
 interface AcceptBiddingModalProps {
     isOpen: boolean,
     onClose: () => void,
-    post: Post,
-    biddingItem: Bidding,
+    biddingDto: BiddingDto,
     createDeal: (biddingId: string) => void,
-    createDealResult: ApiResult<boolean>
+    createDealResult: ApiResult<DealDto>
 }
 
 const CreateDealModal: FC<AcceptBiddingModalProps> =
-    ({ isOpen, onClose, post, biddingItem, createDeal, createDealResult }) => {
+    ({ isOpen, onClose, biddingDto, createDeal, createDealResult }) => {
 
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
@@ -36,7 +35,7 @@ const CreateDealModal: FC<AcceptBiddingModalProps> =
                 <ModalCloseButton />
                 <ModalBody>
                     Are you sure you want to assign the your request to
-                    { biddingItem?.consultant?.nickName } @{ biddingItem?.askPrice }?
+                    { biddingDto?.consultant?.nickName } @{ biddingDto?.askPrice }?
                 </ModalBody>
 
                 <ModalFooter>
@@ -55,7 +54,7 @@ const CreateDealModal: FC<AcceptBiddingModalProps> =
                             !createDealResult.loading &&
                             <Button
                                 colorScheme='blue'
-                                onClick={ () => createDeal(biddingItem?.biddingId) }
+                                onClick={ () => createDeal(biddingDto?.biddingId) }
                                 w='80px'
                             >
                                 Yes

@@ -13,17 +13,17 @@ import {
 } from "@chakra-ui/react";
 import ApiResult from "@api_clients/type/ApiResult";
 import {deleteAnswerApi} from "@api_clients/feature/answer/AnswerApiClient";
-import Answer from "@models/db/entity/Answer";
+import AnswerDto from "@models/dto/rest/receive/answer/AnswerDto";
 
 
 interface DeleteAnswerModalProps {
-    answer: Answer,
+    answerDto: AnswerDto,
     isOpen: boolean,
     onClose: () => void
 }
 
 const DeleteAnswerModalHoc: FC<DeleteAnswerModalProps> =
-    ({ answer, isOpen, onClose }) => {
+    ({ answerDto, isOpen, onClose }) => {
 
         const defaultResult = { loading: false, success: null, error: null };
         const [delRes, setDelRes] = useState<ApiResult<boolean>>(defaultResult);
@@ -35,7 +35,7 @@ const DeleteAnswerModalHoc: FC<DeleteAnswerModalProps> =
         }, [delRes?.success]);
 
         const onDelete = async () => {
-            const res = await deleteAnswerApi(answer?.answerId);
+            const res = await deleteAnswerApi(answerDto?.answerId);
             setDelRes(res);
         }
 

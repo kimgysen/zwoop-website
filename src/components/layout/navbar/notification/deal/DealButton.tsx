@@ -15,23 +15,23 @@ import {css} from '@emotion/react';
 import {FaHandshake} from "react-icons/fa";
 import AuthState from "@models/auth/AuthState";
 import DealBox from "@components/layout/navbar/notification/deal/dealbox/DealBox";
-import DealInitDto from "@models/dto/stomp/receive/dealbox/DealInitDto";
+import DealDto from "@models/dto/rest/receive/deal/DealDto";
 
 
 interface DealButtonProps {
     authState: AuthState
     dealBoxLoading: boolean,
-    dealBoxItems?: DealInitDto[] | null
+    dealDtoList?: DealDto[] | null
 }
 
-const DealButton: FC<DealButtonProps> = ({ authState, dealBoxLoading, dealBoxItems }) => {
+const DealButton: FC<DealButtonProps> = ({ authState, dealBoxLoading, dealDtoList }) => {
 
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const open = () => setIsOpen(!isOpen)
     const close = () => setIsOpen(false)
 
-    const nrItems = dealBoxItems
-        ? dealBoxItems.length
+    const nrItems = dealDtoList
+        ? dealDtoList.length
         : 0;
 
     return (
@@ -89,7 +89,7 @@ const DealButton: FC<DealButtonProps> = ({ authState, dealBoxLoading, dealBoxIte
                                 <DealBox
                                     authState={ authState }
                                     dealBoxLoading={ dealBoxLoading }
-                                    dealBoxItems={ dealBoxItems }
+                                    dealDtoList={ dealDtoList }
                                     closePopup={ close }
                                 />
                             }

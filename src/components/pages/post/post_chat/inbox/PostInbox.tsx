@@ -1,7 +1,7 @@
 import React, {FC, useEffect, useState} from "react";
 import {Box, Divider} from "@chakra-ui/react";
 import PostInboxItem from "@components/pages/post/post_chat/inbox/PostInboxItem";
-import InboxItemReceiveDto from "../../../../../models/dto/stomp/receive/inbox/InboxItemReceiveDto";
+import InboxItemDto from "@models/dto/stomp/receive/user-notification/feature/inbox/InboxItemDto";
 import {isInboxEmpty, isLastInboxItem, rebuildInbox, sortInboxItems} from "../../../../../util/InboxUtil";
 import {getStompDispatcher} from "../../../../../event_dispatchers/StompDispatcher";
 import {
@@ -20,19 +20,19 @@ interface PostInboxProps {
 const PostInbox: FC<PostInboxProps> = (
     { postId, principalId }) => {
     const [inboxLoading, setInboxLoading] = useState<boolean>(true);
-    const [inboxItems, setInboxItems] = useState<InboxItemReceiveDto[]>([]);
-    const [lastReceived, setLastReceived] = useState<InboxItemReceiveDto>();
+    const [inboxItems, setInboxItems] = useState<InboxItemDto[]>([]);
+    const [lastReceived, setLastReceived] = useState<InboxItemDto>();
 
     const stompDispatcher = getStompDispatcher();
 
     useEffect(() => {
-        stompDispatcher.on(POST_INBOX__ON_INIT_ITEMS_RECEIVED, (inboxItems: InboxItemReceiveDto[]) => {
+        stompDispatcher.on(POST_INBOX__ON_INIT_ITEMS_RECEIVED, (inboxItems: InboxItemDto[]) => {
             setInboxLoading(false);
             setInboxItems(sortInboxItems([...inboxItems]));
 
         });
 
-        stompDispatcher.on(POST_INBOX__ON_INBOX_UPDATE_RECEIVED, (inboxItem: InboxItemReceiveDto) => {
+        stompDispatcher.on(POST_INBOX__ON_INBOX_UPDATE_RECEIVED, (inboxItem: InboxItemDto) => {
             setLastReceived(inboxItem);
         });
 
