@@ -30,7 +30,7 @@ export const createDealApi:
 }
 
 export const cancelDealApi:
-    (dealId: string) => Promise<ApiResult<boolean>> =
+    (dealId: string) => Promise<ApiResult<DealDto>> =
     async (dealId) => {
         const jwt = await getRawJwt();
         const url = urlJoin(dealApiPrivateEndpoint, dealId);

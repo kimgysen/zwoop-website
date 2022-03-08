@@ -16,12 +16,13 @@ import {findTagsStartingWith} from "@api_clients/feature/tag/TagApiClient";
 import Tag from "@models/db/entity/Tag";
 import Title from "./Title";
 import ReactMdeEditor from "@components/widgets/react-mde/ReactMde";
+import TagDto from "@models/dto/stomp/receive/common/tag/TagDto";
 
 
 type EditPost = {
     title: string,
     descriptionMd: string,
-    tags: Tag[],
+    tags: TagDto[],
     bidPrice: string
 }
 

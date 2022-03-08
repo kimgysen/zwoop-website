@@ -24,6 +24,7 @@ const PostStompConnect: FC<PostStompConnectProps> = (
                 switch(viewState) {
                     case PostPageViewState.VISITOR_PRIVATE_CHAT:
                         await connectToPostPrivateChat({
+                            authState,
                             postId: postDto?.postId,
                             partnerId: postDto?.op?.userId,
                             router
@@ -33,6 +34,7 @@ const PostStompConnect: FC<PostStompConnectProps> = (
                     case PostPageViewState.INBOX:
                         if (!queryPartnerId) {
                             await connectToPostInbox({
+                                authState,
                                 postId: postDto?.postId,
                                 router
                             });
@@ -42,6 +44,7 @@ const PostStompConnect: FC<PostStompConnectProps> = (
                     case PostPageViewState.INBOX_DETAIL_CHAT:
                         if (queryPartnerId) {
                             await connectToPostPrivateChat({
+                                authState,
                                 postId: postDto?.postId,
                                 partnerId: queryPartnerId as string,
                                 router

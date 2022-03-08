@@ -5,7 +5,7 @@ import OpActionViewHoc
 import NextLink from "next/link";
 import BidderActionViewHoc
     from "@components/pages/post/post-status/post-bidding/bidding-list/action-views/bidder-action/BidderActionViewHoc";
-import {isOp, isPostBiddingConsultant} from "../../../../../../util/PostUtil";
+import {isBiddingPostConsultant, isOp} from "../../../../../../util/PostUtil";
 import AuthState from "@models/auth/AuthState";
 import BiddingDto from "@models/dto/rest/receive/bidding/BiddingDto";
 import PostDto from "@models/dto/rest/receive/post/PostDto";
@@ -38,7 +38,7 @@ const BiddingItem: FC<BiddingItemProps> = ({ authState, postDto, biddingDto }) =
             </Td>
             <Td>
                 {
-                    isPostBiddingConsultant(authState, biddingDto)
+                    isBiddingPostConsultant(authState, biddingDto)
                     && (
                         <BidderActionViewHoc
                             authState={ authState }

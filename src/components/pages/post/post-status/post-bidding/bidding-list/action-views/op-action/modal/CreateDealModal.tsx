@@ -27,52 +27,52 @@ interface AcceptBiddingModalProps {
 const CreateDealModal: FC<AcceptBiddingModalProps> =
     ({ isOpen, onClose, biddingDto, createDeal, createDealResult }) => {
 
-    return (
-        <Modal isOpen={isOpen} onClose={onClose}>
-            <ModalOverlay />
-            <ModalContent>
-                <ModalHeader>Accept bidding</ModalHeader>
-                <ModalCloseButton />
-                <ModalBody>
-                    Are you sure you want to assign the your request to
-                    { biddingDto?.consultant?.nickName } @{ biddingDto?.askPrice }?
-                </ModalBody>
+        return (
+            <Modal isOpen={isOpen} onClose={onClose}>
+                <ModalOverlay />
+                <ModalContent>
+                    <ModalHeader>Accept bidding</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody>
+                        Are you sure you want to assign the your request to
+                        { biddingDto?.consultant?.nickName } @{ biddingDto?.askPrice }?
+                    </ModalBody>
 
-                <ModalFooter>
-                    <VStack align='right'>
-                        {
-                            createDealResult.loading &&
-                            <Button
-                                disabled
-                                isLoading
-                                colorScheme='blue'
-                                variant='outline'
-                                w='80px'
-                            />
-                        }
-                        {
-                            !createDealResult.loading &&
-                            <Button
-                                colorScheme='blue'
-                                onClick={ () => createDeal(biddingDto?.biddingId) }
-                                w='80px'
-                            >
-                                Yes
-                            </Button>
-                        }
-                        {
-                            createDealResult.success &&
-                            <Box color='green'>Success</Box>
-                        }
-                        {
-                            createDealResult.error &&
-                            <Box color='red'>{ createDealResult.error }</Box>
-                        }
-                    </VStack>
-                </ModalFooter>
-            </ModalContent>
-        </Modal>
-    )
-}
+                    <ModalFooter>
+                        <VStack align='right'>
+                            {
+                                createDealResult.loading &&
+                                <Button
+                                    disabled
+                                    isLoading
+                                    colorScheme='blue'
+                                    variant='outline'
+                                    w='80px'
+                                />
+                            }
+                            {
+                                !createDealResult.loading &&
+                                <Button
+                                    colorScheme='blue'
+                                    onClick={ () => createDeal(biddingDto?.biddingId) }
+                                    w='80px'
+                                >
+                                    Yes
+                                </Button>
+                            }
+                            {
+                                createDealResult.success &&
+                                <Box color='green'>Success</Box>
+                            }
+                            {
+                                createDealResult.error &&
+                                <Box color='red'>{ createDealResult.error }</Box>
+                            }
+                        </VStack>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
+        )
+    }
 
 export default CreateDealModal;

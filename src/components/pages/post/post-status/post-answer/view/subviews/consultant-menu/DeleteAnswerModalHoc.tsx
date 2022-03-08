@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from "react";
+import React, {FC, useState} from "react";
 import {
     Box,
     Button,
@@ -14,6 +14,11 @@ import {
 import ApiResult from "@api_clients/type/ApiResult";
 import {deleteAnswerApi} from "@api_clients/feature/answer/AnswerApiClient";
 import AnswerDto from "@models/dto/rest/receive/answer/AnswerDto";
+import {dispatchCustomMessage} from "../../../../../../../../service/stomp/subscriptions/SubscriptionUtil";
+import {
+    POST_STATUS__ANSWER_REMOVED,
+    POST_STEPPER__ANSWER_REMOVED
+} from "../../../../../../../../event_dispatchers/config/StompEvents";
 
 
 interface DeleteAnswerModalProps {
@@ -28,15 +33,15 @@ const DeleteAnswerModalHoc: FC<DeleteAnswerModalProps> =
         const defaultResult = { loading: false, success: null, error: null };
         const [delRes, setDelRes] = useState<ApiResult<boolean>>(defaultResult);
 
-        useEffect(() => {
-            if (delRes.success) {
-                onClose();
-            }
-        }, [delRes?.success]);
-
         const onDelete = async () => {
             const res = await deleteAnswerApi(answerDto?.answerId);
             setDelRes(res);
+
+            if (res?.success) {
+                onClose();
+                dispatchCustomMessage(POST_STATUS__ANSWER_REMOVED, answerDto as AnswerDto);
+                dispatchCustomMessage(POST_STEPPER__ANSWER_REMOVED, answerDto as AnswerDto);
+            }
         }
 
         return (

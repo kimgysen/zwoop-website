@@ -8,6 +8,11 @@ import SaveButton from "@components/widgets/form/buttons/SaveButton";
 import ApiResult from "@api_clients/type/ApiResult";
 import {createAnswerApi} from "@api_clients/feature/answer/AnswerApiClient";
 import AnswerDto from "@models/dto/rest/receive/answer/AnswerDto";
+import {dispatchCustomMessage} from "../../../../../../service/stomp/subscriptions/SubscriptionUtil";
+import {
+    POST_STATUS__ANSWER_ADDED,
+    POST_STEPPER__ANSWER_ADDED
+} from "../../../../../../event_dispatchers/config/StompEvents";
 
 interface AnswerHocProps {
     authState: AuthState,
@@ -24,6 +29,11 @@ const AnswerCreateHoc: FC<AnswerHocProps> = ({ authState, postId }) => {
         if (answerText && answerText.length > 0) {
             const res = await createAnswerApi({ postId, answerText });
             setSaveRes(res);
+
+            if (res?.success) {
+                dispatchCustomMessage(POST_STATUS__ANSWER_ADDED, res?.success as AnswerDto);
+                dispatchCustomMessage(POST_STEPPER__ANSWER_ADDED, res?.success as AnswerDto);
+            }
         }
     }
 

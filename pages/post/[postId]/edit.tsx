@@ -9,13 +9,13 @@ import AppLayout from "@components/layout/AppLayout";
 import {Box, Flex} from "@chakra-ui/react";
 import EditFormDetailsView from "@components/pages/ask/subviews/EditFormDetailsView";
 import SaveButton from "@components/widgets/form/buttons/SaveButton";
-import Tag from "@models/db/entity/Tag";
 import CancelButton from "@components/widgets/form/buttons/CancelButton";
 import AuthState, {defaultAuthState} from "@models/auth/AuthState";
 import {getAuthState} from "@components/auth/AuthStateHelper";
 import ThreeColumnLayout from "@components/layout/column-layouts/ThreeColumnLayout";
 import PostStepperHoc from "@components/pages/post/post-stepper/PostStepperHoc";
 import {isPostEditAllowed} from "@components/pages/post/PostPageHelper";
+import TagDto from "@models/dto/stomp/receive/common/tag/TagDto";
 
 
 export async function getServerSideProps(ctx: { query: { postId: string } }) {
@@ -37,7 +37,7 @@ const PostEditPage: NextPage = (props: any) => {
     const [isAuthorized, setAuthorized] = useState<boolean>(false);
     const [title, setTitle] = useState<string>(postDto?.postTitle);
     const [descriptionMd, setDescriptionMd] = useState<string>(postDto?.postText);
-    const [tags, setTags] = useState<Tag[]>(postDto?.tags);
+    const [tags, setTags] = useState<TagDto[]>(postDto?.tagList);
     const [bidPrice, setBidPrice] = React.useState<string>(postDto?.bidPrice);
     const [isFormValid, setFormValid] = useState(true);
     const [saveError, setSaveError] = useState<string|null>(null);

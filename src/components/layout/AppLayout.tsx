@@ -13,7 +13,6 @@ interface AppLayoutProps {
 
 const AppLayout: React.FC<AppLayoutProps> = (
     { authState, children}) => {
-
     return (
         <Box bg="#ced7e2">
             <Navbar

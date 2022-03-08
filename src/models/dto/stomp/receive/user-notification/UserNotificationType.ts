@@ -1,5 +1,5 @@
 
-export enum NotificationFeatureType {
+export enum UserNotificationType {
     BIDDING_ADDED = 'BIDDING_ADDED',
     BIDDING_CHANGED = 'BIDDING_CHANGED',
     BIDDING_REMOVED = 'BIDDING_REMOVED',

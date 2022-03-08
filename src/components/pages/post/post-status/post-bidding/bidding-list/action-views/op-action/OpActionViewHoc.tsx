@@ -11,6 +11,13 @@ import AuthState from "@models/auth/AuthState";
 import BiddingDto from "@models/dto/rest/receive/bidding/BiddingDto";
 import DealDto from "@models/dto/rest/receive/deal/DealDto";
 import PostDto from "@models/dto/rest/receive/post/PostDto";
+import {dispatchCustomMessage} from "../../../../../../../../service/stomp/subscriptions/SubscriptionUtil";
+import {
+    APP_DEAL_BOX__DEAL_INIT,
+    POST_STATUS__DEAL_INIT,
+    POST_STEPPER__DEAL_INIT,
+    POST_VIEW__DEAL_INIT
+} from "../../../../../../../../event_dispatchers/config/StompEvents";
 
 
 interface OpActionViewHocProps {
@@ -28,15 +35,22 @@ const OpActionViewHoc: FC<OpActionViewHocProps> = ({ authState, postDto, bidding
     const [createDealResult, setCreateDealResult] = useState<ApiResult<DealDto>>(defaultResult);
 
 
-    const handleChat = () => {
-        router.push(`/post/${postDto?.postId}?partnerId=${ biddingDto?.consultant?.userId }`);
+    const handleChat = async () => {
+        await router.push(`/post/${postDto?.postId}?partnerId=${ biddingDto?.consultant?.userId }`);
     }
 
     const createDeal = async (biddingId: string) => {
         setCreateDealResult({ ...defaultResult, loading: true });
         const res = await createDealApi({ biddingId });
         setCreateDealResult(res);
-        onClose();
+
+        if (res?.success) {
+            onClose();
+            dispatchCustomMessage(POST_VIEW__DEAL_INIT, res?.success as DealDto);
+            dispatchCustomMessage(POST_STATUS__DEAL_INIT, res?.success as DealDto);
+            dispatchCustomMessage(POST_STEPPER__DEAL_INIT, res?.success as DealDto);
+            dispatchCustomMessage(APP_DEAL_BOX__DEAL_INIT, res?.success as DealDto);
+        }
     }
 
     return (

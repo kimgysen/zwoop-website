@@ -10,6 +10,11 @@ import ApiResult from "@api_clients/type/ApiResult";
 import AuthState from "@models/auth/AuthState";
 import {deleteBiddingApi, updateBiddingApi} from "@api_clients/feature/bidding/BiddingApiClient";
 import BiddingDto from "@models/dto/rest/receive/bidding/BiddingDto";
+import {dispatchCustomMessage} from "../../../../../../../../service/stomp/subscriptions/SubscriptionUtil";
+import {
+    POST_STATUS__BIDDING_CHANGED,
+    POST_STATUS__BIDDING_REMOVED
+} from "../../../../../../../../event_dispatchers/config/StompEvents";
 
 
 interface BidderActionViewHocProps {
@@ -30,16 +35,22 @@ const BidderActionViewHoc: FC<BidderActionViewHocProps> = ({ authState, biddingD
         setUpdateResult({ ...defaultResult, loading: true });
         const res = await updateBiddingApi(biddingDto?.biddingId, { askPrice });
         setUpdateResult(res);
-        // await mutate();
-        onEditAskClose();
+
+        if (res?.success) {
+            onEditAskClose();
+            dispatchCustomMessage(POST_STATUS__BIDDING_CHANGED, res?.success as BiddingDto);
+        }
     }
 
     const handleDeleteBidding = async () => {
         setDeleteResult({ ...defaultResult, loading: true });
         const res = await deleteBiddingApi(biddingDto?.biddingId);
         setDeleteResult(res);
-        // await mutate();
-        onDeleteModalClose();
+
+        if (res?.success) {
+            onDeleteModalClose();
+            dispatchCustomMessage(POST_STATUS__BIDDING_REMOVED, biddingDto);
+        }
     }
 
     return (

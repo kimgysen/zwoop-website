@@ -10,8 +10,10 @@ import {
 import {initAppInbox, subscribeToNotifications} from "./subscriptions/NotificationSubscriptions";
 import {subscribeToInboxUpdates} from "./subscriptions/PostInboxSubscriptions";
 import {subscribeToPostUpdates} from "./subscriptions/PostUpdateSubscriptions";
+import AuthState from "@models/auth/AuthState";
 
 interface connectPostPrivateChatProps {
+    authState: AuthState,
     jwt: string,
     postId: string,
     partnerId?: string,
@@ -19,7 +21,7 @@ interface connectPostPrivateChatProps {
 }
 
 export const connectPostPrivateChat = ({
-    postId, jwt, partnerId, redirectToLogin }: connectPostPrivateChatProps) => {
+    authState, postId, jwt, partnerId, redirectToLogin }: connectPostPrivateChatProps) => {
     connectStomp(
         {
             [HEADER_CONNECT_TYPE]: stringFromConnectTypeEnum(StreamTypeEnum.POST_PRIVATE_CHAT),
@@ -29,7 +31,7 @@ export const connectPostPrivateChat = ({
             console.log('connect private chat success', frame);
 
             if (postId) {
-                subscribeToPostUpdates(postId);
+                subscribeToPostUpdates(authState, postId);
             }
 
             if (partnerId) {

@@ -6,15 +6,17 @@ import {initAppInbox, subscribeToNotifications} from "./subscriptions/Notificati
 import {subscribeToPostUpdates} from "./subscriptions/PostUpdateSubscriptions";
 import {initPostInbox, subscribeToInboxUpdates} from "./subscriptions/PostInboxSubscriptions";
 import {subscribeToPrivateChatUpdates} from "./subscriptions/PrivateChatSubscriptions";
+import AuthState from "@models/auth/AuthState";
 
 
 interface ConnectPostInboxProps {
+    authState: AuthState,
     postId: string,
     jwt: string,
     router: NextRouter
 }
 
-export const connectPostInbox = ({ postId, jwt, router }: ConnectPostInboxProps) => {
+export const connectPostInbox = ({ authState, postId, jwt, router }: ConnectPostInboxProps) => {
     connectStomp({
             [HEADER_CONNECT_TYPE]: stringFromConnectTypeEnum(StreamTypeEnum.POST_INBOX),
             [HEADER_POST_ID]: postId
@@ -24,7 +26,7 @@ export const connectPostInbox = ({ postId, jwt, router }: ConnectPostInboxProps)
         initAppInbox();
 
         if (postId) {
-            subscribeToPostUpdates(postId);
+            subscribeToPostUpdates(authState, postId);
             initPostInbox(postId);
         }
 

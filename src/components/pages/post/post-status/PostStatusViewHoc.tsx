@@ -3,8 +3,6 @@ import AuthState from "@models/auth/AuthState";
 import BiddingViewHoc from "@components/pages/post/post-status/post-bidding/BiddingViewHoc";
 import {getStompDispatcher} from "../../../../event_dispatchers/StompDispatcher";
 import {
-    APP_DEAL_BOX__DEAL_CANCELLED,
-    APP_DEAL_BOX__DEAL_INIT,
     POST_STATUS__ANSWER_ADDED,
     POST_STATUS__ANSWER_CHANGED,
     POST_STATUS__ANSWER_REMOVED,
@@ -20,7 +18,7 @@ import AnswerDto from "@models/dto/rest/receive/answer/AnswerDto";
 import PostDto from "@models/dto/rest/receive/post/PostDto";
 import DealDto from "@models/dto/rest/receive/deal/DealDto";
 import {isDealParticipant} from "../../../../util/DealUtil";
-import {dispatchCustomMessage} from "../../../../service/stomp/subscriptions/SubscriptionUtil";
+import {infoToast} from "@components/widgets/toast/AppToast";
 
 
 interface BiddingViewHocProps {
@@ -46,23 +44,28 @@ const PostStatusViewHoc: FC<BiddingViewHocProps> = ({ authState, postDto }) => {
                 setDealDto(dealDto);
                 setPostStatus(PostStatusEnum.DEAL_INIT);
 
-                if (isDealParticipant(authState, dealDto)) {
-                    dispatchCustomMessage(APP_DEAL_BOX__DEAL_INIT, dealDto);
+                if (!isDealParticipant(authState, dealDto)) {
+                    infoToast(`${ dealDto?.op?.nickName } made a deal with ${ dealDto?.consultant?.nickName }`);
                 }
+
             });
 
             stompDispatcher.on(POST_STATUS__DEAL_CANCELLED, (dealDto: DealDto) => {
                 setDealDto(null);
                 setPostStatus(PostStatusEnum.POST_INIT);
 
-                if (isDealParticipant(authState, dealDto)) {
-                    dispatchCustomMessage(APP_DEAL_BOX__DEAL_CANCELLED, dealDto);
+                if (!isDealParticipant(authState, dealDto)) {
+                    infoToast(`${ dealDto?.op?.nickName } cancelled deal with ${ dealDto?.consultant?.nickName } cancelled`);
                 }
             });
 
             stompDispatcher.on(POST_STATUS__ANSWER_ADDED, (answerDto: AnswerDto) => {
                 setAnswerDto(answerDto);
                 setPostStatus(PostStatusEnum.ANSWERED);
+
+                if (!isDealParticipant(authState, dealDto)) {
+                    infoToast(`${ dealDto?.consultant?.nickName } added an answer.`);
+                }
             });
 
             stompDispatcher.on(POST_STATUS__ANSWER_CHANGED, (answerDto: AnswerDto) => {
@@ -72,6 +75,10 @@ const PostStatusViewHoc: FC<BiddingViewHocProps> = ({ authState, postDto }) => {
             stompDispatcher.on(POST_STATUS__ANSWER_REMOVED, () => {
                 setAnswerDto(null);
                 setPostStatus(PostStatusEnum.DEAL_INIT);
+
+                if (!isDealParticipant(authState, dealDto)) {
+                    infoToast(`${ dealDto?.consultant?.nickName } removed an answer.`);
+                }
             });
         }
 

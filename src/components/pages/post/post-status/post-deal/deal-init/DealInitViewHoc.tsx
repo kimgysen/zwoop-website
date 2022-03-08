@@ -9,6 +9,13 @@ import {cancelDealApi} from "@api_clients/feature/deal/DealApiClient";
 import {isOp} from "../../../../../../util/PostUtil";
 import DealDto from "@models/dto/rest/receive/deal/DealDto";
 import PostDto from "@models/dto/rest/receive/post/PostDto";
+import {
+    APP_DEAL_BOX__DEAL_CANCELLED,
+    POST_STATUS__DEAL_CANCELLED,
+    POST_STEPPER__DEAL_CANCELLED,
+    POST_VIEW__DEAL_CANCELLED
+} from "../../../../../../event_dispatchers/config/StompEvents";
+import {dispatchCustomMessage} from "../../../../../../service/stomp/subscriptions/SubscriptionUtil";
 
 
 interface AcceptedBiddingViewProps {
@@ -17,18 +24,26 @@ interface AcceptedBiddingViewProps {
     dealDto: DealDto
 }
 
+
 const DealInitViewHoc: FC<AcceptedBiddingViewProps> = ({ authState, postDto, dealDto }) => {
 
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     const defaultResult = { loading: false, success: null, error: null };
-    const [cancelDealResult, setCancelDealResult] = useState<ApiResult<boolean>>(defaultResult);
+    const [cancelDealResult, setCancelDealResult] = useState<ApiResult<DealDto>>(defaultResult);
 
-    const handleCancelDeal = async (dealId: string) => {
+    const handleCancelDeal = async (dealDto: DealDto) => {
         setCancelDealResult({ ...defaultResult, loading: true });
-        const res = await cancelDealApi(dealId);
+        const res = await cancelDealApi(dealDto?.dealId);
         setCancelDealResult(res);
-        onClose();
+
+        if (res?.success) {
+            onClose();
+            dispatchCustomMessage(POST_VIEW__DEAL_CANCELLED, dealDto);
+            dispatchCustomMessage(POST_STATUS__DEAL_CANCELLED, dealDto);
+            dispatchCustomMessage(POST_STEPPER__DEAL_CANCELLED, dealDto);
+            dispatchCustomMessage(APP_DEAL_BOX__DEAL_CANCELLED, dealDto);
+        }
     }
 
     return (
@@ -62,7 +77,7 @@ const DealInitViewHoc: FC<AcceptedBiddingViewProps> = ({ authState, postDto, dea
             <CancelDealModal
                 isOpen={ isOpen }
                 onClose={ onClose }
-                dealId={ dealDto?.dealId }
+                dealDto={ dealDto }
                 cancelDeal={ handleCancelDeal }
                 cancelDealResult={ cancelDealResult }
             />

@@ -12,18 +12,19 @@ import {
     VStack
 } from "@chakra-ui/react";
 import ApiResult from "@api_clients/type/ApiResult";
+import DealDto from "@models/dto/rest/receive/deal/DealDto";
 
 
 interface CancelDealModalProps {
     isOpen: boolean,
     onClose: () => void,
-    dealId: string,
-    cancelDeal: (dealId: string) => void,
-    cancelDealResult: ApiResult<boolean>
+    dealDto: DealDto,
+    cancelDeal: (dealDto: DealDto) => void,
+    cancelDealResult: ApiResult<DealDto>
 }
 
 const CancelDealModal: FC<CancelDealModalProps> =
-    ({ isOpen, onClose, dealId, cancelDeal, cancelDealResult }) => {
+    ({ isOpen, onClose, dealDto, cancelDeal, cancelDealResult }) => {
         return (
             <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
@@ -49,7 +50,7 @@ const CancelDealModal: FC<CancelDealModalProps> =
                                 !cancelDealResult.loading &&
                                 <Button
                                     colorScheme='blue'
-                                    onClick={ () => cancelDeal(dealId) }
+                                    onClick={ () => cancelDeal(dealDto) }
                                     w='80px'
                                 >
                                     Yes
