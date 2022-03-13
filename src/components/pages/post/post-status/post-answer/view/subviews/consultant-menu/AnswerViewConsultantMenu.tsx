@@ -3,7 +3,7 @@ import {Flex, Link, useDisclosure} from "@chakra-ui/react";
 import React from "react";
 import DeleteAnswerModalHoc
     from "@components/pages/post/post-status/post-answer/view/subviews/consultant-menu/DeleteAnswerModalHoc";
-import AnswerDto from "@models/dto/rest/receive/answer/AnswerDto";
+import AnswerDto from "@models/dto/domain-client-dto/answer/AnswerDto";
 
 interface AnswerViewOwnerMenuProps {
     answerDto: AnswerDto,

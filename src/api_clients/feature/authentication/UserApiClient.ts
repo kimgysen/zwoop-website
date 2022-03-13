@@ -2,7 +2,7 @@ import axios, {AxiosError} from "axios";
 import ApiResult from "../../type/ApiResult";
 import {handleAxiosError, handleAxiosResponse} from "../../util/ResponseUtil";
 import AuthUser from "@models/auth/AuthUser";
-import User from "@models/db/entity/User";
+import User from "@models/dto/domain-client-dto/user/UserFullDto";
 import urlJoin from 'url-join';
 
 
@@ -27,15 +27,15 @@ export const findUserByProviderAndOauthId:
 }
 
 export const registerUser:
-    (body: { authProviderId: number, authId: string, profilePic: String, firstName: string, lastName: string, email: string }) =>
-    Promise<ApiResult<AuthUser>> = ({ authProviderId, authId, profilePic, firstName, lastName, email }) => {
+    (body: { authProviderId: number, authId: string, avatar: String, firstName: string, lastName: string, email: string }) =>
+    Promise<ApiResult<AuthUser>> = ({ authProviderId, authId, avatar, firstName, lastName, email }) => {
         return axios
             .post(authApiEndpoint + '/register', {
                 authProviderId,
                 authId,
                 firstName,
                 lastName,
-                profilePic,
+                avatar,
                 email
             })
             .then(res => handleAxiosResponse({

@@ -12,7 +12,10 @@ import {
     VStack
 } from "@chakra-ui/react";
 import ApiResult from "@api_clients/type/ApiResult";
-import AnswerDto from "@models/dto/rest/receive/answer/AnswerDto";
+import AnswerDto from "@models/dto/domain-client-dto/answer/AnswerDto";
+import {acceptAnswerApi} from "@api_clients/feature/answer/AnswerApiClient";
+import {dispatchCustomMessage} from "../../../../../../../../service/stomp/subscriptions/SubscriptionUtil";
+import {POST_STEPPER__ANSWER_ACCEPTED} from "../../../../../../../../event_dispatchers/config/StompEvents";
 
 
 interface AcceptAnswerModalProps {
@@ -33,11 +36,14 @@ const AcceptAnswerModalHoc: FC<AcceptAnswerModalProps> =
             }
         }, [acceptRes?.success]);
 
-        const onAccept = async () => {
-            console.log('Accept answer');
-            onClose();
-            // const res = await deleteAnswerApi(answer?.answerId);
-            // setDelRes(res);
+        const onAccept = async (answerId: string) => {
+            const res = await acceptAnswerApi(answerId);
+
+            if (res?.success) {
+                onClose();
+                dispatchCustomMessage(POST_STEPPER__ANSWER_ACCEPTED, answerDto);
+            }
+
         }
 
         return (
@@ -67,7 +73,7 @@ const AcceptAnswerModalHoc: FC<AcceptAnswerModalProps> =
                                 !acceptRes.loading &&
                                 <Button
                                     colorScheme='green'
-                                    onClick={ onAccept }
+                                    onClick={ () => onAccept(answerDto?.answerId) }
                                     w='80px'
                                 >
                                     Yes

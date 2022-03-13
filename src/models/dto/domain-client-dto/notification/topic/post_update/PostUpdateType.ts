@@ -1,4 +1,4 @@
-export enum PostUpdateFeatureType {
+export enum PostUpdateType {
     POST_CHANGED = 'POST_CHANGED',
     POST_REMOVED = 'POST_REMOVED',
 

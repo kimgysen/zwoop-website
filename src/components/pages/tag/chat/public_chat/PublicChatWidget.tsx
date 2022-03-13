@@ -1,21 +1,22 @@
 import React, {FC, useState} from "react";
 import {Box, Button, useColorModeValue} from "@chakra-ui/react";
 import AutoResizeTextarea from "@components/pages/tag/chat/public_chat/AutoResizeTextArea";
-import PublicMessageReceiveDto from "../../../../../models/dto/stomp/receive/public_chat/PublicMessageReceiveDto";
+import PublicMessageReceiveDto from "@models/dto/stomp/receive/public_chat/PublicMessageReceiveDto";
 import {handleSendPublicMessage, isEmptyList} from "@components/pages/tag/chat/public_chat/PublicChatWidgetHelper";
 import PublicMessageList from "@components/pages/tag/chat/public_chat/chatbox/PublicMessageList";
 import PublicMessageListEmpty from "@components/pages/tag/chat/public_chat/fallbackviews/PublicMessageListEmpty";
 import PublicMessageListLoading from "@components/pages/tag/chat/public_chat/fallbackviews/PublicMessageListLoading";
+import AuthState from "@models/auth/AuthState";
 
 
 interface ChatBoxProps {
+    authState: AuthState,
     tagName: string,
-    principalId: string,
     isLoading: boolean,
     messages: PublicMessageReceiveDto[]
 }
 
-const PublicChatWidget: FC<ChatBoxProps> = ({ tagName, principalId, isLoading, messages }) => {
+const PublicChatWidget: FC<ChatBoxProps> = ({ authState, tagName, isLoading, messages }) => {
 
     const [message, setMessage] = useState('');
 

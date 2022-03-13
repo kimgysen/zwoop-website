@@ -5,8 +5,8 @@ import FacebookProvider from "next-auth/providers/facebook"
 import GithubProvider from "next-auth/providers/github"
 import TwitterProvider from "next-auth/providers/twitter"
 import Auth0Provider from "next-auth/providers/auth0"
-import {AuthProviderEnum} from "@models/db/entity/AuthProvider";
 import {findUserByProviderAndOauthId, loginUser, registerUser} from "@api_clients/feature/authentication/UserApiClient";
+import {AuthProviderEnum} from "@models/enums/AuthProviderEnum";
 
 
 const secret = process.env.SECRET;
@@ -114,24 +114,24 @@ export default NextAuth({
       if (user && account && profile) {
           const { success } = await findUserByProviderAndOauthId(AuthProviderEnum[account.provider], profile.sub);
           if (!success) {
-            const { success: accessToken, userId, firstName, profilePic } = await registerUser({
+            const { success: accessToken, userId, firstName, avatar } = await registerUser({
               authProviderId: AuthProviderEnum[account.provider],
               authId: profile.sub,
               firstName: profile['given_name'],
               lastName: profile['family_name'],
               email: profile['email'],
-              profilePic: profile['picture']
+              avatar: profile['picture']
             });
-            token = { accessToken, userId, firstName, profilePic };
+            token = { accessToken, userId, firstName, avatar };
 
           } else {
             // Just log in
-            const { success: accessToken, userId, firstName, profilePic } = await loginUser({
+            const { success: accessToken, userId, firstName, avatar } = await loginUser({
               authProviderId: AuthProviderEnum[account.provider],
               authId: profile.sub
             });
-            console.log('session', { accessToken, userId, firstName, profilePic });
-            token = { accessToken, userId, firstName, profilePic };
+            console.log('session', { accessToken, userId, firstName, avatar });
+            token = { accessToken, userId, firstName, avatar };
           }
 
       }
@@ -141,12 +141,12 @@ export default NextAuth({
     async session({ session, token, user }) {
       if (token?.accessToken) {
         try {
-          const { accessToken, userId, firstName, profilePic } = token.accessToken;
+          const { accessToken, userId, firstName, avatar } = token.accessToken;
           await decode(accessToken, secret);
 
           return {
             userId,
-            user: { name: firstName, image: profilePic },
+            user: { name: firstName, image: avatar },
             accessToken: { exp: accessToken.exp }
           }
 

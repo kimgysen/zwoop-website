@@ -7,7 +7,7 @@ import TagsList from "../../tags/TagsList";
 import TimeAgo from "react-timeago";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import PostDto from "@models/dto/rest/receive/post/PostDto";
+import PostDto from "@models/dto/domain-client-dto/post/PostDto";
 
 export interface FeedItemProps {
     postDto: PostDto

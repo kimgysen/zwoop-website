@@ -1,7 +1,7 @@
 import React, {Dispatch, FC, SetStateAction, useState} from "react";
 import {updateAboutApi} from "@api_clients/feature/user/UserApiClient";
 import ApiResult from "@api_clients/type/ApiResult";
-import User from "@models/db/entity/User";
+import User from "@models/dto/domain-client-dto/user/UserFullDto";
 import {Box, Button, Flex} from "@chakra-ui/react";
 import ReactMdeEditor from "@components/widgets/react-mde/ReactMde";
 import {Text} from "@chakra-ui/layout/src/text";

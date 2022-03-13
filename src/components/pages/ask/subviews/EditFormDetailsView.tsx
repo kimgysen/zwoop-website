@@ -13,10 +13,10 @@ import FormCard from "@components/widgets/form/FormCard";
 import Card from "@components/layout/components/card/Card";
 import TagsBox from "@components/widgets/tags/TagsBox";
 import {findTagsStartingWith} from "@api_clients/feature/tag/TagApiClient";
-import Tag from "@models/db/entity/Tag";
+import Tag from "@models/dto/domain-client-dto/tag/TagDto";
+import TagDto from "@models/dto/domain-client-dto/tag/TagDto";
 import Title from "./Title";
 import ReactMdeEditor from "@components/widgets/react-mde/ReactMde";
-import TagDto from "@models/dto/stomp/receive/common/tag/TagDto";
 
 
 type EditPost = {

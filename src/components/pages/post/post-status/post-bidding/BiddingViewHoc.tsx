@@ -17,8 +17,8 @@ import {
     POST_STATUS__BIDDING_REMOVED
 } from "../../../../../event_dispatchers/config/StompEvents";
 import {infoToast} from "@components/widgets/toast/AppToast";
-import BiddingDto from "@models/dto/rest/receive/bidding/BiddingDto";
-import PostDto from "@models/dto/rest/receive/post/PostDto";
+import BiddingDto from "@models/dto/domain-client-dto/bidding/BiddingDto";
+import PostDto from "@models/dto/domain-client-dto/post/PostDto";
 
 
 interface BiddingViewProps {

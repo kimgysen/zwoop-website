@@ -4,7 +4,7 @@ import {getRawJwt} from "../../../service/jwt/JwtService";
 import urlJoin from "url-join";
 import axios, {AxiosError} from "axios";
 import {handleAxiosError, handleAxiosResponse} from "@api_clients/util/ResponseUtil";
-import AnswerDto from "@models/dto/rest/receive/answer/AnswerDto";
+import AnswerDto from "@models/dto/domain-client-dto/answer/AnswerDto";
 
 const backendBaseUri = process.env.NEXT_PUBLIC_API_BACKEND_BASE_URI;
 const answerApiPrivatePath = process.env.NEXT_PUBLIC_API_V1_PRIVATE_ANSWER_PREFIX;
@@ -57,6 +57,26 @@ export const deleteAnswerApi:
 
         return axios
             .delete(url, {
+                headers: {
+                    Authorization: `Bearer ${ jwt }`
+                }
+            })
+            .then(res => handleAxiosResponse({
+                res,
+                successStatus: 204,
+                successProp: true
+            }))
+            .catch((reason: AxiosError) => handleAxiosError(reason));
+    }
+
+export const acceptAnswerApi:
+    (answerId: string) => Promise<ApiResult<boolean>> =
+    async (answerId) => {
+        const jwt = await getRawJwt();
+        const url = urlJoin(answerApiPrivateEndpoint, answerId, 'accept');
+
+        return axios
+            .put(url, {}, {
                 headers: {
                     Authorization: `Bearer ${ jwt }`
                 }

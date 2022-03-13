@@ -3,7 +3,7 @@ import ApiRes from "../../../api_clients/type/ApiResult";
 import AuthState from "@models/auth/AuthState";
 import {getFollowedTags} from "@api_clients/feature/user/UserApiClient";
 import WatchList from "@components/widgets/watchlist/WatchList";
-import Tag from "@models/db/entity/Tag";
+import Tag from "@models/dto/domain-client-dto/tag/TagDto";
 
 
 interface WatchListHocProps {

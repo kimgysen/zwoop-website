@@ -1,16 +1,21 @@
-import {FC} from "react";
-import {Flex} from "@chakra-ui/layout/src/flex";
+import React, {FC} from "react";
+import {Center, Image, Text, VStack} from "@chakra-ui/react";
 
 const FeedListEmpty: FC = () => {
     return (
-        <Flex
-            w='100%'
-            mt='20px'
-            py='10px'
-            direction='column'
-        >
-            No open question currently
-        </Flex>
+        <Center>
+            <VStack py='50px'>
+                <Image
+                    height='100px'
+                    width='100px'
+                    src={ '/static/images/feed_noresults.png' }
+                    alt='Empty feed'
+                />
+                <Text fontWeight='bold'>
+                    No open questions
+                </Text>
+            </VStack>
+        </Center>
     )
 }
 

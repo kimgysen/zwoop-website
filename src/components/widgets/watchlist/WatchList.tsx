@@ -1,7 +1,7 @@
 import {Box, Flex, Heading} from "@chakra-ui/react";
 import {FC} from "react";
 import ApiResult from "../../../api_clients/type/ApiResult";
-import Tag from "@models/db/entity/Tag";
+import Tag from "@models/dto/domain-client-dto/tag/TagDto";
 import WatchListLoading from "@components/widgets/watchlist/fallbackviews/WatchListLoading";
 import WatchListError from "@components/widgets/watchlist/fallbackviews/WatchListError";
 import WatchListEmpty from "@components/widgets/watchlist/fallbackviews/WatchListEmpty";

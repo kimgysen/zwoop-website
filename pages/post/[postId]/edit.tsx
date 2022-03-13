@@ -15,7 +15,7 @@ import {getAuthState} from "@components/auth/AuthStateHelper";
 import ThreeColumnLayout from "@components/layout/column-layouts/ThreeColumnLayout";
 import PostStepperHoc from "@components/pages/post/post-stepper/PostStepperHoc";
 import {isPostEditAllowed} from "@components/pages/post/PostPageHelper";
-import TagDto from "@models/dto/stomp/receive/common/tag/TagDto";
+import TagDto from "@models/dto/domain-client-dto/tag/TagDto";
 
 
 export async function getServerSideProps(ctx: { query: { postId: string } }) {

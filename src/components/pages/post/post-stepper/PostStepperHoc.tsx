@@ -6,14 +6,15 @@ import {setActiveStep} from "@components/pages/post/post-stepper/PostStepperHelp
 import {getPostStatusFromPost} from "@components/pages/post/PostPageHelper";
 import {getStompDispatcher} from "../../../../event_dispatchers/StompDispatcher";
 import {
+    POST_STEPPER__ANSWER_ACCEPTED,
     POST_STEPPER__ANSWER_ADDED,
     POST_STEPPER__ANSWER_REMOVED,
     POST_STEPPER__DEAL_CANCELLED,
     POST_STEPPER__DEAL_INIT
 } from "../../../../event_dispatchers/config/StompEvents";
-import {PostStatusEnum, stringFromPostStatusEnum} from "@models/db/entity/PostStatus";
+import {PostStatusEnum} from "@models/enums/PostStatusEnum";
 import {Box} from "@chakra-ui/layout/src/box";
-import PostDto from "@models/dto/rest/receive/post/PostDto";
+import PostDto from "@models/dto/domain-client-dto/post/PostDto";
 
 
 interface PostStepperHocProps {
@@ -36,24 +37,24 @@ const PostStepperHoc: FC<PostStepperHocProps> = ({ postDto }) => {
     useEffect(() => {
         if (postDto) {
             stompDispatcher.on(POST_STEPPER__DEAL_INIT, () => {
-                const updatedSteps = setActiveStep(
-                    stringFromPostStatusEnum(PostStatusEnum.DEAL_INIT), postSteps);
+                const updatedSteps = setActiveStep(PostStatusEnum.DEAL_INIT, postSteps);
                 setPostSteps(updatedSteps);
             });
 
             stompDispatcher.on(POST_STEPPER__DEAL_CANCELLED, () => {
-                const updatedSteps = setActiveStep(
-                    stringFromPostStatusEnum(PostStatusEnum.POST_INIT), postSteps);
+                const updatedSteps = setActiveStep(PostStatusEnum.POST_INIT, postSteps);
                 setPostSteps(updatedSteps);
             });
             stompDispatcher.on(POST_STEPPER__ANSWER_ADDED, () => {
-                const updatedSteps = setActiveStep(
-                    stringFromPostStatusEnum(PostStatusEnum.ANSWERED), postSteps);
+                const updatedSteps = setActiveStep(PostStatusEnum.ANSWERED, postSteps);
                 setPostSteps(updatedSteps);
             });
             stompDispatcher.on(POST_STEPPER__ANSWER_REMOVED, () => {
-                const updatedSteps = setActiveStep(
-                    stringFromPostStatusEnum(PostStatusEnum.DEAL_INIT), postSteps);
+                const updatedSteps = setActiveStep(PostStatusEnum.DEAL_INIT, postSteps);
+                setPostSteps(updatedSteps);
+            });
+            stompDispatcher.on(POST_STEPPER__ANSWER_ACCEPTED, () => {
+                const updatedSteps = setActiveStep(PostStatusEnum.ANSWER_ACCEPTED, postSteps);
                 setPostSteps(updatedSteps);
             });
         }
@@ -64,6 +65,7 @@ const PostStepperHoc: FC<PostStepperHocProps> = ({ postDto }) => {
                 stompDispatcher.remove(POST_STEPPER__DEAL_CANCELLED);
                 stompDispatcher.remove(POST_STEPPER__ANSWER_ADDED);
                 stompDispatcher.remove(POST_STEPPER__ANSWER_REMOVED);
+                stompDispatcher.remove(POST_STEPPER__ANSWER_ACCEPTED);
             }
         }
     }, [postDto?.postId, postSteps]);

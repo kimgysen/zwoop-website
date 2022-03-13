@@ -1,5 +1,5 @@
 import ProgressStep from "@components/widgets/progress-stepper/ProgressStep";
-import {PostStatusEnum} from "@models/db/entity/PostStatus";
+import {PostStatusEnum} from "@models/enums/PostStatusEnum";
 
 const postSteps: ProgressStep[] = [
     {
@@ -10,7 +10,7 @@ const postSteps: ProgressStep[] = [
     },
     {
         id: PostStatusEnum.POST_INIT,
-        title: 'Asked',
+        title: 'Bidding',
         caption: 'Open for bidding',
         isActive: false
     },
@@ -29,7 +29,7 @@ const postSteps: ProgressStep[] = [
     {
         id: PostStatusEnum.ANSWER_ACCEPTED,
         title: 'Answer accepted',
-        caption: 'Accepted by the OP',
+        caption: 'OP accepted',
         isActive: false
     },
     {

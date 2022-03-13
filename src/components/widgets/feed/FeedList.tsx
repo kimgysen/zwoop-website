@@ -6,7 +6,7 @@ import {isEmptyFeed} from "@components/widgets/feed/FeedListHelper";
 import FeedListEmpty from "@components/widgets/feed/fallbackviews/FeedListEmpty";
 import FeedListError from "@components/widgets/feed/fallbackviews/FeedListError";
 import FeedListLoading from "@components/widgets/feed/fallbackviews/FeedListLoading";
-import PostDto from "@models/dto/rest/receive/post/PostDto";
+import PostDto from "@models/dto/domain-client-dto/post/PostDto";
 
 interface FeedListProps {
     feedListRes: ApiResult<PostDto[]>

@@ -1,5 +1,4 @@
 import {Box, Divider, Flex, Heading, Icon, IconButton, Image, VStack} from '@chakra-ui/react';
-import User from "@models/db/entity/User";
 import Card from "@components/layout/components/card/Card";
 import React, {useState} from "react";
 import ReactTimeago from "react-timeago";
@@ -9,16 +8,17 @@ import remarkGfm from "remark-gfm";
 import TagsList from "@components/widgets/tags/TagsList";
 import EditNick from "@components/pages/user/edit/EditNick";
 import EditAbout from "@components/pages/user/edit/EditAbout";
+import UserFullDto from "@models/dto/domain-client-dto/user/UserFullDto";
 
 
 interface UserCardProps {
-    profileUser: User,
+    profileUser: UserFullDto,
     principalId: string
 }
 
 const UserCard: React.FC<UserCardProps> = ({ profileUser, principalId }) => {
 
-    const [editUser, setEditUser] = useState<User>(profileUser);
+    const [editUser, setEditUser] = useState<UserFullDto>(profileUser);
 
     const [isNickEdit, setNickEdit] = useState<boolean>(false);
     const [isAboutEdit, setAboutEdit] = useState<boolean>(false);
@@ -33,7 +33,7 @@ const UserCard: React.FC<UserCardProps> = ({ profileUser, principalId }) => {
                                 w='50px'
                                 h='50px'
                                 mr='10px'
-                                src={ profileUser.profilePic }
+                                src={ profileUser.avatar }
                                 onError={({ currentTarget }) => {
                                     currentTarget.onerror = null; // prevents looping
                                     currentTarget.src="/static/images/profile_fallback.jpg";

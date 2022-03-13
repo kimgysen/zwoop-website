@@ -4,7 +4,7 @@ import EditFormDetailsView from "@components/pages/ask/subviews/EditFormDetailsV
 import SaveButton from "@components/widgets/form/buttons/SaveButton";
 import {validateForm} from "@components/pages/ask/subviews/validate";
 import {createPostApi} from "@api_clients/feature/post/PostApiClient";
-import Tag from "@models/db/entity/Tag";
+import Tag from "@models/dto/domain-client-dto/tag/TagDto";
 import {useRouter} from "next/router";
 
 const AskHoc: FC = () => {

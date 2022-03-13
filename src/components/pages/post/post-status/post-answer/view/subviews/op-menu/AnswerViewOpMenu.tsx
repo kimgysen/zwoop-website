@@ -4,7 +4,7 @@ import React from "react";
 import AcceptAnswerModalHoc
     from "@components/pages/post/post-status/post-answer/view/subviews/op-menu/AcceptAnswerModalHoc";
 import {FaCheck} from "react-icons/fa";
-import AnswerDto from "@models/dto/rest/receive/answer/AnswerDto";
+import AnswerDto from "@models/dto/domain-client-dto/answer/AnswerDto";
 
 interface AnswerViewOpMenuProps {
     answerDto: AnswerDto
@@ -18,11 +18,11 @@ export const AnswerViewOpMenu:FC<AnswerViewOpMenuProps> = ({ answerDto }) => {
         <>
             <Flex color='gray.600'>
                 <Button
-                    colorScheme='green'
+                    colorScheme='gray'
                     leftIcon={<FaCheck />}
                     onClick={ onAcceptModalOpen }
                 >
-                    Accept answer
+                    Accept
                 </Button>
             </Flex>
             <AcceptAnswerModalHoc

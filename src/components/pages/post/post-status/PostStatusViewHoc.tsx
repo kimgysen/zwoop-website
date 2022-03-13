@@ -7,16 +7,17 @@ import {
     POST_STATUS__ANSWER_CHANGED,
     POST_STATUS__ANSWER_REMOVED,
     POST_STATUS__DEAL_CANCELLED,
-    POST_STATUS__DEAL_INIT
+    POST_STATUS__DEAL_INIT,
+    POST_STEPPER__ANSWER_ACCEPTED
 } from "../../../../event_dispatchers/config/StompEvents";
 import DealInitViewHoc from "@components/pages/post/post-status/post-deal/deal-init/DealInitViewHoc";
 import {getPostStatusFromPost, isAnswerAllowed} from "@components/pages/post/PostPageHelper";
-import {PostStatusEnum} from "@models/db/entity/PostStatus";
+import {PostStatusEnum} from "@models/enums/PostStatusEnum";
 import AnswerCreateHoc from "@components/pages/post/post-status/post-answer/create/AnswerCreateHoc";
 import AnswerView from "@components/pages/post/post-status/post-answer/view/AnswerView";
-import AnswerDto from "@models/dto/rest/receive/answer/AnswerDto";
-import PostDto from "@models/dto/rest/receive/post/PostDto";
-import DealDto from "@models/dto/rest/receive/deal/DealDto";
+import AnswerDto from "@models/dto/domain-client-dto/answer/AnswerDto";
+import PostDto from "@models/dto/domain-client-dto/post/PostDto";
+import DealDto from "@models/dto/domain-client-dto/deal/DealDto";
 import {isDealParticipant} from "../../../../util/DealUtil";
 import {infoToast} from "@components/widgets/toast/AppToast";
 
@@ -32,12 +33,14 @@ const PostStatusViewHoc: FC<BiddingViewHocProps> = ({ authState, postDto }) => {
     const [postStatus, setPostStatus] = useState<PostStatusEnum>(getPostStatusFromPost(postDto));
     const [dealDto, setDealDto] = useState<DealDto|null|undefined>(postDto?.postState?.deal);
     const [answerDto, setAnswerDto] = useState<AnswerDto|null|undefined>(postDto?.postState?.answer);
+    const [isAnswerAccepted, setAnswerAccepted] = useState<boolean>(postDto?.postState?.postStatus?.status === PostStatusEnum.ANSWER_ACCEPTED.toString());
 
 
     useEffect(() => {
         setPostStatus(getPostStatusFromPost(postDto));
     }, [postDto?.postId, postDto?.postState?.postStatus])
 
+    console.log(postStatus);
     useEffect(() => {
         if (authState?.principalId && postDto?.postId) {
             stompDispatcher.on(POST_STATUS__DEAL_INIT, (dealDto: DealDto) => {
@@ -80,6 +83,11 @@ const PostStatusViewHoc: FC<BiddingViewHocProps> = ({ authState, postDto }) => {
                     infoToast(`${ dealDto?.consultant?.nickName } removed an answer.`);
                 }
             });
+
+            stompDispatcher.on(POST_STEPPER__ANSWER_ACCEPTED, () => {
+                setAnswerAccepted(true);
+            });
+
         }
 
         return function cleanUp() {
@@ -121,11 +129,13 @@ const PostStatusViewHoc: FC<BiddingViewHocProps> = ({ authState, postDto }) => {
             }
             {
                 postStatus === PostStatusEnum.ANSWERED
+                    || postStatus === PostStatusEnum.ANSWER_ACCEPTED
                 && answerDto
                 && <AnswerView
                         authState={ authState }
                         postDto={ postDto }
                         answerDto={ answerDto }
+                        isAnswerAccepted={ isAnswerAccepted }
                     />
             }
         </>

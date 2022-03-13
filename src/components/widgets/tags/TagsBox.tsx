@@ -1,6 +1,6 @@
 import React, {FC, useState} from "react";
 import Select, {OnChangeValue} from 'react-select';
-import Tag from "@models/db/entity/Tag";
+import Tag from "@models/dto/domain-client-dto/tag/TagDto";
 
 
 // Types for react-select.

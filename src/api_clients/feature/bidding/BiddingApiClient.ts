@@ -2,11 +2,10 @@ import ApiResult from "@api_clients/type/ApiResult";
 import axios, {AxiosError} from "axios";
 import urlJoin from "url-join";
 import {handleAxiosError, handleAxiosResponse} from "@api_clients/util/ResponseUtil";
-import Bidding from "@models/db/entity/Bidding";
 import CreateBiddingDto from "@models/dto/rest/send/bidding/CreateBiddingDto";
 import UpdateBiddingDto from "@models/dto/rest/send/bidding/UpdateBiddingDto";
 import {getRawJwt} from "../../../service/jwt/JwtService";
-import BiddingDto from "@models/dto/rest/receive/bidding/BiddingDto";
+import BiddingDto from "@models/dto/domain-client-dto/bidding/BiddingDto";
 
 
 const backendBaseUri = process.env.NEXT_PUBLIC_API_BACKEND_BASE_URI;
@@ -15,7 +14,7 @@ const biddingApiPrivatePath = process.env.NEXT_PUBLIC_API_V1_PRIVATE_BIDDING_PRE
 const biddingApiPublicEndpoint = urlJoin(backendBaseUri!, biddingApiPublicPath!);
 const biddingApiPrivateEndpoint = urlJoin(backendBaseUri!, biddingApiPrivatePath!);
 
-export const getBiddingsForPost: (url: string) => Promise<Bidding[]> = (url) => {
+export const getBiddingsForPost: (url: string) => Promise<BiddingDto[]> = (url) => {
     return axios
         .get(url)
         .then(res => res.data);

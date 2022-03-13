@@ -4,7 +4,7 @@ import ApiResult from "@api_clients/type/ApiResult";
 import {handleAxiosError, handleAxiosResponse} from "@api_clients/util/ResponseUtil";
 import CreateDealDto from "@models/dto/rest/send/deal/CreateDealDto";
 import {getRawJwt} from "../../../service/jwt/JwtService";
-import DealDto from "@models/dto/rest/receive/deal/DealDto";
+import DealDto from "@models/dto/domain-client-dto/deal/DealDto";
 
 
 const backendBaseUri = process.env.NEXT_PUBLIC_API_BACKEND_BASE_URI;

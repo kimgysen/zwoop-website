@@ -4,11 +4,11 @@ import PrivateChatWidget from "@components/pages/post/post_chat/private_chat/Pri
 import PostInbox from "@components/pages/post/post_chat/inbox/PostInbox";
 import Card from "@components/layout/components/card/Card";
 import PostChatHeader from "@components/pages/post/post_chat/PostChatHeader";
-import User from "@models/db/entity/User";
+import User from "@models/dto/domain-client-dto/user/UserFullDto";
 import ApiResult from "@api_clients/type/ApiResult";
 import {PostPageViewState} from "@components/pages/post/PostPageHelper";
 import {isOp} from "../../../../util/PostUtil";
-import PostDto from "@models/dto/rest/receive/post/PostDto";
+import PostDto from "@models/dto/domain-client-dto/post/PostDto";
 
 
 interface PostSubViewManagerProps {
@@ -80,7 +80,7 @@ const PostChatWidget: FC<PostSubViewManagerProps> = ({ authState, postDto, viewS
                                 partner={{
                                     partnerId: partnerRes.success.userId,
                                     partnerNickName: partnerRes.success.nickName,
-                                    partnerAvatar: partnerRes.success.profilePic
+                                    partnerAvatar: partnerRes.success.avatar
                                 }}
                                 isLoading={ false }
                             />

@@ -1,6 +1,6 @@
 import AuthState from "@models/auth/AuthState";
-import UserDto from "@models/dto/stomp/receive/common/user/UserDto";
-import DealDto from "@models/dto/rest/receive/deal/DealDto";
+import UserDto from "@models/dto/domain-client-dto/user/UserDto";
+import DealDto from "@models/dto/domain-client-dto/deal/DealDto";
 
 
 export const getDealCounterpart =

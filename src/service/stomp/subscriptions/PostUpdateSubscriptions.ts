@@ -17,13 +17,13 @@ import {
     POST_VIEW__POST_CHANGED,
     POST_VIEW__POST_REMOVED,
 } from "../../../event_dispatchers/config/StompEvents";
-import PostUpdateDto from "@models/dto/stomp/receive/post-updates/PostUpdateDto";
-import {PostUpdateFeatureType} from "@models/dto/stomp/receive/post-updates/PostUpdateFeatureType";
+import PostUpdateDto from "@models/dto/domain-client-dto/notification/topic/post_update/PostUpdateDto";
+import {PostUpdateType} from "@models/dto/domain-client-dto/notification/topic/post_update/PostUpdateType";
 import {dispatchCustomMessage} from "./SubscriptionUtil";
-import BiddingDto from "@models/dto/rest/receive/bidding/BiddingDto";
-import DealDto from "@models/dto/rest/receive/deal/DealDto";
-import AnswerDto from "@models/dto/rest/receive/answer/AnswerDto";
-import PostDto from "@models/dto/rest/receive/post/PostDto";
+import BiddingDto from "@models/dto/domain-client-dto/bidding/BiddingDto";
+import DealDto from "@models/dto/domain-client-dto/deal/DealDto";
+import AnswerDto from "@models/dto/domain-client-dto/answer/AnswerDto";
+import PostDto from "@models/dto/domain-client-dto/post/PostDto";
 import {isDealOp} from "../../../util/DealUtil";
 import AuthState from "@models/auth/AuthState";
 import {isAnswerOwner, isBiddingPostConsultant} from "../../../util/PostUtil";
@@ -35,36 +35,36 @@ export const subscribeToPostUpdates = (authState: AuthState, postId: string) => 
             const postUpdateFeatureDto = JSON.parse(msg.body) as PostUpdateDto<any>;
 
             switch (postUpdateFeatureDto.postUpdateType) {
-                case PostUpdateFeatureType.POST_CHANGED:
+                case PostUpdateType.POST_CHANGED:
                     dispatchCustomMessage(POST_VIEW__POST_CHANGED, postUpdateFeatureDto.dto as PostDto);
                     break;
 
-                case PostUpdateFeatureType.POST_REMOVED:
+                case PostUpdateType.POST_REMOVED:
                     dispatchCustomMessage(POST_VIEW__POST_REMOVED, postUpdateFeatureDto.dto as PostDto);
                     break;
 
-                case PostUpdateFeatureType.BIDDING_ADDED:
+                case PostUpdateType.BIDDING_ADDED:
                     const biddingAddedDto = postUpdateFeatureDto.dto as BiddingDto;
                     if (!isBiddingPostConsultant(authState, biddingAddedDto)) {
                         dispatchCustomMessage(POST_STATUS__BIDDING_ADDED, biddingAddedDto);
                     }
                     break;
 
-                case PostUpdateFeatureType.BIDDING_CHANGED:
+                case PostUpdateType.BIDDING_CHANGED:
                     const biddingChangedDto = postUpdateFeatureDto.dto as BiddingDto;
                     if (!isBiddingPostConsultant(authState, biddingChangedDto)) {
                         dispatchCustomMessage(POST_STATUS__BIDDING_CHANGED, postUpdateFeatureDto.dto as BiddingDto);
                     }
                     break;
 
-                case PostUpdateFeatureType.BIDDING_REMOVED:
+                case PostUpdateType.BIDDING_REMOVED:
                     const biddingRemovedDto = postUpdateFeatureDto.dto as BiddingDto;
                     if (!isBiddingPostConsultant(authState, biddingRemovedDto)) {
                         dispatchCustomMessage(POST_STATUS__BIDDING_REMOVED, postUpdateFeatureDto.dto as BiddingDto);
                     }
                     break;
 
-                case PostUpdateFeatureType.DEAL_INIT:
+                case PostUpdateType.DEAL_INIT:
                     const dealInitDto = postUpdateFeatureDto.dto as DealDto;
                     if (!isDealOp(authState, dealInitDto)) {
                         dispatchCustomMessage(POST_VIEW__DEAL_INIT, dealInitDto);
@@ -73,7 +73,7 @@ export const subscribeToPostUpdates = (authState: AuthState, postId: string) => 
                     }
                     break;
 
-                case PostUpdateFeatureType.DEAL_CANCELLED:
+                case PostUpdateType.DEAL_CANCELLED:
                     const dealCancelledDto = postUpdateFeatureDto.dto as DealDto;
                     if (!isDealOp(authState, dealCancelledDto)) {
                         dispatchCustomMessage(POST_VIEW__DEAL_CANCELLED, dealCancelledDto);
@@ -82,7 +82,7 @@ export const subscribeToPostUpdates = (authState: AuthState, postId: string) => 
                     }
                     break;
 
-                case PostUpdateFeatureType.ANSWER_ADDED:
+                case PostUpdateType.ANSWER_ADDED:
                     const answerAddedDto = postUpdateFeatureDto.dto as AnswerDto;
                     if (!isAnswerOwner(authState, answerAddedDto)) {
                         dispatchCustomMessage(POST_STATUS__ANSWER_ADDED, answerAddedDto);
@@ -90,14 +90,14 @@ export const subscribeToPostUpdates = (authState: AuthState, postId: string) => 
                     }
                     break;
 
-                case PostUpdateFeatureType.ANSWER_CHANGED:
+                case PostUpdateType.ANSWER_CHANGED:
                     const answerChangedDto = postUpdateFeatureDto.dto as AnswerDto
                     if (!isAnswerOwner(authState, answerChangedDto)) {
                         dispatchCustomMessage(POST_STATUS__ANSWER_CHANGED, answerChangedDto);
                     }
                     break;
 
-                case PostUpdateFeatureType.ANSWER_REMOVED:
+                case PostUpdateType.ANSWER_REMOVED:
                     const answerRemovedDto = postUpdateFeatureDto.dto as AnswerDto;
                     if (!isAnswerOwner(authState, answerRemovedDto)) {
                         dispatchCustomMessage(POST_STATUS__ANSWER_REMOVED, postUpdateFeatureDto.dto as AnswerDto);

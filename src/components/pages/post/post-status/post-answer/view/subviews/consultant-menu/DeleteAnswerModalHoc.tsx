@@ -13,7 +13,7 @@ import {
 } from "@chakra-ui/react";
 import ApiResult from "@api_clients/type/ApiResult";
 import {deleteAnswerApi} from "@api_clients/feature/answer/AnswerApiClient";
-import AnswerDto from "@models/dto/rest/receive/answer/AnswerDto";
+import AnswerDto from "@models/dto/domain-client-dto/answer/AnswerDto";
 import {dispatchCustomMessage} from "../../../../../../../../service/stomp/subscriptions/SubscriptionUtil";
 import {
     POST_STATUS__ANSWER_REMOVED,

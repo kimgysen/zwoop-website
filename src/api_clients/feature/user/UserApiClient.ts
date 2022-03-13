@@ -2,8 +2,8 @@ import axios, {AxiosError} from "axios";
 import urlJoin from "url-join";
 import ApiResult from "../../type/ApiResult";
 import {handleAxiosError, handleAxiosResponse} from "../../util/ResponseUtil";
-import User from "@models/db/entity/User";
-import Tag from "@models/db/entity/Tag";
+import User from "@models/dto/domain-client-dto/user/UserFullDto";
+import Tag from "@models/dto/domain-client-dto/tag/TagDto";
 import {getRawJwt} from "../../../service/jwt/JwtService";
 
 const userApiBaseUri = process.env.NEXT_PUBLIC_API_USER_BASE_URI;

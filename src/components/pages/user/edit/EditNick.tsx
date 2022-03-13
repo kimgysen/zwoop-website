@@ -1,7 +1,7 @@
 import React, {Dispatch, FC, SetStateAction, useState} from "react";
 import {updateNickNameApi} from "@api_clients/feature/user/UserApiClient";
 import ApiResult from "@api_clients/type/ApiResult";
-import User from "@models/db/entity/User";
+import User from "@models/dto/domain-client-dto/user/UserFullDto";
 import {Button, Flex, Input, Text, VStack} from "@chakra-ui/react";
 
 

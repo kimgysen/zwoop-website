@@ -1,4 +1,4 @@
-import PrivateMessageSendDto from "../../../models/dto/stomp/send/PrivateMessageSendDto";
+import PrivateMessageSendDto from "@models/dto/stomp/send/PrivateMessageSendDto";
 import {getStompClient} from "../StompService";
 
 

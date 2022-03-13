@@ -2,8 +2,7 @@ import {FC} from "react";
 import {Box} from "@chakra-ui/react";
 import PrivateMessageItem from "@components/pages/post/post_chat/private_chat/chatbox/PrivateMessageItem";
 import styles from '../PrivateChatWidget.module.css';
-import PrivateMessageReceiveDto
-    from "../../../../../../models/dto/stomp/receive/private_chat/feature/PrivateMessageReceiveDto";
+import PrivateMessageReceiveDto from "@models/dto/stomp/receive/private_chat/feature/PrivateMessageReceiveDto";
 
 
 interface MessageListProps {
@@ -19,9 +18,7 @@ const PrivateMessageList: FC<MessageListProps> = ({ principalId, messages }) => 
                     <PrivateMessageItem
                         key={ `message-${index}` }
                         principalId={ principalId }
-                        senderId={ messageItem.fromUserId }
-                        senderAvatar={ messageItem.fromAvatar }
-                        message={ messageItem.message }
+                        messageDto={ messageItem }
                     />
                 ))
             }

@@ -1,6 +1,6 @@
-import UserDto from "@models/dto/stomp/receive/common/user/UserDto";
-import TagDto from "@models/dto/stomp/receive/common/tag/TagDto";
-import PostStateDto from "@models/dto/rest/receive/post/PostStateDto";
+import UserDto from "@models/dto/domain-client-dto/user/UserDto";
+import TagDto from "@models/dto/domain-client-dto/tag/TagDto";
+import PostStateDto from "@models/dto/domain-client-dto/post/PostStateDto";
 
 export default interface PostDto {
     postId: string;

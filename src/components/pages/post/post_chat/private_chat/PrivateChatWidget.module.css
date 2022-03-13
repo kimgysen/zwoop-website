@@ -111,13 +111,23 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
+.chatApp__messageDate {
+    clear: both;
+    text-align: right;
+    font-size: 11px;
+    color: #718096;
+}
+.chatApp__convMessageItem--left .chatApp__messageDate {
+    float: left;
+    padding-left: 43px;
+}
 .chatApp__convMessageItem--left .chatApp__convMessageAvatar {
     float: left;
 }
 .chatApp__convMessageItem--left .chatApp__convMessageValue {
     float: left;
     text-align: left;
-    margin: 0 0 0 1rem;
+    margin: 0 0 0 3px;
     background-color: #fafafa;
 }
 .chatApp__convMessageItem--left .chatApp__convMessageValue::before {
@@ -131,13 +141,18 @@
     border-width: 6px 10px 6px 0;
     border-color: transparent #fafafa transparent transparent;
 }
+
+.chatApp__convMessageItem--right .chatApp__messageDate {
+    float: right;
+    padding-right: 43px;
+}
 .chatApp__convMessageItem--right .chatApp__convMessageAvatar {
     float: right;
 }
 .chatApp__convMessageItem--right .chatApp__convMessageValue {
     float: right;
     text-align: right;
-    margin: 0 1rem 0 0;
+    margin: 0 3px 0 0;
     color: #fff;
     background-color: #4870df;
 }

@@ -8,13 +8,3 @@ export enum PostStatusEnum {
     PAID = 'PAID',
     REVIEWED = 'REVIEWED'
 }
-
-export default interface PostStatus {
-    postStatusId: string,
-    status: string,
-    description: string
-}
-
-export const stringFromPostStatusEnum = (postStatusEnum: PostStatusEnum): string =>
-    PostStatusEnum[postStatusEnum];
-

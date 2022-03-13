@@ -14,11 +14,10 @@ import TagHeaderHoc from "@components/pages/tag/header/TagHeaderHoc";
 import FeedListHoc from "@components/widgets/feed/FeedListHoc";
 import TagStompConnect from "@components/stomp/tag/TagStompConnect";
 import {getAuthState} from "@components/auth/AuthStateHelper";
-import {PostStatusEnum} from "@models/db/entity/PostStatus";
+import {PostStatusEnum} from "@models/enums/PostStatusEnum";
 
 
 const FeedByTag: NextPage = () => {
-
     const { data: session, status } = useSession();
 
     const router = useRouter();
@@ -54,6 +53,7 @@ const FeedByTag: NextPage = () => {
                         && (
                             <>
                                 <TagHeaderHoc
+                                    authState={ authState }
                                     tagName={ query.tagName as string }
                                     setWatchListDirty={ setWatchListDirty }
                                 />
@@ -68,23 +68,27 @@ const FeedByTag: NextPage = () => {
                         )
                     }
                     rightComponent={
-                        <TagStompConnect
-                            tagName={ query.tagName as string }
-                            authState={ authState }
-                        >
-                            <Card>
-                                {
-                                    authState.isLoggedIn
-                                    && query.tagName
-                                    && (
-                                        <TagChatWidget
-                                            tagName={ query.tagName as string }
-                                            principalId={ authState.principalId as string }
-                                        />
-                                    )
-                                }
-                            </Card>
-                        </TagStompConnect>
+                        <>
+                            {
+                                authState?.isLoggedIn
+                                && <TagStompConnect
+                                        tagName={ query.tagName as string }
+                                        authState={ authState }
+                                    >
+                                        <Card>
+                                            {
+                                                query.tagName
+                                                && (
+                                                    <TagChatWidget
+                                                        tagName={ query.tagName as string }
+                                                        authState={ authState }
+                                                    />
+                                                )
+                                            }
+                                        </Card>
+                                    </TagStompConnect>
+                            }
+                        </>
                     }
                 />
             </AppLayout>

@@ -1,4 +1,4 @@
-import UserDto from "@models/dto/stomp/receive/common/user/UserDto";
+import UserDto from "@models/dto/domain-client-dto/user/UserDto";
 
 
 export default interface DealDto {

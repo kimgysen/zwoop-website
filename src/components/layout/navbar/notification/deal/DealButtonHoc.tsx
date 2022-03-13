@@ -11,7 +11,7 @@ import {addDeal, removeDealById} from "@components/layout/navbar/notification/de
 import {infoToast} from "@components/widgets/toast/AppToast";
 import {getDealsForUserApi} from "@api_clients/feature/deal/DealApiClient";
 import {getDealCounterpart} from "../../../../../util/DealUtil";
-import DealDto from "@models/dto/rest/receive/deal/DealDto";
+import DealDto from "@models/dto/domain-client-dto/deal/DealDto";
 
 
 interface DealButtonHocProps {

@@ -1,6 +1,6 @@
 import {Box, Flex, Link} from "@chakra-ui/react";
 import {FC} from "react";
-import Tag from "@models/db/entity/Tag";
+import Tag from "@models/dto/domain-client-dto/tag/TagDto";
 import NextLink from 'next/link';
 
 

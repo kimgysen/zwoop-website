@@ -4,7 +4,7 @@ import {useRouter} from "next/router";
 import {disconnectStomp} from "../../../service/stomp/StompService";
 import {connectToPostInbox, connectToPostPrivateChat} from "@components/stomp/post/PostStompConnectHelper";
 import {PostPageViewState} from "@components/pages/post/PostPageHelper";
-import PostDto from "@models/dto/rest/receive/post/PostDto";
+import PostDto from "@models/dto/domain-client-dto/post/PostDto";
 
 
 interface PostStompConnectProps {

@@ -12,8 +12,8 @@ import {
     VStack
 } from "@chakra-ui/react";
 import ApiResult from "@api_clients/type/ApiResult";
-import BiddingDto from "@models/dto/rest/receive/bidding/BiddingDto";
-import DealDto from "@models/dto/rest/receive/deal/DealDto";
+import BiddingDto from "@models/dto/domain-client-dto/bidding/BiddingDto";
+import DealDto from "@models/dto/domain-client-dto/deal/DealDto";
 
 
 interface AcceptBiddingModalProps {

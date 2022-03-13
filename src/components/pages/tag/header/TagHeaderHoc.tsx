@@ -3,14 +3,16 @@ import TagHeader from "@components/pages/tag/header/TagHeader";
 import ApiResult from "@api_clients/type/ApiResult";
 import {isWatching, unwatchTag, watchTag} from "@api_clients/feature/tag/TagApiClient";
 import {IsWatchingTag} from "@models/dto/user/IsWatchingTag";
+import AuthState from "@models/auth/AuthState";
 
 
-interface TagHeaderHoc {
+interface TagHeaderHocProps {
+    authState: AuthState,
     tagName: string,
     setWatchListDirty: Dispatch<SetStateAction<boolean>>
 }
 
-const TagHeaderHoc: FC<TagHeaderHoc> = ({ tagName, setWatchListDirty }) => {
+const TagHeaderHoc: FC<TagHeaderHocProps> = ({ authState, tagName, setWatchListDirty }) => {
 
     let defaultIsWatchingRes = { loading: false, success: null, error: null };
 
@@ -41,6 +43,7 @@ const TagHeaderHoc: FC<TagHeaderHoc> = ({ tagName, setWatchListDirty }) => {
 
     return (
         <TagHeader
+            authState={ authState }
             tagName={ tagName }
             isWatchingRes={ isWatchingRes }
             handleWatch={ handleWatch }

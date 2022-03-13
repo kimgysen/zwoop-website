@@ -21,12 +21,12 @@ import {
 
 interface UserWidgetProps {
     userId: string,
-    profilePic: string
+    avatar: string
 }
 
-const UserWidget: FC<UserWidgetProps> = ({ userId, profilePic }) => {
+const UserWidget: FC<UserWidgetProps> = ({ userId, avatar: defaultAvatar }) => {
 
-    const [avatar, setAvatar] = useState(profilePic);
+    const [avatar, setAvatar] = useState(defaultAvatar);
 
     const handleError = () => {
         setAvatar('/static/images/profile_fallback.jpg');

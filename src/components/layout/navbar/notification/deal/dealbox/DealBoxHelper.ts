@@ -1,4 +1,4 @@
-import DealDto from "@models/dto/rest/receive/deal/DealDto";
+import DealDto from "@models/dto/domain-client-dto/deal/DealDto";
 
 export const isDealBoxEmpty = (deals?: DealDto[] | null) =>
     !deals || deals.length === 0;

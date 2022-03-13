@@ -3,12 +3,11 @@ import {Box} from "@chakra-ui/layout/src/box";
 import styles from './PrivateChatWidget.module.css';
 import PrivateMessageList from "@components/pages/post/post_chat/private_chat/chatbox/PrivateMessageList";
 import PrivateInputMessage from "@components/pages/post/post_chat/private_chat/chatbox/PrivateInputMessage";
-import PrivateMessageReceiveDto
-    from "../../../../../models/dto/stomp/receive/private_chat/feature/PrivateMessageReceiveDto";
+import PrivateMessageReceiveDto from "@models/dto/stomp/receive/private_chat/feature/PrivateMessageReceiveDto";
 import ChatPartner from "@models/chat/ChatPartner";
-import PartnerReadDto from "../../../../../models/dto/stomp/receive/private_chat/feature/PartnerReadDto";
+import PartnerReadDto from "@models/dto/stomp/receive/private_chat/feature/PartnerReadDto";
 import PartnerReadBox from "@components/pages/post/post_chat/private_chat/chatbox/subviews/PartnerReadBox";
-import TypingDto from "../../../../../models/dto/stomp/receive/private_chat/feature/TypingDto";
+import TypingDto from "@models/dto/stomp/receive/private_chat/feature/TypingDto";
 import PartnerTypingBox from "@components/pages/post/post_chat/private_chat/chatbox/subviews/PartnerTypingBox";
 import {
     hasPartnerRead,

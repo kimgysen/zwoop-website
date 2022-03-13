@@ -7,8 +7,8 @@ import CancelDealModal from "@components/pages/post/post-status/post-deal/deal-i
 import ApiResult from "@api_clients/type/ApiResult";
 import {cancelDealApi} from "@api_clients/feature/deal/DealApiClient";
 import {isOp} from "../../../../../../util/PostUtil";
-import DealDto from "@models/dto/rest/receive/deal/DealDto";
-import PostDto from "@models/dto/rest/receive/post/PostDto";
+import DealDto from "@models/dto/domain-client-dto/deal/DealDto";
+import PostDto from "@models/dto/domain-client-dto/post/PostDto";
 import {
     APP_DEAL_BOX__DEAL_CANCELLED,
     POST_STATUS__DEAL_CANCELLED,

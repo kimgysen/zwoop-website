@@ -1,5 +1,5 @@
 import React, {FC} from "react";
-import {Divider, Heading, HStack, IconButton, Link, Text} from "@chakra-ui/react";
+import {Button, Divider, Heading, HStack, Link, Text} from "@chakra-ui/react";
 import {FaChevronLeft} from 'react-icons/fa';
 import {useRouter} from "next/router";
 import {PostPageViewState} from "@components/pages/post/PostPageHelper";
@@ -18,8 +18,8 @@ const PostChatHeader: FC<PostChatHeaderProps> =
 
     const router = useRouter();
 
-    const backToInbox = () => {
-        router.push(
+    const backToInbox = async () => {
+        await router.push(
             `/post/${ postId }`
         );
     }
@@ -37,14 +37,16 @@ const PostChatHeader: FC<PostChatHeaderProps> =
                     viewState === PostPageViewState.INBOX_DETAIL_CHAT
                     && (
                         <HStack>
-                            <IconButton as='span'
-                                 w='5%'
-                                 onClick={ backToInbox }
-                                 variant='outline'
-                                 colorScheme='teal'
-                                 aria-label="Back to inbox"
-                                 icon={<FaChevronLeft />}
-                            />
+                            <Button
+                                fontSize= '11px'
+                                colorScheme='teal'
+                                variant='link'
+                                onClick={ backToInbox }
+                                padding='5px'
+                            >
+                                <FaChevronLeft />
+                                Inbox
+                            </Button>
                             <Text
                                 w='95%'
                                 maxW='220px'

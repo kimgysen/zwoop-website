@@ -1,8 +1,7 @@
-import PrivateMessageReceiveDto
-    from "../../../../../models/dto/stomp/receive/private_chat/feature/PrivateMessageReceiveDto";
+import PrivateMessageReceiveDto from "@models/dto/stomp/receive/private_chat/feature/PrivateMessageReceiveDto";
 import {NextRouter} from "next/router";
 import ChatPartner from "@models/chat/ChatPartner";
-import PartnerReadDto from "../../../../../models/dto/stomp/receive/private_chat/feature/PartnerReadDto";
+import PartnerReadDto from "@models/dto/stomp/receive/private_chat/feature/PartnerReadDto";
 import InboxItemDto from "@models/dto/stomp/receive/user-notification/feature/inbox/InboxItemDto";
 import {sendPrivateMessage} from "../../../../../service/stomp/publishers/PrivateChatPublisher";
 

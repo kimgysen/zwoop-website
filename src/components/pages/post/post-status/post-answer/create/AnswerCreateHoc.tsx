@@ -7,7 +7,7 @@ import {Box} from "@chakra-ui/layout/src/box";
 import SaveButton from "@components/widgets/form/buttons/SaveButton";
 import ApiResult from "@api_clients/type/ApiResult";
 import {createAnswerApi} from "@api_clients/feature/answer/AnswerApiClient";
-import AnswerDto from "@models/dto/rest/receive/answer/AnswerDto";
+import AnswerDto from "@models/dto/domain-client-dto/answer/AnswerDto";
 import {dispatchCustomMessage} from "../../../../../../service/stomp/subscriptions/SubscriptionUtil";
 import {
     POST_STATUS__ANSWER_ADDED,

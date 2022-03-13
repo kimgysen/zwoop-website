@@ -15,7 +15,7 @@ import {css} from '@emotion/react';
 import {FaHandshake} from "react-icons/fa";
 import AuthState from "@models/auth/AuthState";
 import DealBox from "@components/layout/navbar/notification/deal/dealbox/DealBox";
-import DealDto from "@models/dto/rest/receive/deal/DealDto";
+import DealDto from "@models/dto/domain-client-dto/deal/DealDto";
 
 
 interface DealButtonProps {

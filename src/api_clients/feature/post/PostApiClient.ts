@@ -3,9 +3,9 @@ import ApiResult from "../../type/ApiResult";
 import SavePostDto from "@models/dto/rest/send/post/SavePostDto";
 import {handleAxiosError, handleAxiosResponse} from "../../util/ResponseUtil";
 import urlJoin from "url-join";
-import {PostStatusEnum} from "@models/db/entity/PostStatus";
+import {PostStatusEnum} from "@models/enums/PostStatusEnum";
 import {getRawJwt} from "../../../service/jwt/JwtService";
-import PostDto from "@models/dto/rest/receive/post/PostDto";
+import PostDto from "@models/dto/domain-client-dto/post/PostDto";
 
 const backendBaseUri = process.env.NEXT_PUBLIC_API_BACKEND_BASE_URI;
 const postApiPrivatePath = process.env.NEXT_PUBLIC_API_V1_PRIVATE_POST_PREFIX;

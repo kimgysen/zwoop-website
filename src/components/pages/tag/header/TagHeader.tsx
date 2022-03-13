@@ -3,12 +3,12 @@ import {Box, Flex, Heading, Spacer} from "@chakra-ui/react";
 import ApiResult from "../../../../api_clients/type/ApiResult";
 import Card from "@components/layout/components/card/Card";
 import {IsWatchingTag} from "@models/dto/user/IsWatchingTag";
-import ButtonIsWatchingLoading from "@components/pages/tag/header/fallbackviews/ButtonIsWatchingLoading";
-import ButtonIsWatchingError from "@components/pages/tag/header/fallbackviews/ButtonIsWatchingError";
 import ButtonIsWatching from "@components/pages/tag/header/ButtonIsWatching";
+import AuthState from "@models/auth/AuthState";
 
 
 interface TagHeaderProps {
+    authState: AuthState,
     tagName: string,
     isWatchingRes: ApiResult<IsWatchingTag>,
     handleWatch: (tagName: string) => void,
@@ -16,7 +16,7 @@ interface TagHeaderProps {
 }
 
 const TagHeader: FC<TagHeaderProps> = (
-    { tagName, isWatchingRes, handleWatch, handleUnwatch }) => {
+    { authState, tagName, isWatchingRes, handleWatch, handleUnwatch }) => {
 
     return (
         <Card>
@@ -33,19 +33,10 @@ const TagHeader: FC<TagHeaderProps> = (
                 <Spacer />
                 <Box>
                     {
-                        isWatchingRes.error
-                        && <ButtonIsWatchingError />
-
-                    }
-                    {
-                        isWatchingRes.loading
-                        && <ButtonIsWatchingLoading />
-                    }
-                    {
-                        isWatchingRes.success
+                       authState?.isLoggedIn
                         && <ButtonIsWatching
                                 tagName={ tagName }
-                                isWatching={ isWatchingRes.success.isWatching }
+                                isWatchingRes={ isWatchingRes }
                                 handleWatch={ handleWatch }
                                 handleUnwatch={ handleUnwatch }
                             />

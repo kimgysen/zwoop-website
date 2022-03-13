@@ -100,7 +100,7 @@ const Navbar: React.FC<NavbarProps> = ({ authState }) => {
                                 </HStack>
                                 <UserWidget
                                     userId={ authState?.principalId as string }
-                                    profilePic={ authState?.principalAvatar + '?referrerpolicy="no-referrer"' as string } />
+                                    avatar={ authState?.principalAvatar + '?referrerpolicy="no-referrer"' as string } />
                                 <NextLink href={'/ask'}>
                                     <Button
                                         bg={'blue.400'}

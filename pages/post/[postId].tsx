@@ -11,14 +11,14 @@ import PostChatWidget from "@components/pages/post/post_chat/PostChatWidget";
 import {useRouter} from "next/router";
 import PostStatusViewHoc from "@components/pages/post/post-status/PostStatusViewHoc";
 import ApiResult from "@api_clients/type/ApiResult";
-import User from "@models/db/entity/User";
+import UserFullDto from "@models/dto/domain-client-dto/user/UserFullDto";
 import {getUserById} from "@api_clients/feature/user/UserApiClient";
 import PostStompConnect from "@components/stomp/post/PostStompConnect";
 import {getViewState, isChatAllowed, PostPageViewState} from "@components/pages/post/PostPageHelper";
 import {getAuthState} from "@components/auth/AuthStateHelper";
 import {AxiosError, AxiosResponse} from "axios";
 import PostStepperHoc from "@components/pages/post/post-stepper/PostStepperHoc";
-import PostDto from "@models/dto/rest/receive/post/PostDto";
+import PostDto from "@models/dto/domain-client-dto/post/PostDto";
 
 
 export async function getServerSideProps(ctx: { query: { postId: string } }) {
@@ -49,7 +49,7 @@ const PostByIdPage: NextPage = (props: any) => {
 
     const [authState, setAuthState] = useState<AuthState>(defaultAuthState);
     const [viewState, setViewState] = useState<PostPageViewState>(PostPageViewState.LOGGED_OFF);
-    const [partnerRes, setPartnerRes] = useState<ApiResult<User>>();
+    const [partnerRes, setPartnerRes] = useState<ApiResult<UserFullDto>>();
     const [postDto, setPostDto] = useState<PostDto>(ssrPost);
 
 

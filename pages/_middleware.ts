@@ -4,7 +4,7 @@ import {decode} from 'jwt-simple';
 import {match} from 'node-match-path';
 
 
-const authenticatedPaths = ['/', '/ask', '/tags/*'];
+const authenticatedPaths = ['/', '/ask'];
 
 const secret = process.env.SECRET;
 

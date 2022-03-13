@@ -1,5 +1,6 @@
 import deepCopy from 'deepcopy';
 import ProgressStep from "@components/widgets/progress-stepper/ProgressStep";
+import {PostStatusEnum} from "@models/enums/PostStatusEnum";
 
 const resetSteps = (progressSteps: ProgressStep[]) =>
     progressSteps.map(step => {
@@ -7,11 +8,11 @@ const resetSteps = (progressSteps: ProgressStep[]) =>
         return step;
     });
 
-export const setActiveStep = (postStatus: string|null, progressSteps: ProgressStep[]) => {
+export const setActiveStep = (postStatus: PostStatusEnum|null, progressSteps: ProgressStep[]) => {
     const clonedSteps = deepCopy(progressSteps);
     if (postStatus) {
         resetSteps(clonedSteps);
-        const step = clonedSteps?.find(step => step.id === postStatus);
+        const step = clonedSteps?.find(step => step.id === postStatus.toString());
         if (step)
             step.isActive = true;
 

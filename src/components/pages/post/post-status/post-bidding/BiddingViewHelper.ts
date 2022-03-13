@@ -1,5 +1,5 @@
 import AuthState from "@models/auth/AuthState";
-import BiddingDto from "@models/dto/rest/receive/bidding/BiddingDto";
+import BiddingDto from "@models/dto/domain-client-dto/bidding/BiddingDto";
 
 
 export const biddingListIsEmpty = (biddingList: BiddingDto[]) =>

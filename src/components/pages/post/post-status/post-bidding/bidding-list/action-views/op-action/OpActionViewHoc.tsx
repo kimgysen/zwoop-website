@@ -8,9 +8,9 @@ import CreateDealModal
 import {useRouter} from "next/router";
 import {createDealApi} from "@api_clients/feature/deal/DealApiClient";
 import AuthState from "@models/auth/AuthState";
-import BiddingDto from "@models/dto/rest/receive/bidding/BiddingDto";
-import DealDto from "@models/dto/rest/receive/deal/DealDto";
-import PostDto from "@models/dto/rest/receive/post/PostDto";
+import BiddingDto from "@models/dto/domain-client-dto/bidding/BiddingDto";
+import DealDto from "@models/dto/domain-client-dto/deal/DealDto";
+import PostDto from "@models/dto/domain-client-dto/post/PostDto";
 import {dispatchCustomMessage} from "../../../../../../../../service/stomp/subscriptions/SubscriptionUtil";
 import {
     APP_DEAL_BOX__DEAL_INIT,

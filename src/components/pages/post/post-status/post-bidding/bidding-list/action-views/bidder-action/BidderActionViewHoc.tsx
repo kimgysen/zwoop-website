@@ -9,7 +9,7 @@ import DeleteBiddingModal
 import ApiResult from "@api_clients/type/ApiResult";
 import AuthState from "@models/auth/AuthState";
 import {deleteBiddingApi, updateBiddingApi} from "@api_clients/feature/bidding/BiddingApiClient";
-import BiddingDto from "@models/dto/rest/receive/bidding/BiddingDto";
+import BiddingDto from "@models/dto/domain-client-dto/bidding/BiddingDto";
 import {dispatchCustomMessage} from "../../../../../../../../service/stomp/subscriptions/SubscriptionUtil";
 import {
     POST_STATUS__BIDDING_CHANGED,

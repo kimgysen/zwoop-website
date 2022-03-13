@@ -1,4 +1,4 @@
-import Tag from "@models/db/entity/Tag";
+import Tag from "@models/dto/domain-client-dto/tag/TagDto";
 
 export default interface SavePostDto {
     title: string,

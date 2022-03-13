@@ -1,9 +1,9 @@
 import React, {FC, useEffect, useState} from "react";
 import {Box, Tab, TabList, TabPanel, TabPanels, Tabs} from "@chakra-ui/react";
-import ChatRoomUserReceiveDto from "../../../../models/dto/stomp/receive/public_chat/ChatRoomUserReceiveDto";
+import ChatRoomUserReceiveDto from "@models/dto/stomp/receive/public_chat/ChatRoomUserReceiveDto";
 import PublicChatWidget from "@components/pages/tag/chat/public_chat/PublicChatWidget";
 import ConnectedUsers from "@components/pages/tag/chat/connected_users/ConnectedUsers";
-import PublicMessageReceiveDto from "../../../../models/dto/stomp/receive/public_chat/PublicMessageReceiveDto";
+import PublicMessageReceiveDto from "@models/dto/stomp/receive/public_chat/PublicMessageReceiveDto";
 import {getStompDispatcher} from "../../../../event_dispatchers/StompDispatcher";
 import {
     PUBLIC_CHAT__INIT_CONNECTED_USERS,
@@ -12,14 +12,15 @@ import {
     PUBLIC_CHAT__ON_MESSAGE_RECEIVED,
     PUBLIC_CHAT__ON_USER_CONNECTED
 } from "../../../../event_dispatchers/config/StompEvents";
+import AuthState from "@models/auth/AuthState";
 
 
 interface TagChatProps {
-    tagName: string,
-    principalId: string
+    authState: AuthState,
+    tagName: string
 }
 
-const TagChatWidget: FC<TagChatProps> = ({ tagName, principalId }) => {
+const TagChatWidget: FC<TagChatProps> = ({ authState, tagName }) => {
 
     const [isLoading, setLoading] = useState<boolean>(true);
     const [messages, setMessages] = useState<PublicMessageReceiveDto[]>([]);
@@ -78,7 +79,7 @@ const TagChatWidget: FC<TagChatProps> = ({ tagName, principalId }) => {
                 <TabPanels>
                     <TabPanel>
                         <PublicChatWidget
-                            principalId={ principalId }
+                            authState={ authState }
                             tagName={ tagName }
                             isLoading={ isLoading }
                             messages={ messages }

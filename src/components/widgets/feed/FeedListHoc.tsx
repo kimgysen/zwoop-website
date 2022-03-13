@@ -2,8 +2,8 @@ import {FC, useEffect, useState} from "react";
 import {FeedTypeEnum, getFeed} from "@api_clients/feature/post/PostApiClient";
 import ApiResult from "../../../api_clients/type/ApiResult";
 import FeedList from "@components/widgets/feed/FeedList";
-import {PostStatusEnum} from "@models/db/entity/PostStatus";
-import PostDto from "@models/dto/rest/receive/post/PostDto";
+import {PostStatusEnum} from "@models/enums/PostStatusEnum";
+import PostDto from "@models/dto/domain-client-dto/post/PostDto";
 
 interface FeedListHocProps {
     feedType: FeedTypeEnum,

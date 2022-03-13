@@ -1,7 +1,7 @@
 import AuthState from "@models/auth/AuthState";
-import BiddingDto from "@models/dto/rest/receive/bidding/BiddingDto";
-import AnswerDto from "@models/dto/rest/receive/answer/AnswerDto";
-import PostDto from "@models/dto/rest/receive/post/PostDto";
+import BiddingDto from "@models/dto/domain-client-dto/bidding/BiddingDto";
+import AnswerDto from "@models/dto/domain-client-dto/answer/AnswerDto";
+import PostDto from "@models/dto/domain-client-dto/post/PostDto";
 
 
 export const isOp = (authState: AuthState, postDto: PostDto) =>

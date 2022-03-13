@@ -5,7 +5,7 @@ import {isDealBoxEmpty, isLastDealBoxItem} from "@components/layout/navbar/notif
 import DealBoxEmpty from "@components/layout/navbar/notification/deal/dealbox/fallbackviews/DealBoxEmpty";
 import {Box, Divider} from "@chakra-ui/react";
 import DealBoxItem from "@components/layout/navbar/notification/deal/dealbox/DealBoxItem";
-import DealDto from "@models/dto/rest/receive/deal/DealDto";
+import DealDto from "@models/dto/domain-client-dto/deal/DealDto";
 
 
 interface DealBoxProps {
@@ -35,6 +35,7 @@ const DealBox: FC<DealBoxProps> = ({ authState, dealBoxLoading, dealDtoList, clo
                          textAlign='left'
                     >
                         <DealBoxItem
+                            authState={ authState }
                             dealDto={ dealDto }
                             closePopup={ closePopup }
                         />

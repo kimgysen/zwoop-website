@@ -18,11 +18,11 @@ import {
     POST_VIEW__POST_CHANGED,
     POST_VIEW__POST_REMOVED
 } from "../../../../event_dispatchers/config/StompEvents";
-import Tag from "@models/db/entity/Tag";
+import Tag from "@models/dto/domain-client-dto/tag/TagDto";
 import {infoToast} from "@components/widgets/toast/AppToast";
-import {PostStatusEnum} from "@models/db/entity/PostStatus";
+import {PostStatusEnum} from "@models/enums/PostStatusEnum";
 import {isOp} from "../../../../util/PostUtil";
-import PostDto from "@models/dto/rest/receive/post/PostDto";
+import PostDto from "@models/dto/domain-client-dto/post/PostDto";
 
 
 interface PostViewProps {

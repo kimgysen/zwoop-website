@@ -1,9 +1,9 @@
 import AuthState from "@models/auth/AuthState";
-import {PostStatusEnum, stringFromPostStatusEnum} from "@models/db/entity/PostStatus";
+import {PostStatusEnum} from "@models/enums/PostStatusEnum";
 import {isOp, isPostDealConsultant} from "../../../util/PostUtil";
 import {isDealConsultant} from "../../../util/DealUtil";
-import PostDto from "@models/dto/rest/receive/post/PostDto";
-import DealDto from "@models/dto/rest/receive/deal/DealDto";
+import PostDto from "@models/dto/domain-client-dto/post/PostDto";
+import DealDto from "@models/dto/domain-client-dto/deal/DealDto";
 
 export enum PostPageViewState {
     LOGGED_OFF,
@@ -40,7 +40,7 @@ export const getPostStatusFromPost = (post?: PostDto): PostStatusEnum =>
         : PostStatusEnum.POST_SETUP;
 
 export const isStatusPostInit = (postDto: PostDto) =>
-    postDto?.postState?.postStatus?.status === stringFromPostStatusEnum(PostStatusEnum.POST_INIT);
+    postDto?.postState?.postStatus?.status === PostStatusEnum.POST_INIT.toString();
 
 export const isChatAllowed = (authState: AuthState, postDto: PostDto) => {
     return isStatusPostInit(postDto)

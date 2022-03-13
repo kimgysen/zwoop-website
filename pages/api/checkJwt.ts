@@ -1,7 +1,7 @@
 import type {NextApiRequest, NextApiResponse} from "next";
 import {decode} from "jwt-simple";
 
-import User from "@models/db/entity/User";
+import User from "@models/dto/domain-client-dto/user/UserFullDto";
 
 
 const cookieName: string = process.env.JWT_COOKIE_NAME as string;

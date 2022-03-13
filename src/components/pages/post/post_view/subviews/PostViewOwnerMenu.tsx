@@ -3,7 +3,7 @@ import {Flex, Link, useDisclosure} from "@chakra-ui/react";
 import NextLink from "next/link";
 import DeletePostModal from "@components/pages/post/post_view/modal/DeletePostModal";
 import ApiResult from "@api_clients/type/ApiResult";
-import {PostStatusEnum} from "@models/db/entity/PostStatus";
+import {PostStatusEnum} from "@models/enums/PostStatusEnum";
 
 
 interface PostViewOwnerMenuProps {

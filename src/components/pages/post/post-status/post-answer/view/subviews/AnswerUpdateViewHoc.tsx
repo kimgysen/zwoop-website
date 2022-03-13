@@ -8,7 +8,7 @@ import {Flex} from "@chakra-ui/layout/src/flex";
 import ApiResult from "@api_clients/type/ApiResult";
 import {updateAnswerApi} from "@api_clients/feature/answer/AnswerApiClient";
 import SaveButton from "@components/widgets/form/buttons/SaveButton";
-import AnswerDto from "@models/dto/rest/receive/answer/AnswerDto";
+import AnswerDto from "@models/dto/domain-client-dto/answer/AnswerDto";
 
 
 interface AnswerUpdateHocProps {

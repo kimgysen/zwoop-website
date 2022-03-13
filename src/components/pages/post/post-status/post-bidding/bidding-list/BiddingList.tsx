@@ -2,8 +2,8 @@ import React, {FC} from "react";
 import BiddingItem from "@components/pages/post/post-status/post-bidding/bidding-list/BiddingItem";
 import {Table, Tbody, Th, Thead, Tr} from "@chakra-ui/react";
 import AuthState from "@models/auth/AuthState";
-import BiddingDto from "@models/dto/rest/receive/bidding/BiddingDto";
-import PostDto from "@models/dto/rest/receive/post/PostDto";
+import BiddingDto from "@models/dto/domain-client-dto/bidding/BiddingDto";
+import PostDto from "@models/dto/domain-client-dto/post/PostDto";
 
 interface BiddingListProps {
     authState: AuthState,

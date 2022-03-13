@@ -7,8 +7,8 @@ import BidderActionViewHoc
     from "@components/pages/post/post-status/post-bidding/bidding-list/action-views/bidder-action/BidderActionViewHoc";
 import {isBiddingPostConsultant, isOp} from "../../../../../../util/PostUtil";
 import AuthState from "@models/auth/AuthState";
-import BiddingDto from "@models/dto/rest/receive/bidding/BiddingDto";
-import PostDto from "@models/dto/rest/receive/post/PostDto";
+import BiddingDto from "@models/dto/domain-client-dto/bidding/BiddingDto";
+import PostDto from "@models/dto/domain-client-dto/post/PostDto";
 
 
 interface BiddingItemProps {
