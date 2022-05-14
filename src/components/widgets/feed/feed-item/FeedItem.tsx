@@ -2,7 +2,7 @@ import NextLink from 'next/link'
 import {Box, Divider, Flex, Heading, HStack, Image, Link} from "@chakra-ui/react";
 import React, {FC} from "react";
 import Card from "../../../layout/components/card/Card";
-import {BnbBox} from "./BnbBox";
+import {PriceBox} from "./PriceBox";
 import TagsList from "../../tags/TagsList";
 import TimeAgo from "react-timeago";
 import ReactMarkdown from "react-markdown";
@@ -22,7 +22,7 @@ const FeedItem: FC<FeedItemProps> = ({ postDto }) => {
             <Flex
                 minH={{ base: '50px' }}
             >
-                <BnbBox price={ postDto?.bidPrice } />
+                <PriceBox price={ postDto?.bidPrice } />
                 <Box
                     ml={ "20px" }
                     width={'80%'}

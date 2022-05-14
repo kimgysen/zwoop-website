@@ -13,7 +13,7 @@ import DealDto from "@models/dto/domain-client-dto/deal/DealDto";
 import PostDto from "@models/dto/domain-client-dto/post/PostDto";
 import {dispatchCustomMessage} from "../../../../../../../../service/stomp/subscriptions/SubscriptionUtil";
 import {
-    APP_DEAL_BOX__DEAL_INIT,
+    NOTIFICATION__DEAL_INIT,
     POST_STATUS__DEAL_INIT,
     POST_STEPPER__DEAL_INIT,
     POST_VIEW__DEAL_INIT
@@ -49,7 +49,7 @@ const OpActionViewHoc: FC<OpActionViewHocProps> = ({ authState, postDto, bidding
             dispatchCustomMessage(POST_VIEW__DEAL_INIT, res?.success as DealDto);
             dispatchCustomMessage(POST_STATUS__DEAL_INIT, res?.success as DealDto);
             dispatchCustomMessage(POST_STEPPER__DEAL_INIT, res?.success as DealDto);
-            dispatchCustomMessage(APP_DEAL_BOX__DEAL_INIT, res?.success as DealDto);
+            dispatchCustomMessage(NOTIFICATION__DEAL_INIT, res?.success as DealDto);
         }
     }
 

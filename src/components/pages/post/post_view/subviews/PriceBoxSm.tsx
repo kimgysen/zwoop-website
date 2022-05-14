@@ -1,12 +1,12 @@
 import React, {FC} from "react";
 import {Center, VStack} from "@chakra-ui/react";
 
-interface BnbBoxSmProps {
+interface PriceBoxSmProps {
     price: string,
     currencyCode: string
 }
 
-const BnbBoxSm: FC<BnbBoxSmProps> = ({ price, currencyCode }) => {
+const PriceBoxSm: FC<PriceBoxSmProps> = ({ price, currencyCode }) => {
     return (
         <VStack>
             <Center
@@ -29,4 +29,4 @@ const BnbBoxSm: FC<BnbBoxSmProps> = ({ price, currencyCode }) => {
     )
 }
 
-export default BnbBoxSm;
+export default PriceBoxSm;

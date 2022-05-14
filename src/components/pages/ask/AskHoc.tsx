@@ -41,7 +41,7 @@ const AskHoc: FC = () => {
             title,
             text: descriptionMd,
             tags,
-            currencyCode: 'BNB',
+            currencyCode: 'BUSD',
             bidPrice
         });
 

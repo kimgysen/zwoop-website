@@ -17,7 +17,6 @@ interface TagHeaderProps {
 
 const TagHeader: FC<TagHeaderProps> = (
     { authState, tagName, isWatchingRes, handleWatch, handleUnwatch }) => {
-
     return (
         <Card>
             <Flex>

@@ -17,11 +17,11 @@ import Searchbox from "@components/widgets/searchbox/Searchbox";
 import LoginModal from "@components/layout/navbar/modal/LoginModal";
 import {FaPen} from "react-icons/fa";
 import AppInboxButtonHoc from "@components/layout/navbar/notification/inbox/AppInboxButtonHoc";
-import NotificationButton from "@components/layout/navbar/notification/notification/NotificationButton";
 import UserWidget from "@components/layout/navbar/user/UserWidget";
 import {useRouter} from "next/router";
 import AuthState from "@models/auth/AuthState";
 import DealButtonHoc from "@components/layout/navbar/notification/deal/DealButtonHoc";
+import NotificationButtonHoc from "@components/layout/navbar/notification/notification/NotificationButtonHoc";
 
 interface NavbarProps {
     authState: AuthState
@@ -93,9 +93,8 @@ const Navbar: React.FC<NavbarProps> = ({ authState }) => {
                                     <AppInboxButtonHoc url='/chat'
                                                     authState={ authState }
                                     />
-                                    <NotificationButton
-                                        count={0}
-                                        url='/notifications'
+                                    <NotificationButtonHoc
+                                        authState={ authState }
                                     />
                                 </HStack>
                                 <UserWidget

@@ -5,7 +5,7 @@ import remarkGfm from "remark-gfm";
 import ReactMarkdown from "react-markdown";
 import React, {useEffect, useState} from "react";
 import TagsList from "@components/widgets/tags/TagsList";
-import BnbBoxSm from "./subviews/BnbBoxSm";
+import PriceBoxSm from "./subviews/PriceBoxSm";
 import PostTitleView from "@components/pages/post/post_view/subviews/PostTitleView";
 import PostUserBox from "@components/pages/post/post_view/subviews/PostUserBox";
 import AuthState from "@models/auth/AuthState";
@@ -88,7 +88,7 @@ const PostViewHoc: React.FC<PostViewProps> = ({ authState, postDto }) => {
         <Card>
             <Flex pb='10px'>
                 <Box pr='10px'>
-                    <BnbBoxSm
+                    <PriceBoxSm
                         price={ bidPrice }
                         currencyCode={ postDto?.currencyCode }
                     />

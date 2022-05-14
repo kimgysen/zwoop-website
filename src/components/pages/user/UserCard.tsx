@@ -82,7 +82,7 @@ const UserCard: React.FC<UserCardProps> = ({ profileUser, principalId }) => {
                         <Box as='span' ml={'10px'}>Member since: <ReactTimeago date={ profileUser.createdAt } /></Box>
                     </Box>
                     {
-                        profileUser.tags.length > 0 &&
+                        profileUser?.tags?.length > 0 &&
                         <Box
                             py={ '10px' }
                         >

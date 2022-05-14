@@ -79,7 +79,7 @@ const EditFormDetailsView: React.FC<FormDetailsViewProps> = ({ post, setters }) 
             <Divider mt='15px' mb='15px' />
             <FormCard
                 title='Bid price'
-                description='Amount of BNB you offer in exchange for support'>
+                description='Amount of BUSD you offer in exchange for support'>
                 <NumberInput
                     size='md'
                     maxW="32"

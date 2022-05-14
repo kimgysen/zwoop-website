@@ -16,7 +16,7 @@ interface ButtonIsWatchingProps {
 }
 
 const ButtonIsWatching: FC<ButtonIsWatchingProps> = ({ tagName, isWatchingRes, handleWatch, handleUnwatch }) => {
-    const isWatching = isWatchingRes?.success;
+    const isWatching = isWatchingRes?.success?.isWatching;
 
     return (
         <Box>

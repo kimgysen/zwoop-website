@@ -35,12 +35,10 @@ const PostStatusViewHoc: FC<BiddingViewHocProps> = ({ authState, postDto }) => {
     const [answerDto, setAnswerDto] = useState<AnswerDto|null|undefined>(postDto?.postState?.answer);
     const [isAnswerAccepted, setAnswerAccepted] = useState<boolean>(postDto?.postState?.postStatus?.status === PostStatusEnum.ANSWER_ACCEPTED.toString());
 
-
     useEffect(() => {
         setPostStatus(getPostStatusFromPost(postDto));
-    }, [postDto?.postId, postDto?.postState?.postStatus])
+    }, [postDto?.postId, postDto?.postState?.postStatus]);
 
-    console.log(postStatus);
     useEffect(() => {
         if (authState?.principalId && postDto?.postId) {
             stompDispatcher.on(POST_STATUS__DEAL_INIT, (dealDto: DealDto) => {
@@ -67,6 +65,7 @@ const PostStatusViewHoc: FC<BiddingViewHocProps> = ({ authState, postDto }) => {
                 setPostStatus(PostStatusEnum.ANSWERED);
 
                 if (!isDealParticipant(authState, dealDto)) {
+                    console.log('dealDto', dealDto);
                     infoToast(`${ dealDto?.consultant?.nickName } added an answer.`);
                 }
             });
@@ -128,8 +127,8 @@ const PostStatusViewHoc: FC<BiddingViewHocProps> = ({ authState, postDto }) => {
                     />
             }
             {
-                postStatus === PostStatusEnum.ANSWERED
-                    || postStatus === PostStatusEnum.ANSWER_ACCEPTED
+                (postStatus === PostStatusEnum.ANSWERED
+                    || postStatus === PostStatusEnum.ANSWER_ACCEPTED)
                 && answerDto
                 && <AnswerView
                         authState={ authState }

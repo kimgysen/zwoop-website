@@ -24,7 +24,7 @@ const Hero: React.FC = () => {
                     </Text>
                 </Heading>
                 <Text color={'gray.500'} maxW={'3xl'}>
-                    Ask experienced developers to help you with your software problem in exchange for BNB.
+                    Ask experienced developers to help you with your software problem in exchange for BUSD.
                 </Text>
                 <Stack spacing={6} direction={'row'}>
                     <Button

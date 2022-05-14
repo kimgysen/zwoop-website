@@ -2,11 +2,11 @@ import {FC} from "react";
 import {Center, Image, keyframes, usePrefersReducedMotion, VStack} from "@chakra-ui/react";
 
 
-export interface BnbBoxProps {
+export interface PriceBoxProps {
     price: string
 }
 
-export const BnbBox: FC<BnbBoxProps> = ({ price }) => {
+export const PriceBox: FC<PriceBoxProps> = ({ price }) => {
     const prefersReducedMotion = usePrefersReducedMotion();
     const spin = keyframes`
       from { transform: rotate(0deg); }
@@ -37,17 +37,17 @@ export const BnbBox: FC<BnbBoxProps> = ({ price }) => {
                 fontWeight={ 600 }
                 color="ruby.600"
             >
-                BNB
+                BUSD
             </Center>
             <Center
                 h={ 40 }
             >
                 <Image
                     animation={ animation }
-                    src='/static/images/bnb-icon.svg'
+                    src='/static/images/busd-icon.png'
                     w={ 30 }
                     h={ 30 }
-                    alt="trx-logo"
+                    alt="bnb-logo"
                     color="ruby.600"
                 />
             </Center>

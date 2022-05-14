@@ -61,7 +61,7 @@ const PostEditPage: NextPage = (props: any) => {
             title,
             text: descriptionMd,
             tags,
-            currencyCode: 'BNB',
+            currencyCode: 'BUSD',
             bidPrice
         });
 

@@ -10,7 +10,7 @@ import {isOp} from "../../../../../../util/PostUtil";
 import DealDto from "@models/dto/domain-client-dto/deal/DealDto";
 import PostDto from "@models/dto/domain-client-dto/post/PostDto";
 import {
-    APP_DEAL_BOX__DEAL_CANCELLED,
+    NOTIFICATION__DEAL_CANCELLED,
     POST_STATUS__DEAL_CANCELLED,
     POST_STEPPER__DEAL_CANCELLED,
     POST_VIEW__DEAL_CANCELLED
@@ -42,7 +42,7 @@ const DealInitViewHoc: FC<AcceptedBiddingViewProps> = ({ authState, postDto, dea
             dispatchCustomMessage(POST_VIEW__DEAL_CANCELLED, dealDto);
             dispatchCustomMessage(POST_STATUS__DEAL_CANCELLED, dealDto);
             dispatchCustomMessage(POST_STEPPER__DEAL_CANCELLED, dealDto);
-            dispatchCustomMessage(APP_DEAL_BOX__DEAL_CANCELLED, dealDto);
+            dispatchCustomMessage(NOTIFICATION__DEAL_CANCELLED, dealDto);
         }
     }
 

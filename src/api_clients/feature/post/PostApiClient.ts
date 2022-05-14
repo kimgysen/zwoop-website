@@ -78,24 +78,24 @@ export const getCsrPostById: (postId: string) => Promise<ApiResult<PostDto>> = (
 export const getFeed:
     (feedType: FeedTypeEnum, postStatus: PostStatusEnum, page: number, size: number, tagName?: string) => Promise<ApiResult<PostDto[]>> =
     (feedType, postStatus, page, size, tagName) => {
-    let params: any = {
-        feedType: FeedTypeEnum[feedType],
-        postStatus: PostStatusEnum[postStatus],
-        page,
-        size
-    };
+        let params: any = {
+            feedType: FeedTypeEnum[feedType],
+            postStatus: PostStatusEnum[postStatus],
+            page,
+            size
+        };
 
-    if (feedType === FeedTypeEnum.FEED_BY_TAG) {
-        params.tagName = tagName;
-    }
+        if (feedType === FeedTypeEnum.FEED_BY_TAG) {
+            params.tagName = tagName;
+        }
 
-    return axios
-        .get(postApiPublicEndpoint, { params })
-        .then(res => handleAxiosResponse({
-            res,
-            successStatus: 200,
-            successProp: res.data.content
-        }))
-        .catch((reason: AxiosError) => handleAxiosError(reason));
+        return axios
+            .get(postApiPublicEndpoint, { params })
+            .then(res => handleAxiosResponse({
+                res,
+                successStatus: 200,
+                successProp: res.data.content
+            }))
+            .catch((reason: AxiosError) => handleAxiosError(reason));
 
 }

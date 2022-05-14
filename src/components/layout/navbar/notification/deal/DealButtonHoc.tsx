@@ -4,8 +4,8 @@ import AuthState from "@models/auth/AuthState";
 import ApiResult from "@api_clients/type/ApiResult";
 import {getStompDispatcher} from "../../../../../event_dispatchers/StompDispatcher";
 import {
-    APP_DEAL_BOX__DEAL_CANCELLED,
-    APP_DEAL_BOX__DEAL_INIT
+    NOTIFICATION__DEAL_CANCELLED,
+    NOTIFICATION__DEAL_INIT
 } from "../../../../../event_dispatchers/config/StompEvents";
 import {addDeal, removeDealById} from "@components/layout/navbar/notification/deal/dealbox/DealBoxHelper";
 import {infoToast} from "@components/widgets/toast/AppToast";
@@ -18,12 +18,12 @@ interface DealButtonHocProps {
     authState: AuthState
 }
 
+const stompDispatcher = getStompDispatcher();
+
 const DealButtonHoc: FC<DealButtonHocProps> = ({ authState }) => {
 
     let defaultDealsRes = { loading: false, success: [], error: null };
     const [dealsRes, setDealsRes] = useState<ApiResult<DealDto[]>>(defaultDealsRes);
-
-    const stompDispatcher = getStompDispatcher();
 
     useEffect(() => {
         (async() => {
@@ -35,8 +35,8 @@ const DealButtonHoc: FC<DealButtonHocProps> = ({ authState }) => {
 
 
     useEffect(() => {
-        if (authState.principalId) {
-            stompDispatcher.on(APP_DEAL_BOX__DEAL_INIT, (dealDto: DealDto) => {
+        if (authState?.principalId) {
+            stompDispatcher.on(NOTIFICATION__DEAL_INIT, (dealDto: DealDto) => {
                 const updatedDeals = addDeal(dealsRes?.success, dealDto);
                 setDealsRes({...defaultDealsRes, success: updatedDeals });
 
@@ -44,7 +44,7 @@ const DealButtonHoc: FC<DealButtonHocProps> = ({ authState }) => {
                 infoToast(`New deal with ${ counterpart?.nickName }`);
             });
 
-            stompDispatcher.on(APP_DEAL_BOX__DEAL_CANCELLED, (dealDto: DealDto) => {
+            stompDispatcher.on(NOTIFICATION__DEAL_CANCELLED, (dealDto: DealDto) => {
                 const updatedDeals = removeDealById(dealsRes?.success, dealDto?.dealId);
                 setDealsRes({...defaultDealsRes, success: updatedDeals })
 
@@ -54,11 +54,11 @@ const DealButtonHoc: FC<DealButtonHocProps> = ({ authState }) => {
         }
 
         return function cleanUp() {
-            stompDispatcher.remove(APP_DEAL_BOX__DEAL_INIT);
-            stompDispatcher.remove(APP_DEAL_BOX__DEAL_CANCELLED);
+            stompDispatcher.remove(NOTIFICATION__DEAL_INIT);
+            stompDispatcher.remove(NOTIFICATION__DEAL_CANCELLED);
         }
 
-    }, [authState?.principalId, dealsRes?.success]);
+    }, [authState?.principalId]);
 
     return (
         <DealButton
